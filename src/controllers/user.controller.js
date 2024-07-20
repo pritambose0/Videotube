@@ -5,9 +5,11 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async (req, res) => {
-  // Step 1 - Get User data from frontend
+  // Get User data from frontend
 
   const { fullName, email, username, password } = req.body;
+  // console.log("req.body - ", req.body);
+  // console.log("req.files - ", req.files);
 
   // Validation (Empty or not)
 
@@ -19,7 +21,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Check user exits or not: username, email
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
   // console.log(existedUser);
@@ -30,8 +32,16 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Check for images, Avatar
 
-  const avatarLocalPath = req.files?.avatar[0].path;
-  const coverImageLocalPath = req.files?.coverImage[0].path;
+  const avatarLocalPath = req.files?.avatar[0]?.path;
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar is required");
@@ -43,9 +53,9 @@ const registerUser = asyncHandler(async (req, res) => {
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
   if (!avatar) {
-    throw new ApiError(400, "Avatar is required");
+    throw new ApiError(400, "Cloudinary: Avatar is required");
   }
-
+  console.log("COVERIMAGE: ", coverImage);
   // Create User Object - Create entry in DB
 
   const user = await User.create({
@@ -72,7 +82,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "UserUsr registered successfully"));
+    .json(new ApiResponse(200, createdUser, "User registered successfully"));
 });
 
 export { registerUser };
