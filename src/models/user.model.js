@@ -52,7 +52,9 @@ const userSchema = new Schema(
 // Here we can't use arrow function as it does not have the reference of this keyword.
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return; // execute this only if password is updated or created
+  // execute this only if password is updated or created
+  if (!this.isModified("password")) return;
+
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
