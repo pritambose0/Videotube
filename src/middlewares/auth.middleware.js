@@ -1,7 +1,7 @@
-import asyncHandler from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
-import { jwt } from "jsonwebtoken";
-import { User } from "../models/user.model";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import jwt from "jsonwebtoken";
+import { User } from "../models/user.model.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {
@@ -11,6 +11,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
       req.header("Authorization")?.replace("Bearer ", "");
     // Header looks like Authorization: Bearer  <token>
 
+    console.log("TOKEN", token);
     if (!token) {
       throw new ApiError(401, "Unauthorized request");
     }
