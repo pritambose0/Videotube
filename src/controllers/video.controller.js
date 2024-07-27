@@ -5,6 +5,70 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
 
+const getAllVideos = asyncHandler(async (req, res) => {
+  const {
+    page = 1,
+    limit = 10,
+    query = "",
+    sortBy = "createdAt",
+    sortType = "desc",
+  } = req.query;
+
+  const skip = (page - 1) * limit;
+
+  const videos = await Video.aggregate([
+    {
+      $match: {
+        $or: [
+          { title: { $regex: query, $options: "i" } },
+          { description: { $regex: query, $options: "i" } },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+        pipeline: [
+          {
+            $project: {
+              avatar: 1,
+              username: 1,
+              fullName: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        owner: 1,
+        "videoFile.url": 1,
+        "thumbnail.url": 1,
+        createdAt: 1,
+        title: 1,
+        duration: 1,
+        views: 1,
+      },
+    },
+    {
+      $sort: {
+        [sortBy]: sortType === "asc" ? 1 : -1,
+      },
+    },
+    { $limit: limit * 1 },
+    { $skip: skip },
+  ]);
+
+  // console.log("VIDEOS: ", videos);
+  res
+    .status(200)
+    .json(new ApiResponse(200, videos, "Videos fetched successfully"));
+});
+
 const publishVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
@@ -42,10 +106,10 @@ const publishVideo = asyncHandler(async (req, res) => {
   });
 
   if (!video) throw new ApiError(500, "Error while uploading video");
-  console.log("VIDEO", video);
+  //   console.log("VIDEO", video);
   res
     .status(200)
     .json(new ApiResponse(200, video, "Video uploaded Successfully"));
 });
 
-export { publishVideo };
+export { publishVideo, getAllVideos };
