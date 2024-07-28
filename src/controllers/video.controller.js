@@ -1,8 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
 import { User } from "../models/user.model.js";
 
@@ -233,4 +236,110 @@ const getVideoById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, video, "Video fetched successfully"));
 });
 
-export { publishVideo, getAllVideos, getVideoById };
+const updateVideo = asyncHandler(async (req, res) => {
+  const { title, description } = req.body;
+
+  // if (!(title || description)) {
+  //   throw new ApiError(400, "updateVideo :: Title or Description is required");
+  // }
+
+  const { videoId } = req.params;
+  if (!videoId || !isValidObjectId(videoId)) {
+    throw new ApiError(400, "updateVideo :: VideoId not found");
+  }
+
+  const video = await Video.findById(videoId);
+  if (!video) throw new ApiError(404, "Video not found");
+
+  if (req.user?._id.toString() !== video?.owner._id.toString()) {
+    throw new ApiError(
+      401,
+      "updateVideo :: You do not have permission to perform this action"
+    );
+  }
+
+  const thumbnailLocalPath = req.file?.path;
+
+  if (!thumbnailLocalPath) {
+    throw new ApiError(400, "updateVideo :: Thumbnail is required");
+  }
+  const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+  if (!thumbnail) {
+    throw new ApiError(
+      400,
+      "updateVideo :: Error while uploading thumbnail on Cloudinary"
+    );
+  }
+
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    {
+      $set: {
+        title: title || video?.title,
+        description: description || video?.description,
+        thumbnail: {
+          url: thumbnail?.url,
+          publicId: thumbnail?.public_id,
+        },
+      },
+    },
+    { new: true }
+  );
+
+  if (!updatedVideo) {
+    throw new ApiError(400, "updateVideo :: Error while updating video");
+  }
+
+  const oldThumbnailPublicId = video?.thumbnail?.publicId;
+
+  if (!oldThumbnailPublicId) {
+    throw new ApiError(500, " updateVideo :: oldThumbnailPublicId not found");
+  }
+
+  const deleteOldThumbnail = await deleteFromCloudinary(oldThumbnailPublicId);
+
+  if (!deleteOldThumbnail) {
+    throw new ApiError(
+      500,
+      "updateVideo :: Error while deleting old thumbnail from Cloudinary"
+    );
+  }
+  // console.log("VIDEO UPDATED", updatedVideo);
+  res
+    .status(200)
+    .json(new ApiResponse(200, updatedVideo, "Video updated successfully"));
+});
+
+const deleteVideo = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId || !isValidObjectId(videoId)) {
+    throw new ApiError(400, "deleteVideo :: Error while getting videoId");
+  }
+
+  const video = await Video.findById(videoId);
+  if (!video) throw new ApiError(404, "Video not found");
+
+  if (req.user?._id.toString() !== video?.owner._id.toString()) {
+    throw new ApiError(
+      401,
+      "deleteVideo :: You do not have permission to perform this action"
+    );
+  }
+  const deletedVideo = await Video.findByIdAndDelete(videoId);
+  const delVideoFile = await deleteFromCloudinary(video?.videoFile?.publicId);
+  const delThumbnail = await deleteFromCloudinary(video?.thumbnail?.publicId);
+
+  if (!delVideoFile || !delThumbnail) {
+    throw new ApiError(
+      500,
+      "deleteVideo :: Error while deleting video from Cloudinary"
+    );
+  }
+  // console.log("DELETED VIDEO", deletedVideo);
+  res
+    .status(200)
+    .json(new ApiResponse(200, deletedVideo, "Video deleted successfully"));
+});
+
+export { publishVideo, getAllVideos, getVideoById, updateVideo, deleteVideo };
