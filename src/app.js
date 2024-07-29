@@ -17,9 +17,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 //Routes
-import userRouter from "./routes/user.routes.js";
+
 //http://localhost:8000/api/v1/users/register
-import videoRouter from "./routes/video.routes.js";
+import userRouter from "./routes/user.route.js";
+import videoRouter from "./routes/video.route.js";
 
 //Routes Declarations
 app.use("/api/v1/users", userRouter);

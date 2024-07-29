@@ -342,4 +342,49 @@ const deleteVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, deletedVideo, "Video deleted successfully"));
 });
 
-export { publishVideo, getAllVideos, getVideoById, updateVideo, deleteVideo };
+const togglePublishStatus = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId || !isValidObjectId(videoId)) {
+    throw new ApiResponse(400, "togglePublishVideo :: Video id is not valid");
+  }
+
+  const video = await Video.findById(videoId);
+
+  if (!video) {
+    throw new ApiError(404, "togglePublishVideo :: Video not found");
+  }
+
+  if (req.user?._id.toString() !== video?.owner._id.toString()) {
+    throw new ApiError(
+      401,
+      "togglePublishVideo :: You do not have permission to perform this action"
+    );
+  }
+
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    {
+      $set: { isPublished: !video?.isPublished },
+    },
+    {
+      new: true,
+    }
+  );
+  // console.log("TOGGLE STATUS: ", updatedVideo);
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedVideo, "Publish status toggled successfully")
+    );
+});
+
+export {
+  publishVideo,
+  getAllVideos,
+  getVideoById,
+  updateVideo,
+  deleteVideo,
+  togglePublishStatus,
+};
