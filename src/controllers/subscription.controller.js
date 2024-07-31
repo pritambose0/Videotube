@@ -71,7 +71,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
         from: "users",
         localField: "subscriber",
         foreignField: "_id",
-        as: "subscribers",
+        as: "subscribers", // here we can use further pipeline too for more details
       },
     },
     {
