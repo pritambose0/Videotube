@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import React, { useId } from "react";
-
+import { PropTypes } from "prop-types";
 const Input = React.forwardRef(function Input(
-  { label, type = "text", className = "", ...props },
+  { label, type = "text", className = "", name, ...props },
   ref
 ) {
   const id = useId();
@@ -20,9 +19,17 @@ const Input = React.forwardRef(function Input(
         ref={ref}
         {...props}
         id={id}
+        name={name}
       />
     </div>
   );
 });
+
+Input.propTypes = {
+  label: PropTypes.string,
+  type: PropTypes.string,
+  className: PropTypes.string,
+  name: PropTypes.string,
+};
 
 export default Input;

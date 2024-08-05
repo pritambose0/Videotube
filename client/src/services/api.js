@@ -1,17 +1,18 @@
 import axios from "axios";
 import config from "../config/config";
 
-// Create axios instance with base URL
+// Axios instance with base URL
 const api = axios.create({
   baseURL: config.baseUrl,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // Endpoints functions
 export const createAccount = (userData) =>
-  api.post("/users/register", userData);
+  api.post("/users/register", userData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
 export const login = (credentials) => api.post("/users/login", credentials);
 export const logout = () => api.post("/users/logout");

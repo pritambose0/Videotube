@@ -1,16 +1,25 @@
+import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import { login } from "../services/api";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
-    console.log(data);
+    setError("");
     try {
       const response = await login(data);
-      console.log(response);
+      if (response) {
+        dispatch(login(response.data.data));
+        navigate("/");
+      }
     } catch (error) {
-      console.log(error.stack);
+      setError(error.response?.data?.message || error.message);
     }
   };
 
@@ -72,6 +81,7 @@ function Login() {
             </defs>
           </svg>
         </div>
+        {error && <p className="text-red-500 my-3">{error}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
@@ -94,7 +104,7 @@ function Login() {
               required: true,
             })}
           />
-          <button className="bg-[#ae7aff] px-4 py-3 text-black">
+          <button className="bg-[#ae7aff] px-4 py-3 text-black" type="submit">
             Sign in with Email
           </button>
         </form>

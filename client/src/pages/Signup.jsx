@@ -1,17 +1,35 @@
+import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import { createAccount } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    setError("");
     try {
-      const response = await createAccount(data);
-      console.log(response);
+      const response = await createAccount({
+        ...data,
+        avatar: data.avatar[0],
+        coverImage: data.coverImage[0],
+      });
+      // console.log("RESPONSE", response.data.data);
+      if (response) {
+        dispatch(login(response.data.data));
+        navigate("/login");
+      }
     } catch (error) {
-      console.log(error.stack);
+      setError(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,11 +91,16 @@ function Signup() {
             </defs>
           </svg>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {error && <p className="text-red-600 my-3 text-center">{error}</p>}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          encType="multipart/form-data"
+          method="POST"
+        >
           <Input
             label="Full Name*"
             placeholder="Enter your Full Name"
-            {...register("name", { required: true })}
+            {...register("fullName", { required: true })}
           />
           <Input
             label="Username*"
@@ -107,11 +130,21 @@ function Signup() {
           <Input
             label="Avatar*"
             type="file"
+            name="avatar"
             {...register("avatar", { required: true })}
           />
-          <Input label="Cover Image" type="file" {...register("coverImage")} />
-          <button className="bg-[#ae7aff] px-4 py-3 text-black" type="submit">
-            Sign up with Email
+          <Input
+            label="Cover Image"
+            name="coverImage"
+            type="file"
+            {...register("coverImage")}
+          />
+
+          <button
+            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md"
+            type="submit"
+          >
+            {loading ? "Loading..." : "Sign Up"}
           </button>
         </form>
       </div>

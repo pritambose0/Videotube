@@ -93,7 +93,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/users/login",
+    path: "/login",
     element: (
       <AuthLayout authentication={false}>
         <Login />,
@@ -101,7 +101,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/users/signup",
+    path: "/signup",
     element: (
       <AuthLayout authentication={false}>
         <Signup />,
