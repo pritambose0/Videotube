@@ -28,6 +28,22 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/login",
+        element: (
+          <AuthLayout authentication={false}>
+            <Login />,
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <AuthLayout authentication={false}>
+            <Signup />,
+          </AuthLayout>
+        ),
+      },
+      {
         path: "/liked-videos",
         element: (
           <AuthLayout authentication={false}>
@@ -54,7 +70,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/c",
-        element: <ProfileOutlet />,
+        element: (
+          <AuthLayout authentication={true}>
+            <ProfileOutlet />,
+          </AuthLayout>
+        ),
         children: [
           {
             path: "/c/videos",
@@ -91,22 +111,6 @@ const router = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: "/login",
-    element: (
-      <AuthLayout authentication={false}>
-        <Login />,
-      </AuthLayout>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <AuthLayout authentication={false}>
-        <Signup />,
-      </AuthLayout>
-    ),
   },
   {
     path: "*",

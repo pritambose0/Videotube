@@ -7,7 +7,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
-    Credentials: true,
+    credentials: true,
   })
 );
 

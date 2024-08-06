@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 function ProfileCard({
   coverPhoto,
-  channelPhoto,
+  avatar,
   channelName,
   channelHandle,
   subscribers,
@@ -23,7 +23,7 @@ function ProfileCard({
           <img
             src={coverPhoto}
             alt="cover-photo"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-center"
           />
         </div>
       </div>
@@ -31,7 +31,7 @@ function ProfileCard({
       <div className="px-4 pb-4">
         <div className="flex flex-wrap gap-4 pb-4 pt-6">
           <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
-            <img src={channelPhoto} alt="Channel" className="h-full w-full" />
+            <img src={avatar} alt="Channel" className="h-full w-full" />
           </span>
           <div className="mr-auto inline-block">
             <h1 className="font-bold text-xl">{channelName}</h1>
@@ -89,7 +89,7 @@ function ProfileCard({
 
 ProfileCard.propTypes = {
   coverPhoto: PropTypes.string,
-  channelPhoto: PropTypes.string,
+  avatar: PropTypes.string,
   channelName: PropTypes.string,
   channelHandle: PropTypes.string,
   subscribers: PropTypes.string,

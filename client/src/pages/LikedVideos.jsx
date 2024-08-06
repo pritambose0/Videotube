@@ -1,7 +1,5 @@
-import React from "react";
-
 function LikedVideos() {
-  return <div>LikedVideos</div>;
+  return <div></div>;
 }
 
 export default LikedVideos;

@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const authStatus = useSelector((state) => state.auth.status);
+
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
       <nav className="mx-auto flex max-w-7xl items-center py-2">
@@ -179,7 +182,7 @@ function Navbar() {
             </button>
           </div>
           <ul className="my-4 flex w-full flex-wrap gap-2 px-4 sm:hidden">
-            <li className="w-full">
+            <Link to="/liked-videos" className="w-full">
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                   <svg
@@ -199,8 +202,8 @@ function Navbar() {
                 </span>
                 <span>Liked Videos</span>
               </button>
-            </li>
-            <li className="w-full">
+            </Link>
+            <Link to="/c/videos" className="w-full">
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                   <svg
@@ -227,8 +230,9 @@ function Navbar() {
                 </span>
                 <span>My Content</span>
               </button>
-            </li>
-            <li className="w-full">
+            </Link>
+
+            <Link to="/" className="w-full">
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                   <svg
@@ -248,7 +252,8 @@ function Navbar() {
                 </span>
                 <span>Support</span>
               </button>
-            </li>
+            </Link>
+
             <li className="w-full">
               <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
                 <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
@@ -280,12 +285,20 @@ function Navbar() {
           </ul>
           <div className="mb-8 mt-auto flex w-full flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
             <Link to="/login">
-              <button className="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">
+              <button
+                className={`${
+                  authStatus ? "hidden" : "block"
+                } w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent`}
+              >
                 Log in
               </button>
             </Link>
             <Link to="/signup">
-              <button className="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">
+              <button
+                className={`${
+                  authStatus ? "hidden" : "block"
+                } mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto`}
+              >
                 Sign up
               </button>
             </Link>

@@ -1,30 +1,41 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
-import { login } from "../services/api";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { login } from "../store/authSlice";
+import axiosInstance from "../services/axiosInstance";
+import config from "../config/config";
 
 function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     setError("");
     try {
-      const response = await login(data);
-      if (response) {
-        dispatch(login(response.data.data));
+      const session = await axiosInstance.post(
+        `${config.baseUrl}/users/login`,
+        data,
+        { withCredentials: true }
+      );
+      if (session) {
+        const userData = await axiosInstance.get(
+          `${config.baseUrl}/users/current-user`,
+          { withCredentials: true }
+        );
+        dispatch(login(userData?.data?.data));
         navigate("/");
       }
     } catch (error) {
-      setError(error.response?.data?.message || error.message);
+      setError(error.message);
     }
   };
 
   return (
-    <div className="h-screen overflow-y-auto bg-[#121212] text-white">
+    <div className="h-screen w-full overflow-y-auto bg-[#121212] text-white">
       <div className="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
         <div className="mx-auto inline-block w-16">
           <svg
@@ -84,6 +95,11 @@ function Login() {
         {error && <p className="text-red-500 my-3">{error}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            label="Username*"
+            placeholder="Enter your username"
+            {...register("username", { required: true })}
+          />
           <Input
             label="Email*"
             placeholder="Enter your email"
