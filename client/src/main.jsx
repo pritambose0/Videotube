@@ -14,6 +14,7 @@ import {
   Signup,
   Channel,
   Tweet,
+  VideoPage,
 } from "./pages";
 import AuthLayout from "./components/AuthLayout.jsx";
 import { Provider } from "react-redux";
@@ -51,7 +52,14 @@ const router = createBrowserRouter([
           </AuthLayout>
         ),
       },
-
+      {
+        path: "/videos/:id",
+        element: (
+          <AuthLayout authentication={false}>
+            <VideoPage />,
+          </AuthLayout>
+        ),
+      },
       {
         path: "/channel/:id",
         element: (

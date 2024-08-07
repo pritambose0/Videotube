@@ -9,6 +9,7 @@ import History from "./History.jsx";
 import Playlists from "./Playlists.jsx";
 import MyChannel from "./MyChannel.jsx";
 import ProfileOutlet from "../components/ProfileOutlet.jsx";
+import VideoPage from "./VideoPage.jsx";
 
 export {
   Channel,
@@ -22,4 +23,5 @@ export {
   Playlists,
   MyChannel,
   ProfileOutlet,
+  VideoPage,
 };

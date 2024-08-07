@@ -147,7 +147,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "none",
   };
 
   // Send Cookie
@@ -177,6 +177,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
   };
 
   return res
@@ -190,7 +191,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies?.refreshToken || req.body?.refreshToken;
 
-  if (!incomingRefreshToken) throw ApiError(401, "Unauthorized request");
+  if (!incomingRefreshToken) throw new ApiError(401, "Unauthorized request");
 
   try {
     const decodedToken = jwt.verify(

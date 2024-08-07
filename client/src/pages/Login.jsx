@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
 import axiosInstance from "../services/axiosInstance";
-import config from "../config/config";
 
 function Login() {
   const { register, handleSubmit } = useForm();
@@ -16,16 +15,13 @@ function Login() {
   const onSubmit = async (data) => {
     setError("");
     try {
-      const session = await axiosInstance.post(
-        `${config.baseUrl}/users/login`,
-        data,
-        { withCredentials: true }
-      );
+      const session = await axiosInstance.post("/users/login", data, {
+        withCredentials: true,
+      });
       if (session) {
-        const userData = await axiosInstance.get(
-          `${config.baseUrl}/users/current-user`,
-          { withCredentials: true }
-        );
+        const userData = await axiosInstance.get(`/users/current-user`, {
+          withCredentials: true,
+        });
         dispatch(login(userData?.data?.data));
         navigate("/");
       }

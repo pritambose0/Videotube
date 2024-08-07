@@ -10,18 +10,15 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getCurrentUser()
-      .then((userData) => {
-        if (userData) {
-          dispatch(login(userData.data?.data));
-        } else {
-          dispatch(logout());
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
+    getCurrentUser().then((userData) => {
+      if (userData) {
+        dispatch(login(userData?.data?.data));
+      } else {
+        dispatch(logout());
+      }
+    });
+  }, [dispatch]);
+
   return (
     <>
       <div className="h-screen overflow-y-auto bg-[#121212] text-white">

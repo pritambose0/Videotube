@@ -11,9 +11,9 @@ import {
 } from "../controllers/video.controller.js";
 
 const router = Router();
-router.use(verifyJWT); // It applies every route in this file
-
 router.route("/").get(getAllVideos);
+
+router.use(verifyJWT); // It applies every route in this file
 
 router.route("/upload-video").post(
   upload.fields([

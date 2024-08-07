@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
-import { createAccount } from "../services/api";
+// import { createAccount } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
+import axiosInstance from "../services/axiosInstance";
 
 function Signup() {
   const { register, handleSubmit } = useForm();
@@ -16,11 +17,19 @@ function Signup() {
   const onSubmit = async (data) => {
     setError("");
     try {
-      const response = await createAccount({
-        ...data,
-        avatar: data.avatar[0],
-        coverImage: data.coverImage[0],
-      });
+      const response = await axiosInstance.post(
+        "/users/register",
+        {
+          ...data,
+          avatar: data.avatar[0],
+          coverImage: data.coverImage[0],
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       // console.log("RESPONSE", response.data.data);
       if (response) {
         dispatch(login(response.data.data));

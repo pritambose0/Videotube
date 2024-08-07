@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 function Navbar() {
   const authStatus = useSelector((state) => state.auth.status);
+  console.log(authStatus);
 
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
@@ -283,26 +284,20 @@ function Navbar() {
               </button>
             </li>
           </ul>
-          <div className="mb-8 mt-auto flex w-full flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
-            <Link to="/login">
-              <button
-                className={`${
-                  authStatus ? "hidden" : "block"
-                } w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent`}
-              >
-                Log in
-              </button>
-            </Link>
-            <Link to="/signup">
-              <button
-                className={`${
-                  authStatus ? "hidden" : "block"
-                } mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto`}
-              >
-                Sign up
-              </button>
-            </Link>
-          </div>
+          {!authStatus && (
+            <div className="mb-8 mt-auto flex w-full flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
+              <Link to="/login">
+                <button className="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">
+                  Log in
+                </button>
+              </Link>
+              <Link to="/signup">
+                <button className="mr-1 w-full bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">
+                  Sign up
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </header>
