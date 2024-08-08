@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Navbar() {
   const authStatus = useSelector((state) => state.auth.status);
-  console.log(authStatus);
+  // console.log(authStatus);
 
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">

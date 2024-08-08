@@ -19,10 +19,7 @@ function Login() {
         withCredentials: true,
       });
       if (session) {
-        const userData = await axiosInstance.get(`/users/current-user`, {
-          withCredentials: true,
-        });
-        dispatch(login(userData?.data?.data));
+        dispatch(login(session.data?.data));
         navigate("/");
       }
     } catch (error) {

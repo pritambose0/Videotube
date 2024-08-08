@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/videos/:id",
+        path: "/videos/:videoId",
         element: (
           <AuthLayout authentication={false}>
             <VideoPage />,
