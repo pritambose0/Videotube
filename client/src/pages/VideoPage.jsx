@@ -40,7 +40,8 @@ function VideoPage() {
               title={video?.title}
               views={video?.views}
               timeAgo={video?.createdAt}
-              likes={video.likesCount}
+              likes={video?.likesCount || 0}
+              isLiked={video?.isLiked}
             />
 
             <div onClick={handleClick}>

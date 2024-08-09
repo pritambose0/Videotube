@@ -1,10 +1,24 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../services/axiosInstance";
+import { logout } from "../store/authSlice";
 
 function Navbar() {
   const authStatus = useSelector((state) => state.auth.status);
   // console.log(authStatus);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    axiosInstance
+      .post("/users/logout")
+      .then(() => {
+        dispatch(logout());
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
       <nav className="mx-auto flex max-w-7xl items-center py-2">
@@ -284,7 +298,7 @@ function Navbar() {
               </button>
             </li>
           </ul>
-          {!authStatus && (
+          {!authStatus ? (
             <div className="mb-8 mt-auto flex w-full flex-wrap gap-4 px-4 sm:mb-0 sm:mt-0 sm:items-center sm:px-0">
               <Link to="/login">
                 <button className="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent">
@@ -297,6 +311,13 @@ function Navbar() {
                 </button>
               </Link>
             </div>
+          ) : (
+            <button
+              className="w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
           )}
         </div>
       </nav>

@@ -4,7 +4,7 @@ import config from "../config/config";
 const axiosInstance = axios.create({
   baseURL: config.baseUrl,
   withCredentials: true, // Include cookies in requests
-  timeout: 5000,
+  timeout: 10000,
 });
 
 axiosInstance.interceptors.response.use(
@@ -19,7 +19,7 @@ axiosInstance.interceptors.response.use(
         });
         return axiosInstance(originalRequest);
       } catch (e) {
-        console.error("Refresh token failed", e);
+        console.log(e);
       }
     }
     return Promise.reject(error.message);

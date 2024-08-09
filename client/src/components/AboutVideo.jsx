@@ -1,9 +1,14 @@
 import PropTypes from "prop-types";
+import axiosInstance from "../services/axiosInstance";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+
 const AboutVideo = ({
   title,
   views,
   timeAgo,
   likes,
+  isLiked,
   playlistName,
   onSave,
   onCreatePlaylist,
@@ -38,6 +43,19 @@ const AboutVideo = ({
     }
     return seconds <= 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
   }
+  const [liked, setLiked] = useState(isLiked);
+  console.log(isLiked);
+
+  const { videoId } = useParams();
+  const handleLike = () => {
+    axiosInstance.post(`likes/toggle/v/${videoId}`).then((res) => {
+      setLiked(!liked);
+
+      console.log(liked);
+      console.log(res.data);
+    });
+  };
+  console.log(liked);
 
   return (
     <div className="flex flex-wrap gap-y-2">
@@ -53,12 +71,17 @@ const AboutVideo = ({
             <button
               className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
               data-like={likes}
-              data-like-alt={String(likes + 1)}
+              data-like-alt={likes + 1}
+              onClick={handleLike}
             >
-              <span className="inline-block w-5 group-focus/btn:text-[#ae7aff]">
+              <span
+                className={`inline-block w-5 ${
+                  isLiked ? "text-[#ae7aff]" : "group-focus/btn:text-[#ae7aff]"
+                }`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  fill={isLiked ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
@@ -184,6 +207,7 @@ AboutVideo.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
   views: PropTypes.number,
+  isLiked: PropTypes.bool,
   timeAgo: PropTypes.string,
   author: PropTypes.string,
   likes: PropTypes.number,
