@@ -11,18 +11,17 @@ function App() {
   const userStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    userStatus &&
-      getCurrentUser()
-        .then((userData) => {
-          if (userData) {
-            dispatch(login(userData?.data?.data));
-          } else {
-            dispatch(logout());
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    getCurrentUser()
+      .then((userData) => {
+        if (userData) {
+          dispatch(login(userData?.data?.data));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [dispatch, userStatus]);
 
   return (

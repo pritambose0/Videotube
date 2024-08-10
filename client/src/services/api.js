@@ -10,11 +10,9 @@ export const createAccount = (userData) => {
 };
 
 export const login = (credentials) =>
-  axiosInstance.post("/users/login", credentials, {
-    withCredentials: true,
-  });
-export const getCurrentUser = () =>
-  axiosInstance.get("/users/current-user", { withCredentials: true });
+  axiosInstance.post("/users/login", credentials);
+
+export const getCurrentUser = () => axiosInstance.get("/users/current-user");
 
 export const logout = () => axiosInstance.post("/users/logout");
 export const fetchVideos = () => axiosInstance.get("/videos");

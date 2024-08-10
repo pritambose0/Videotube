@@ -15,9 +15,7 @@ function Login() {
   const onSubmit = async (data) => {
     setError("");
     try {
-      const session = await axiosInstance.post("/users/login", data, {
-        withCredentials: true,
-      });
+      const session = await axiosInstance.post("/users/login", data);
       if (session) {
         dispatch(login(session.data?.data));
         navigate("/");
@@ -113,7 +111,7 @@ function Login() {
               required: true,
             })}
           />
-          {error && <p className="text-red-500 my-3">{error}</p>}
+          {error && <p className="text-red-500 my-3">{error.message}</p>}
 
           <button className="bg-[#ae7aff] px-4 py-3 text-black" type="submit">
             Sign in with Email

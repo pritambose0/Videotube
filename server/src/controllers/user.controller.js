@@ -190,6 +190,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies?.refreshToken || req.body?.refreshToken;
+  // console.log("COOKIE", req.cookies);
 
   if (!incomingRefreshToken) throw new ApiError(401, "Unauthorized request");
 
@@ -212,8 +213,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       secure: true,
     };
 
-    const { accessToken, newRefreshToken } =
+    const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefreshToken(user._id);
+    // console.log("NEW REFRESH TOKEN", newRefreshToken);
 
     return res
       .status(200)
@@ -248,6 +250,9 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   // console.log("USER: ", req.user);
+  if (!req.user) {
+    throw new ApiError(401, "Unauthorized request");
+  }
   return res
     .status(200)
     .json(new ApiResponse(200, req.user, "User fetched successfully"));
