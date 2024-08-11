@@ -46,12 +46,12 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 
   // const playlist = await Playlist.find({ owner: userId });
 
-  if (!playlists?.length) {
-    throw new ApiError(
-      400,
-      "getUserPlaylists :: No playlists found for this user"
-    );
-  }
+  // if (!playlists?.length) {
+  //   throw new ApiError(
+  //     400,
+  //     "getUserPlaylists :: No playlists found for this user"
+  //   );
+  // }
   //   console.log("PLAYLISTS", playlists);
   res
     .status(200)

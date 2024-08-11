@@ -12,9 +12,9 @@ import {
 
 const router = Router();
 router.route("/").get(getAllVideos);
-router.route("/:videoId").get(getVideoById);
 
 router.use(verifyJWT); // It applies every route in this file
+router.route("/:videoId").get(getVideoById);
 
 router.route("/upload-video").post(
   upload.fields([

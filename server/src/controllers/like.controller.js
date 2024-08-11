@@ -1,5 +1,6 @@
 import mongoose, { isValidObjectId } from "mongoose";
 import { Like } from "../models/like.model.js";
+import { Video } from "../models/video.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -9,6 +10,11 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 
   if (!videoId || !isValidObjectId(videoId)) {
     throw new ApiError(400, "toggleVideoLike :: video id is not valid");
+  }
+
+  const video = await Video.findById(videoId);
+  if (!video) {
+    throw new ApiError(404, "toggleVideoLike :: Video not found");
   }
 
   const existingLikeStatus = await Like.findOne({
@@ -32,10 +38,46 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
       throw new ApiError(500, "toggleVideoLike :: Error while adding like");
     }
   }
-  //   console.log("EXISTING", existingLikeStatus);
+
+  const likes = await Video.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(videoId),
+      },
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "video",
+        as: "likes",
+      },
+    },
+    {
+      $addFields: {
+        likesCount: {
+          $size: "$likes",
+        },
+      },
+    },
+    {
+      $project: {
+        likesCount: 1,
+      },
+    },
+  ]);
+  console.log("LIKES", likes[0].likesCount);
+
+  // console.log("EXISTING", existingLikeStatus);
   res
     .status(200)
-    .json(new ApiResponse(200, existingLikeStatus, "Like Status Updated"));
+    .json(
+      new ApiResponse(
+        200,
+        { isLiked: !existingLikeStatus, likes: likes[0].likesCount },
+        "Like Status Updated"
+      )
+    );
 });
 
 const toggleCommentLike = asyncHandler(async (req, res) => {

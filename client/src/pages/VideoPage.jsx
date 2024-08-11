@@ -3,10 +3,12 @@ import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import AboutVideo from "../components/AboutVideo";
 import VideoInfo from "../components/VideoInfo";
+import { useSelector } from "react-redux";
 
 function VideoPage() {
   const { videoId } = useParams();
   const [video, setVideo] = useState({});
+  const [playlists, setPlaylists] = useState([]);
 
   useEffect(() => {
     axiosInstance
@@ -15,7 +17,21 @@ function VideoPage() {
       .catch((err) => console.log(err));
   }, [videoId]);
 
-  console.log(video);
+  const userId = useSelector((state) => state.auth.userData?._id);
+  // console.log(userId);
+
+  useEffect(() => {
+    userId &&
+      axiosInstance
+        .get(`/playlists/user/${userId}`)
+        .then((res) => setPlaylists(res.data?.data))
+        .catch((error) => {
+          console.log(error);
+        });
+  }, [userId]);
+  // console.log(playlists);
+
+  // console.log(video?.owner && video?.owner[0]?._id);
   // console.log(video?.videoFile?.url);
   // console.log(video && video?.owner && video?.owner[0].fullName);
   const handleClick = () => {};
@@ -42,6 +58,7 @@ function VideoPage() {
               timeAgo={video?.createdAt}
               likes={video?.likesCount || 0}
               isLiked={video?.isLiked}
+              playliists={playlists}
             />
 
             <div onClick={handleClick}>

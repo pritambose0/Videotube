@@ -2,17 +2,9 @@ import PropTypes from "prop-types";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import PlaylistModal from "./PlaylistModel";
 
-const AboutVideo = ({
-  title,
-  views,
-  timeAgo,
-  likes,
-  isLiked,
-  playlistName,
-  onSave,
-  onCreatePlaylist,
-}) => {
+const AboutVideo = ({ title, views, timeAgo, likes, isLiked, playliists }) => {
   function timeAgoFormat(dateString) {
     const date = new Date(dateString);
     const now = new Date();
@@ -44,18 +36,27 @@ const AboutVideo = ({
     return seconds <= 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
   }
   const [liked, setLiked] = useState(isLiked);
-  console.log(isLiked);
-
   const { videoId } = useParams();
   const handleLike = () => {
-    axiosInstance.post(`likes/toggle/v/${videoId}`).then((res) => {
-      setLiked(!liked);
-
-      console.log(liked);
-      console.log(res.data);
-    });
+    axiosInstance
+      .post(`likes/toggle/v/${videoId}`)
+      .then((res) => {
+        if (res.data.success) {
+          setLiked(!liked);
+          if (liked) {
+            res.data.likes--;
+          } else {
+            res.data.likes++;
+          }
+        }
+        console.log(res?.data);
+      })
+      .catch((error) => {
+        console.log("Error toggling like:", error);
+      });
   };
-  console.log(liked);
+  // console.log(isLiked);
+  // console.log(liked);
 
   return (
     <div className="flex flex-wrap gap-y-2">
@@ -70,18 +71,20 @@ const AboutVideo = ({
           <div className="flex overflow-hidden rounded-lg border">
             <button
               className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-              data-like={likes}
-              data-like-alt={likes + 1}
+              data-like={liked ? likes + 1 : likes}
+              data-like-alt={liked ? likes + 1 : likes}
               onClick={handleLike}
             >
               <span
                 className={`inline-block w-5 ${
-                  isLiked ? "text-[#ae7aff]" : "group-focus/btn:text-[#ae7aff]"
+                  liked || isLiked
+                    ? "text-[#ae7aff]"
+                    : "group-focus/btn:text-[#ae7aff]"
                 }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill={isLiked ? "currentColor" : "none"}
+                  fill={liked || isLiked ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
@@ -119,10 +122,7 @@ const AboutVideo = ({
             </button>
           </div>
           <div className="relative block">
-            <button
-              className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black"
-              onClick={onSave}
-            >
+            <button className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black">
               <span className="inline-block w-5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -139,63 +139,9 @@ const AboutVideo = ({
                   ></path>
                 </svg>
               </span>
-              Save
+              Playlist
             </button>
-            <div className="absolute right-0 top-full z-10 hidden w-64 overflow-hidden rounded-lg bg-[#121212] p-4 shadow shadow-slate-50/30 hover:block peer-focus:block">
-              <h3 className="mb-4 text-center text-lg font-semibold">
-                Save to playlist
-              </h3>
-              <ul className="mb-4">
-                <li className="mb-2 last:mb-0">
-                  <label
-                    className="group/label inline-flex cursor-pointer items-center gap-x-3"
-                    htmlFor="Python-checkbox"
-                  >
-                    <input
-                      type="checkbox"
-                      className="peer hidden"
-                      id="Python-checkbox"
-                    />
-                    <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-transparent bg-white text-white group-hover/label:border-[#ae7aff] peer-checked:border-[#ae7aff] peer-checked:text-[#ae7aff]">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="3"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4.5 12.75l6 6 9-13.5"
-                        ></path>
-                      </svg>
-                    </span>
-                    {playlistName}
-                  </label>
-                </li>
-              </ul>
-              <div className="flex flex-col">
-                <label
-                  htmlFor="playlist-name"
-                  className="mb-1 inline-block cursor-pointer"
-                >
-                  Name
-                </label>
-                <input
-                  className="w-full rounded-lg border border-transparent bg-white px-3 py-2 text-black outline-none focus:border-[#ae7aff]"
-                  id="playlist-name"
-                  placeholder="Enter playlist name"
-                />
-                <button
-                  className="mx-auto mt-4 rounded-lg bg-[#ae7aff] px-4 py-2 text-black"
-                  onClick={onCreatePlaylist}
-                >
-                  Create new playlist
-                </button>
-              </div>
-            </div>
+            <PlaylistModal playlists={playliists} />
           </div>
         </div>
       </div>
@@ -211,9 +157,8 @@ AboutVideo.propTypes = {
   timeAgo: PropTypes.string,
   author: PropTypes.string,
   likes: PropTypes.number,
-  playlistName: PropTypes.string,
+  playliists: PropTypes.array,
   onCreatePlaylist: PropTypes.func,
-  onSave: PropTypes.func,
 };
 
 export default AboutVideo;
