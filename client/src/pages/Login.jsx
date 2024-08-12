@@ -22,7 +22,7 @@ function Login() {
       }
     } catch (error) {
       console.log(error);
-      setError(error);
+      setError(error.data?.message);
     }
   };
 
@@ -111,7 +111,7 @@ function Login() {
               required: true,
             })}
           />
-          {error && <p className="text-red-500 my-3">{error.message}</p>}
+          {error && <p className="text-red-500 my-3">{error}</p>}
 
           <button className="bg-[#ae7aff] px-4 py-3 text-black" type="submit">
             Sign in with Email

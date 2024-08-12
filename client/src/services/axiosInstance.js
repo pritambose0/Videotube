@@ -10,23 +10,25 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const serverError = error;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         await axios.post(
           `${config.baseUrl}/users/refresh-token`,
           {},
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
 
+        // Retry the original request with the new token
         return axiosInstance(originalRequest);
-      } catch (e) {
-        return Promise.reject(e.message);
+      } catch (error) {
+        console.log("Error: ", error.response);
+        return Promise.reject(serverError ? serverError.response : error);
       }
     }
-    return Promise.reject(error.message);
+    // If the error is not a 401 or the retry fails, pass it along
+    return Promise.reject(error);
   }
 );
 
