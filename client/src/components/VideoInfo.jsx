@@ -1,12 +1,27 @@
 import PropTypes from "prop-types";
+import axiosInstance from "../services/axiosInstance";
+import { useState } from "react";
 
 const VideoInfo = ({
   channelImage,
   channelName,
-  subscribers,
   description,
-  //   onSubscribe,
+  channelId,
+  subscribers,
+  subscribeStatus,
 }) => {
+  const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
+
+  const handleSubscribe = async () => {
+    // console.log("CHANNEL ID: ", channelId)
+    try {
+      const res = await axiosInstance.post(`/subscriptions/c/${channelId}`);
+      console.log(res.data);
+      setIsSubscribed(res.data.data.isSubscribed);
+    } catch (error) {
+      console.log(error.response?.data);
+    }
+  };
   return (
     <div>
       <div className="mt-4 flex items-center justify-between">
@@ -44,8 +59,9 @@ const VideoInfo = ({
                 ></path>
               </svg>
             </span>
-            <span className="group-focus/btn:hidden">Subscribe</span>
-            <span className="hidden group-focus/btn:block">Subscribed</span>
+            <span className="group-focus/btn" onClick={handleSubscribe}>
+              {subscribeStatus || isSubscribed ? "Subscribed" : "Subscribe"}
+            </span>
           </button>
         </div>
       </div>
@@ -60,9 +76,10 @@ const VideoInfo = ({
 VideoInfo.propTypes = {
   channelImage: PropTypes.string,
   channelName: PropTypes.string,
-  subscribers: PropTypes.number,
   description: PropTypes.string,
-  //   onSubscribe: PropTypes.,
+  channelId: PropTypes.string,
+  subscribers: PropTypes.number,
+  subscribeStatus: PropTypes.bool,
 };
 
 export default VideoInfo;

@@ -38,14 +38,23 @@ const toggleSubscription = asyncHandler(async (req, res) => {
       throw new ApiError(500, "toggleSubscription :: Error while subscribing");
     }
   }
+  const subscribers = await Subscription.find({
+    channel: channelId,
+  }).countDocuments();
+  console.log(subscribers);
 
   // console.log("SUBSCRIPTION STATUS", existingSubscriptionStatus);
 
-  res
-    .status(200)
-    .json(
-      new ApiResponse(200, existingSubscriptionStatus, "Subscription toggled")
-    );
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        subscribers: subscribers,
+        isSubscribed: !existingSubscriptionStatus,
+      },
+      "Subscription toggled"
+    )
+  );
 });
 
 // controller to return subscriber list of a channel

@@ -18,22 +18,27 @@ function VideoPage() {
   }, [videoId]);
 
   const userId = useSelector((state) => state.auth.userData?._id);
-  // console.log(userId);
 
   useEffect(() => {
-    userId &&
-      axiosInstance
-        .get(`/playlists/user/${userId}`)
-        .then((res) => setPlaylists(res.data?.data))
-        .catch((error) => {
-          console.log(error);
-        });
-  }, [userId]);
-  // console.log(playlists);
+    const fetchPlaylists = async () => {
+      try {
+        if (userId) {
+          const res = await axiosInstance.get(`/playlists/user/${userId}`);
+          const playlistData = res.data?.data || [];
+          setPlaylists(playlistData);
+        }
+      } catch (error) {
+        console.log(error.response?.data);
+      }
+    };
 
+    fetchPlaylists();
+  }, [userId]);
+
+  // console.log(playlists);
   // console.log(video?.owner && video?.owner[0]?._id);
-  // console.log(video?.videoFile?.url);
-  // console.log(video && video?.owner && video?.owner[0].fullName);
+  console.log("VIDEO", video);
+
   const handleClick = () => {};
 
   return (
@@ -65,8 +70,10 @@ function VideoPage() {
               <VideoInfo
                 channelImage={video?.thumbnail?.url}
                 channelName={video && video?.owner && video?.owner[0].fullName}
-                subscribers={video?.subscribersCount || 0}
                 description={video?.description}
+                channelId={video?.owner && video?.owner[0]?._id}
+                subscribers={video?.owner && video?.owner[0].subscriberCount}
+                subscribeStatus={video?.owner && video?.owner[0].isSubscribed}
               />
             </div>
           </div>
