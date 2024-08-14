@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import axiosInstance from "../services/axiosInstance";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 const VideoInfo = ({
   channelImage,
@@ -12,14 +13,22 @@ const VideoInfo = ({
 }) => {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
 
-  const handleSubscribe = async () => {
-    // console.log("CHANNEL ID: ", channelId)
-    try {
+  const mutation = useMutation({
+    mutationFn: async () => {
       const res = await axiosInstance.post(`/subscriptions/c/${channelId}`);
-      console.log(res.data);
-      setIsSubscribed(res.data.data.isSubscribed);
-    } catch (error) {
-      console.log(error.response?.data);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      setIsSubscribed(data.data?.isSubscribed);
+    },
+    onError: (error) => {
+      console.error("Subscription toggle error:", error.response?.data.message);
+    },
+  });
+
+  const handleSubscribe = () => {
+    if (channelId) {
+      mutation.mutate();
     }
   };
   return (

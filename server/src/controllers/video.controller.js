@@ -194,6 +194,9 @@ const getVideoById = asyncHandler(async (req, res) => {
       },
     },
     {
+      $unwind: "$owner",
+    },
+    {
       $lookup: {
         from: "comments",
         localField: "_id",

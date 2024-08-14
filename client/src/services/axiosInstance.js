@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
         // Retry the original request with the new token
         return axiosInstance(originalRequest);
       } catch (error) {
-        console.log("Error: ", error.response);
+        console.error(error.response);
         return Promise.reject(serverError ? serverError.response : error);
       }
     }

@@ -31,9 +31,17 @@ const getVideoComments = asyncHandler(async (req, res) => {
               _id: 1,
               username: 1,
               avatar: 1,
+              fullName: 1,
             },
           },
         ],
+      },
+    },
+    // This step converts the owner array into an object
+    {
+      $unwind: {
+        path: "$owner",
+        preserveNullAndEmptyArrays: true,
       },
     },
     {
@@ -54,6 +62,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     {
       $project: {
         _id: 1,
+        createdAt: 1,
         username: 1,
         avatar: 1,
         likesCount: 1,

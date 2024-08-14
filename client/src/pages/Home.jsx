@@ -1,39 +1,33 @@
-import { useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 import axiosInstance from "../services/axiosInstance";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 function Home() {
-  const [videos, setVideos] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setError("");
-    axiosInstance
-      .get("/videos")
-      .then((res) => {
-        setVideos(res.data?.data);
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  const {
+    data: videos,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryKey: ["videos"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/videos");
+      return res.data?.data;
+    },
+    staleTime: 1000 * 60,
+  });
 
   // console.log("VIDEOS", videos);
 
   return (
     <>
       <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
-        {error && (
+        {isError && (
           <div className="flex h-full items-center justify-center text-center">
             <h1 className="text-2xl font-bold text-red-500">Error Occurred </h1>
           </div>
         )}
-        {loading ? (
+        {isLoading ? (
           <div className="flex h-screen items-center justify-center text-center">
             <h1 className="text-2xl font-bold">Loading...</h1>
           </div>

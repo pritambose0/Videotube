@@ -1,46 +1,51 @@
-import { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import AboutVideo from "../components/AboutVideo";
 import VideoInfo from "../components/VideoInfo";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import Comment from "../components/Comment";
+import { timeAgoFormat } from "../utils/timeAgoFormat";
 
 function VideoPage() {
   const { videoId } = useParams();
-  const [video, setVideo] = useState({});
-  const [playlists, setPlaylists] = useState([]);
-
-  useEffect(() => {
-    axiosInstance
-      .get(`/videos/${videoId}`)
-      .then((video) => setVideo(video.data?.data))
-      .catch((err) => console.log(err));
-  }, [videoId]);
-
   const userId = useSelector((state) => state.auth.userData?._id);
 
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        if (userId) {
-          const res = await axiosInstance.get(`/playlists/user/${userId}`);
-          const playlistData = res.data?.data || [];
-          setPlaylists(playlistData);
-        }
-      } catch (error) {
-        console.log(error.response?.data);
-      }
-    };
+  // Fetch video data
+  const { data: video } = useQuery({
+    queryKey: ["video", videoId],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/videos/${videoId}`);
+      return res?.data?.data;
+    },
+    staleTime: 1000 * 60, // Cache data for 1 minute
+    enabled: !!videoId, // Only run the query if videoId is defined
+  });
 
-    fetchPlaylists();
-  }, [userId]);
+  // Fetch playlists data
+  const { data: playlists } = useQuery({
+    queryKey: ["playlists", userId],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/playlists/user/${userId}`);
+      return res?.data?.data || [];
+    },
+    staleTime: 1000 * 60,
+    enabled: !!userId,
+  });
 
-  // console.log(playlists);
-  // console.log(video?.owner && video?.owner[0]?._id);
-  console.log("VIDEO", video);
+  // Fetch comments data
+  const { data: comments } = useQuery({
+    queryKey: ["comments", videoId],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/comments/${videoId}`);
+      return res?.data?.data;
+    },
+    staleTime: 1000 * 60,
+  });
+
+  // console.log(video);
 
   const handleClick = () => {};
-
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0">
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
@@ -69,21 +74,23 @@ function VideoPage() {
             <div onClick={handleClick}>
               <VideoInfo
                 channelImage={video?.thumbnail?.url}
-                channelName={video && video?.owner && video?.owner[0].fullName}
+                channelName={video && video?.owner && video?.owner.fullName}
                 description={video?.description}
-                channelId={video?.owner && video?.owner[0]?._id}
-                subscribers={video?.owner && video?.owner[0].subscriberCount}
-                subscribeStatus={video?.owner && video?.owner[0].isSubscribed}
+                channelId={video?.owner && video?.owner?._id}
+                subscribers={video?.owner && video?.owner.subscriberCount}
+                subscribeStatus={video?.owner && video?.owner.isSubscribed}
               />
             </div>
           </div>
 
           <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
-            <h6 className="font-semibold">573 Comments...</h6>
+            <h6 className="font-semibold">{comments?.length || 0} Comments</h6>
           </button>
           <div className="fixed inset-x-0 top-full z-[60] h-[calc(100%-69px)] overflow-auto rounded-lg border bg-[#121212] p-4 duration-200 hover:top-[67px] peer-focus:top-[67px] sm:static sm:h-auto sm:max-h-[500px] lg:max-h-none">
             <div className="block">
-              <h6 className="mb-4 font-semibold">573 Comments</h6>
+              <h6 className="mb-4 font-semibold">
+                {comments?.length || 0} Comments
+              </h6>
               <input
                 type="text"
                 className="w-full rounded-lg border bg-transparent px-2 py-1 placeholder-white"
@@ -91,28 +98,18 @@ function VideoPage() {
               />
             </div>
             <hr className="my-4 border-white" />
+
             <div>
-              <div className="flex gap-x-4">
-                <div className="mt-2 h-11 w-11 shrink-0">
-                  <img
-                    src="https://images.pexels.com/photos/18148932/pexels-photo-18148932/free-photo-of-woman-reading-book-on-a-bench.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    alt="sarahjv"
-                    className="h-full w-full rounded-full"
-                  />
-                </div>
-                <div className="block">
-                  <p className="flex items-center text-gray-200">
-                    Sarah Johnson ·<span className="text-sm">17 hour ago</span>
-                  </p>
-                  <p className="text-sm text-gray-200">@sarahjv</p>
-                  <p className="mt-3 text-sm">
-                    This series is exactly what I&#x27;ve been looking for!
-                    Excited to dive into these advanced React patterns. Thanks
-                    for putting this together!
-                  </p>
-                </div>
-              </div>
-              <hr className="my-4 border-white" />
+              {comments?.map((comment) => (
+                <Comment
+                  key={comment._id}
+                  ownerAvatar={comment.owner?.avatar}
+                  comment={comment.content}
+                  timeAgo={timeAgoFormat(comment.createdAt)}
+                  fullName={comment.owner?.fullName}
+                  username={comment.owner?.username}
+                />
+              ))}
             </div>
           </div>
         </div>
