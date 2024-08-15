@@ -3,8 +3,16 @@ import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import PlaylistModal from "./PlaylistModel";
+import { useMutation } from "@tanstack/react-query";
 
-const AboutVideo = ({ title, views, timeAgo, likes, isLiked, playliists }) => {
+const AboutVideo = ({
+  title,
+  views,
+  timeAgo,
+  likes: likesCount,
+  isLiked,
+  playliists,
+}) => {
   function timeAgoFormat(dateString) {
     const date = new Date(dateString);
     const now = new Date();
@@ -36,24 +44,27 @@ const AboutVideo = ({ title, views, timeAgo, likes, isLiked, playliists }) => {
     return seconds <= 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
   }
   const [liked, setLiked] = useState(isLiked);
+  const [likes, setLikes] = useState(likesCount);
   const { videoId } = useParams();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.post(`likes/toggle/v/${videoId}`);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      setLiked(data.data?.isLiked);
+      setLikes(data.data?.likes);
+    },
+    onError: (error) => {
+      console.error("Like toggle error:", error.response?.data.message);
+    },
+  });
+
   const handleLike = () => {
-    axiosInstance
-      .post(`likes/toggle/v/${videoId}`)
-      .then((res) => {
-        if (res.data.success) {
-          setLiked(!liked);
-          if (liked) {
-            res.data.likes--;
-          } else {
-            res.data.likes++;
-          }
-        }
-        console.log(res?.data);
-      })
-      .catch((error) => {
-        console.log("Error toggling like:", error);
-      });
+    if (videoId) {
+      mutation.mutate();
+    }
   };
   // console.log(isLiked);
   // console.log(liked);
@@ -71,20 +82,18 @@ const AboutVideo = ({ title, views, timeAgo, likes, isLiked, playliists }) => {
           <div className="flex overflow-hidden rounded-lg border">
             <button
               className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
-              data-like={liked ? likes + 1 : likes}
-              data-like-alt={liked ? likes + 1 : likes}
+              data-like={likes}
+              data-like-alt={likes}
               onClick={handleLike}
             >
               <span
                 className={`inline-block w-5 ${
-                  liked || isLiked
-                    ? "text-[#ae7aff]"
-                    : "group-focus/btn:text-[#ae7aff]"
+                  liked ? "text-[#ae7aff]" : "group-focus/btn:text-[#ae7aff]"
                 }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill={liked || isLiked ? "currentColor" : "none"}
+                  fill={liked ? "currentColor" : "none"}
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"

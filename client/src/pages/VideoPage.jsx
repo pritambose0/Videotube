@@ -43,7 +43,7 @@ function VideoPage() {
     staleTime: 1000 * 60,
   });
 
-  // console.log(video);
+  // console.log(video?.owner?.isSubscribed);
 
   const handleClick = () => {};
   return (
@@ -57,31 +57,33 @@ function VideoPage() {
               </video>
             </div>
           </div>
-          <div
-            className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5"
-            role="button"
-            tabIndex="0"
-          >
-            <AboutVideo
-              title={video?.title}
-              views={video?.views}
-              timeAgo={video?.createdAt}
-              likes={video?.likesCount || 0}
-              isLiked={video?.isLiked}
-              playliists={playlists}
-            />
-
-            <div onClick={handleClick}>
-              <VideoInfo
-                channelImage={video?.thumbnail?.url}
-                channelName={video && video?.owner && video?.owner.fullName}
-                description={video?.description}
-                channelId={video?.owner && video?.owner?._id}
-                subscribers={video?.owner && video?.owner.subscriberCount}
-                subscribeStatus={video?.owner && video?.owner.isSubscribed}
+          {video && (
+            <div
+              className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5"
+              role="button"
+              tabIndex="0"
+            >
+              <AboutVideo
+                title={video?.title}
+                views={video?.views}
+                timeAgo={video?.createdAt}
+                likes={video?.likesCount || 0}
+                isLiked={video?.isLiked}
+                playliists={playlists}
               />
+
+              <div onClick={handleClick}>
+                <VideoInfo
+                  channelImage={video?.thumbnail?.url}
+                  channelName={video?.owner?.fullName}
+                  description={video?.description}
+                  channelId={video?.owner?._id}
+                  subscribers={video?.owner?.subscriberCount}
+                  subscribeStatus={video?.owner?.isSubscribed}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           <button className="peer w-full rounded-lg border p-4 text-left duration-200 hover:bg-white/5 focus:bg-white/5 sm:hidden">
             <h6 className="font-semibold">{comments?.length || 0} Comments</h6>

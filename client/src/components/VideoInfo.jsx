@@ -12,6 +12,8 @@ const VideoInfo = ({
   subscribeStatus,
 }) => {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
+  // console.log(isSubscribed);
+  // console.log(subscribeStatus);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -69,7 +71,7 @@ const VideoInfo = ({
               </svg>
             </span>
             <span className="group-focus/btn" onClick={handleSubscribe}>
-              {subscribeStatus || isSubscribed ? "Subscribed" : "Subscribe"}
+              {isSubscribed ? "Subscribed" : "Subscribe"}
             </span>
           </button>
         </div>
