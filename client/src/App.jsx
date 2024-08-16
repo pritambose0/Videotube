@@ -20,7 +20,7 @@ function App() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.data?.message);
       });
   }, [dispatch, userStatus]);
 

@@ -66,7 +66,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  console.log("LIKES", likes[0].likesCount);
+  // console.log("LIKES", likes[0].likesCount);
 
   // console.log("EXISTING", existingLikeStatus);
   res

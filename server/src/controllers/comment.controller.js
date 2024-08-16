@@ -8,7 +8,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
   //TODO: get all comments for a video
   const { videoId } = req.params;
   const { page = 1, limit = 10 } = req.query;
-
+  const pageNum = parseInt(page);
   if (!videoId || !isValidObjectId(videoId)) {
     throw new ApiError(400, "getVideoComments :: Video Id is not valid");
   }
@@ -71,16 +71,28 @@ const getVideoComments = asyncHandler(async (req, res) => {
       },
     },
     {
-      $skip: (page - 1) * limit,
+      $skip: (parseInt(page) - 1) * limit,
     },
     {
       $limit: parseInt(limit),
     },
   ]);
+  const totalComments = await Comment.countDocuments({ video: videoId });
+  const totalPages = Math.ceil(totalComments / limit);
+  console.log(totalPages);
+
+  const nextPage = pageNum < totalPages ? pageNum + 1 : null;
+  console.log(nextPage);
 
   res
     .status(200)
-    .json(new ApiResponse(200, comments, "Comments fetched successfully"));
+    .json(
+      new ApiResponse(
+        200,
+        { comments, nextPage, totalComments },
+        "Comments fetched successfully"
+      )
+    );
 });
 
 const addComment = asyncHandler(async (req, res) => {
