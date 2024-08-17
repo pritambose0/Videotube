@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../../services/axiosInstance";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 

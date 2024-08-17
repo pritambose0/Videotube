@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import PlaylistModal from "./PlaylistModel";
+import PlaylistModal from "../PlaylistModel";
 import { useMutation } from "@tanstack/react-query";
 
 const AboutVideo = ({

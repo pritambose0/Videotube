@@ -8,7 +8,7 @@ import LikedVideos from "./LikedVideos.jsx";
 import History from "./History.jsx";
 import Playlists from "./Playlists.jsx";
 import MyChannel from "./MyChannel.jsx";
-import ProfileOutlet from "../components/ProfileOutlet.jsx";
+import ProfileOutlet from "../components/Profile/ProfileOutlet.jsx";
 import VideoPage from "./VideoPage.jsx";
 
 export {

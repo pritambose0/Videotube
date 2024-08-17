@@ -1,6 +1,6 @@
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import PropTypes from "prop-types";
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../../services/axiosInstance";
 import { useParams } from "react-router-dom";
 
 function Comment({

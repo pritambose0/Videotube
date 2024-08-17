@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { timeAgoFormat } from "../utils/timeAgoFormat";
+import { timeAgoFormat } from "../../utils/timeAgoFormat";
 
 const VideoCard = ({
   avatar,

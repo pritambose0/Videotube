@@ -1,4 +1,4 @@
-import VideoCard from "../components/VideoCard";
+import VideoCard from "../components/Video/VideoCard";
 import axiosInstance from "../services/axiosInstance";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";

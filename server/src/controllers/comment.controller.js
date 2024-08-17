@@ -78,18 +78,13 @@ const getVideoComments = asyncHandler(async (req, res) => {
     },
   ]);
   const totalComments = await Comment.countDocuments({ video: videoId });
-  const totalPages = Math.ceil(totalComments / limit);
-  console.log(totalPages);
-
-  const nextPage = pageNum < totalPages ? pageNum + 1 : null;
-  console.log(nextPage);
 
   res
     .status(200)
     .json(
       new ApiResponse(
         200,
-        { comments, nextPage, totalComments },
+        { comments, totalComments },
         "Comments fetched successfully"
       )
     );
