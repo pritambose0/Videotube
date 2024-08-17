@@ -1,4 +1,4 @@
-import mongoose, { plugin, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
