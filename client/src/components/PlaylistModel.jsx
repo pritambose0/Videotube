@@ -2,30 +2,48 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 const PlaylistModal = ({ playlists }) => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [newPlaylistName, setNewPlaylistName] = useState("");
 
-  const handleCheckboxChange = (id) => {
-    setSelectedItem((prevSelectedItem) =>
-      prevSelectedItem && prevSelectedItem === id ? null : id
-    );
-    // console.log(selectedItem);
-  };
   const { videoId } = useParams();
-  const handlePlaylistSave = (playlistId) => {
-    axiosInstance
-      .patch(`/playlists/add/${videoId}/${playlistId}`)
-      .then(() => alert("Added to playlist"))
-      .catch((error) => console.log(error));
-  };
-  const [newPlaylistName, setNewPlaylistName] = useState();
+
+  const { mutate: saveToPlaylistMutation } = useMutation({
+    mutationFn: async (playlistId) => {
+      const res = await axiosInstance.patch(
+        `/playlists/add/${videoId}/${playlistId}`
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      alert("Added to playlist");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const createPlaylistMutation = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.post("/playlists/", {
+        name: newPlaylistName,
+      });
+      console.log(res);
+
+      return res.data;
+    },
+    onSuccess: () => {
+      alert("Playlist created successfully");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const onCreatePlaylist = () => {
-    axiosInstance
-      .post("/playlists/", { name: newPlaylistName })
-      .then(() => alert("Playlist created successfully"))
-      .catch((error) => console.log(error));
+    createPlaylistMutation.mutate();
   };
 
   return (
@@ -40,7 +58,7 @@ const PlaylistModal = ({ playlists }) => {
               <input
                 type="checkbox"
                 className="peer hidden"
-                onChange={() => handleCheckboxChange(playlist._id)}
+                onChange={() => setSelectedItem(playlist._id || null)}
                 checked={selectedItem === playlist._id}
               />
               <span className="inline-flex h-4 w-4 items-center justify-center rounded-[4px] border border-transparent bg-white text-white group-hover/label:border-[#ae7aff] peer-checked:border-[#ae7aff] peer-checked:text-[#ae7aff]">
@@ -64,7 +82,7 @@ const PlaylistModal = ({ playlists }) => {
           </li>
         ))}
         <button
-          onClick={() => handlePlaylistSave(selectedItem)}
+          onClick={() => saveToPlaylistMutation(selectedItem)}
           className="peer flex items-center gap-x-2 rounded-lg bg-white px-4 py-1.5 text-black"
         >
           Save
