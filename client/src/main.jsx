@@ -21,6 +21,7 @@ import { Provider } from "react-redux";
 import store from "./store/store.js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ChannelPage from "./components/ChannelPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <LikedVideos />,
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/c/:username",
+        element: (
+          <AuthLayout authentication={false}>
+            <ChannelPage />,
           </AuthLayout>
         ),
       },

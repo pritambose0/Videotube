@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import axiosInstance from "../../services/axiosInstance";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 const VideoInfo = ({
   channelImage,
@@ -10,9 +11,10 @@ const VideoInfo = ({
   channelId,
   subscribers,
   subscribeStatus,
+  channelUsername,
 }) => {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
-  // console.log(isSubscribed);
+  console.log(isSubscribed);
   // console.log(subscribeStatus);
 
   const mutation = useMutation({
@@ -44,10 +46,12 @@ const VideoInfo = ({
               className="h-full w-full rounded-full"
             />
           </div>
-          <div className="block">
-            <p className="text-gray-200">{channelName}</p>
-            <p className="text-sm text-gray-400">{subscribers} Subscribers</p>
-          </div>
+          <Link to={`/c/${channelUsername}`}>
+            <div className="block">
+              <p className="text-gray-200">{channelName}</p>
+              <p className="text-sm text-gray-400">{subscribers} Subscribers</p>
+            </div>
+          </Link>
         </div>
         <div className="block">
           <button
@@ -91,6 +95,7 @@ VideoInfo.propTypes = {
   channelId: PropTypes.string,
   subscribers: PropTypes.number,
   subscribeStatus: PropTypes.bool,
+  channelUsername: PropTypes.string,
 };
 
 export default VideoInfo;

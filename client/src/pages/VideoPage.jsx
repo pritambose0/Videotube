@@ -31,8 +31,8 @@ function VideoPage() {
     staleTime: 1000 * 60,
     enabled: !!userId,
   });
+  console.log(video);
 
-  const handleClick = () => {};
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">
       <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
@@ -59,16 +59,15 @@ function VideoPage() {
                 playliists={playlists}
               />
 
-              <div onClick={handleClick}>
-                <VideoInfo
-                  channelImage={video?.thumbnail?.url}
-                  channelName={video?.owner?.fullName}
-                  description={video?.description}
-                  channelId={video?.owner?._id}
-                  subscribers={video?.owner?.subscriberCount}
-                  subscribeStatus={video?.owner?.isSubscribed}
-                />
-              </div>
+              <VideoInfo
+                channelUsername={video?.owner?.username}
+                channelImage={video?.thumbnail?.url}
+                channelName={video?.owner?.fullName}
+                description={video?.description}
+                channelId={video?.owner?._id}
+                subscribers={video?.owner?.subscriberCount}
+                subscribeStatus={video?.owner?.isSubscribed}
+              />
             </div>
           )}
 

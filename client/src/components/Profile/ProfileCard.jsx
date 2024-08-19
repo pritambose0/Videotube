@@ -1,5 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "../../services/axiosInstance";
 
 function ProfileCard({
   coverPhoto,
@@ -8,8 +11,15 @@ function ProfileCard({
   channelHandle,
   subscribers,
   subscribed,
+  channelId,
+  isSubscribed: subscribeStatus,
 }) {
-  const location = useLocation();
+  const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
+  // console.log("SUBSCRIBE STATUS", subscribeStatus);
+  // console.log("IS SUBSCRIBED", isSubscribed);
+  console.log("SUBSCRIBERS", subscribers);
+  console.log("SUBSCRIBED", subscribed);
+
   const tabs = [
     { name: "Videos", path: "/c/videos" },
     { name: "Playlists", path: "/c/playlists" },
@@ -17,6 +27,24 @@ function ProfileCard({
     { name: "Subscribed", path: "/c/subscribed" },
   ];
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.post(`/subscriptions/c/${channelId}`);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      setIsSubscribed(data.data?.isSubscribed);
+    },
+    onError: (error) => {
+      console.error("Subscription toggle error:", error.response?.data.message);
+    },
+  });
+
+  const handleSubscribe = () => {
+    if (channelId) {
+      mutation.mutate();
+    }
+  };
   return (
     <>
       <div className="relative min-h-[150px] w-full pt-[16.28%]">
@@ -38,7 +66,8 @@ function ProfileCard({
             <h1 className="font-bold text-xl">{channelName}</h1>
             <p className="text-sm text-gray-400">@{channelHandle}</p>
             <p className="text-sm text-gray-400">
-              {subscribers} Subscribers · {subscribed} Subscribed
+              {subscribers ? subscribers : 0} Subscribers ·{" "}
+              {subscribed ? subscribed : 0} Subscribed
             </p>
           </div>
           <div className="inline-block">
@@ -60,8 +89,9 @@ function ProfileCard({
                     ></path>
                   </svg>
                 </span>
-                <span className="group-focus/btn:hidden">Subscribe</span>
-                <span className="hidden group-focus/btn:block">Subscribed</span>
+                <span className="group-focus/btn" onClick={handleSubscribe}>
+                  {isSubscribed ? "Subscribed" : "Subscribe"}
+                </span>
               </button>
             </div>
           </div>
@@ -93,7 +123,9 @@ ProfileCard.propTypes = {
   avatar: PropTypes.string,
   channelName: PropTypes.string,
   channelHandle: PropTypes.string,
-  subscribers: PropTypes.string,
-  subscribed: PropTypes.string,
+  subscribers: PropTypes.number,
+  subscribed: PropTypes.number,
+  isSubscribed: PropTypes.bool,
+  channelId: PropTypes.string,
 };
 export default ProfileCard;
