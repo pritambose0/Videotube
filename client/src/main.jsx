@@ -89,7 +89,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/c",
+        path: "/c/:username",
         element: (
           <AuthLayout authentication={true}>
             <ProfileOutlet />,
@@ -97,15 +97,15 @@ const router = createBrowserRouter([
         ),
         children: [
           {
-            path: "/c/videos",
+            path: "/c/:username/videos",
             element: (
-              <AuthLayout authentication={false}>
+              <AuthLayout authentication={true}>
                 <MyChannel />,
               </AuthLayout>
             ),
           },
           {
-            path: "/c/playlists",
+            path: "/c/:username/playlists",
             element: (
               <AuthLayout authentication={false}>
                 <Playlists />,
@@ -113,7 +113,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "/c/tweets",
+            path: "/c/:username/tweets",
             element: (
               <AuthLayout authentication={false}>
                 <Tweet />,
@@ -121,7 +121,7 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: "/c/subscribed",
+            path: "/c/:username/subscribed",
             element: (
               <AuthLayout authentication={false}>
                 <Subscribed />,

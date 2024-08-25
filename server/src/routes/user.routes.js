@@ -3,6 +3,7 @@ import {
   changeCurrentPassword,
   getCurrentUser,
   getUserChannelProfile,
+  getUserChannelVideos,
   getWatchHistory,
   loginUser,
   logoutUser,
@@ -49,5 +50,5 @@ router
 
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
 router.route("/history").get(verifyJWT, getWatchHistory);
-
+router.route("/c/:username/videos").get(getUserChannelVideos);
 export default router;

@@ -489,6 +489,28 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     );
 });
 
+const getUserChannelVideos = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  if (!username) {
+    throw new ApiError(400, "Username not found");
+  }
+  // Find the user by username
+  const user = await User.findOne({ username });
+  console.log("USER", user);
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const videos = await Video.find({ _id: user._id });
+
+  console.log("VIDEOS: ", videos);
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, videos, "Videos fetched successfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -501,4 +523,5 @@ export {
   updateCoverImage,
   getUserChannelProfile,
   getWatchHistory,
+  getUserChannelVideos,
 };

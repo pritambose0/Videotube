@@ -1,6 +1,11 @@
+import { useSelector } from "react-redux";
 import SidebarItem from "./SidebarItem";
 
 function Sidebar() {
+  const username = useSelector((state) => state.auth.userData?.username);
+  // const user
+  console.log(username);
+
   const items = [
     {
       to: "/",
@@ -24,7 +29,7 @@ function Sidebar() {
       isHiddenOnSmall: false,
     },
     {
-      to: "/liked-videos",
+      to: username ? `/${username}/liked-videos` : "/login",
       icon: (
         <svg
           width="100%"
@@ -45,7 +50,7 @@ function Sidebar() {
       isHiddenOnSmall: true,
     },
     {
-      to: "/history",
+      to: username ? `/${username}/history` : "/login",
       icon: (
         <svg
           width="100%"
@@ -66,7 +71,7 @@ function Sidebar() {
       isHiddenOnSmall: false,
     },
     {
-      to: "/c/videos",
+      to: username ? `/c/${username}/videos` : "/login",
       icon: (
         <svg
           width="100%"
@@ -94,7 +99,7 @@ function Sidebar() {
       isHiddenOnSmall: true,
     },
     {
-      to: "/c/playlists",
+      to: username ? `/c/${username}/playlists` : "/login",
       icon: (
         <svg
           width="100%"

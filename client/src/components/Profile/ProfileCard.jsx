@@ -17,14 +17,14 @@ function ProfileCard({
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
   // console.log("SUBSCRIBE STATUS", subscribeStatus);
   // console.log("IS SUBSCRIBED", isSubscribed);
-  console.log("SUBSCRIBERS", subscribers);
-  console.log("SUBSCRIBED", subscribed);
+  // console.log("SUBSCRIBERS", subscribers);
+  // console.log("SUBSCRIBED", subscribed);
 
   const tabs = [
-    { name: "Videos", path: "/c/videos" },
-    { name: "Playlists", path: "/c/playlists" },
-    { name: "Tweets", path: "/c/tweets" },
-    { name: "Subscribed", path: "/c/subscribed" },
+    { name: "Videos", path: `/c/${channelHandle}/videos` },
+    { name: "Playlists", path: `/c/${channelHandle}/playlists` },
+    { name: "Tweets", path: `/c/${channelHandle}/tweets` },
+    { name: "Subscribed", path: `/c/${channelHandle}/subscribed` },
   ];
 
   const mutation = useMutation({
