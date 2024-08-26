@@ -5,10 +5,15 @@ import VideoInfo from "../components/Video/VideoInfo";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import Comments from "../components/Comment/CommentModel";
+import { useEffect } from "react";
 
 function VideoPage() {
   const { videoId } = useParams();
   const userId = useSelector((state) => state.auth.userData?._id);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // Fetch video data
   const { data: video } = useQuery({

@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/liked-videos",
+        path: "/c/:username/liked-videos",
         element: (
           <AuthLayout authentication={false}>
             <LikedVideos />,
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/history",
+        path: "/c/:username/history",
         element: (
           <AuthLayout authentication={false}>
             <History />,

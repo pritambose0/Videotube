@@ -46,7 +46,7 @@ const VideoInfo = ({
               className="h-full w-full rounded-full"
             />
           </div>
-          <Link to={`/c/${channelUsername}`}>
+          <Link to={`/c/${channelUsername}/videos`}>
             <div className="block">
               <p className="text-gray-200">{channelName}</p>
               <p className="text-sm text-gray-400">{subscribers} Subscribers</p>

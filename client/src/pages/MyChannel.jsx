@@ -1,4 +1,11 @@
+import { useState } from "react";
+import VideoUploadModal from "../components/Video Modals/VideoUploadModal";
+
 function MyChannel() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   return (
     <>
       <div className="flex justify-center p-4">
@@ -27,7 +34,10 @@ function MyChannel() {
             This page has yet to upload a video. Search another page in order to
             find more videos.
           </p>
-          <button className="mt-4 inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black">
+          <button
+            className="mt-4 inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black"
+            onClick={openModal}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -45,6 +55,7 @@ function MyChannel() {
             </svg>{" "}
             New video
           </button>
+          <VideoUploadModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
       </div>
     </>

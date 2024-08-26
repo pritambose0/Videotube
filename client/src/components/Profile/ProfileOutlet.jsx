@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../services/axiosInstance";
+import { useEffect } from "react";
 function ProfileOutlet() {
   const { username } = useParams();
 
@@ -12,9 +13,13 @@ function ProfileOutlet() {
       const res = await axiosInstance.get(`/users/c/${username}`);
       return res?.data?.data;
     },
-    staleTime: Infinity,
+    staleTime: 1000 * 60,
     enabled: !!username,
   });
+  // console.log("User", user);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -24,8 +29,8 @@ function ProfileOutlet() {
           avatar={user?.avatar}
           channelName={user?.fullName}
           channelHandle={user?.username}
-          subscribers={600}
-          subscribed={220}
+          subscribers={user?.subscribersCount}
+          subscribed={user?.subscribedToCount}
         />
         <Outlet />
       </section>

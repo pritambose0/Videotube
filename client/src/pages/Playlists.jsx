@@ -1,6 +1,6 @@
 function Playlists() {
   return (
-    <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+    <section className="w-full pb-[70px] sm:pb-0 lg:ml-0">
       <div className="px-4 pb-4">
         <div className="flex justify-center p-4">
           <div className="w-full max-w-sm text-center">

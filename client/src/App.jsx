@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
@@ -32,6 +33,7 @@ function App() {
           <Sidebar />
           <Outlet />
         </div>
+        <Toaster />
       </div>
     </>
   );

@@ -3,8 +3,7 @@ import SidebarItem from "./SidebarItem";
 
 function Sidebar() {
   const username = useSelector((state) => state.auth.userData?.username);
-  // const user
-  console.log(username);
+  // console.log(username);
 
   const items = [
     {
@@ -29,7 +28,7 @@ function Sidebar() {
       isHiddenOnSmall: false,
     },
     {
-      to: username ? `/${username}/liked-videos` : "/login",
+      to: username ? `/c/${username}/liked-videos` : "/login",
       icon: (
         <svg
           width="100%"
@@ -50,7 +49,7 @@ function Sidebar() {
       isHiddenOnSmall: true,
     },
     {
-      to: username ? `/${username}/history` : "/login",
+      to: username ? `/c/${username}/history` : "/login",
       icon: (
         <svg
           width="100%"

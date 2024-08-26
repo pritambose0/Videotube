@@ -1,5 +1,5 @@
 import React, { useId } from "react";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 const Input = React.forwardRef(function Input(
   { label, type = "text", className = "", name, ...props },
   ref
