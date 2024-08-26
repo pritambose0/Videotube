@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 function UploadingModal({ onCancel }) {
   return (
     <div className="absolute inset-x-0 top-0 z-10 flex h-[calc(100vh-66px)] items-center justify-center bg-black/50 px-4 pb-[86px] pt-4 sm:h-[calc(100vh-82px)] sm:px-14 sm:py-8">
@@ -85,5 +87,9 @@ function UploadingModal({ onCancel }) {
     </div>
   );
 }
+
+UploadingModal.propTypes = {
+  onCancel: PropTypes.any,
+};
 
 export default UploadingModal;
