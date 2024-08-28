@@ -45,7 +45,7 @@ const toggleSubscription = asyncHandler(async (req, res) => {
 
   // console.log("SUBSCRIPTION STATUS", existingSubscriptionStatus);
 
-  res.status(200).json(
+  return res.status(200).json(
     new ApiResponse(
       200,
       {
@@ -107,7 +107,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     throw new ApiError(404, "getUserChannelSubscribers :: Channel not found");
   }
   // console.log("SUBSCRIBERS", subscribers);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, subscribers, "Subscribers fetched"));
 });
@@ -158,7 +158,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
   }
   // console.log("SUBSCRIBED CHANNELS", subscribedChannels);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, subscribedChannels, "Channels fetched"));
 });

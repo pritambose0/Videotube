@@ -68,7 +68,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
   ]);
 
   // console.log("VIDEOS: ", videos);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });
@@ -87,7 +87,7 @@ const publishVideo = asyncHandler(async (req, res) => {
   if (!thumbnailLocalPath) throw new ApiError(400, "Thumbnail is required");
 
   const videoFile = await uploadOnCloudinary(videoFileLocalPath);
-  //   console.log("VIDEO FILE", videoFile);
+  // console.log("VIDEO FILE", videoFile);
   if (!videoFile) throw new ApiError(400, "Cloudinary: Video File is required");
 
   const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
@@ -111,7 +111,7 @@ const publishVideo = asyncHandler(async (req, res) => {
 
   if (!video) throw new ApiError(500, "Error while uploading video");
   //   console.log("VIDEO", video);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, video, "Video uploaded Successfully"));
 });
@@ -235,7 +235,7 @@ const getVideoById = asyncHandler(async (req, res) => {
     },
   });
   // console.log("VIDEO", video);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, video[0], "Video fetched successfully"));
 });
@@ -309,7 +309,7 @@ const updateVideo = asyncHandler(async (req, res) => {
     );
   }
   // console.log("VIDEO UPDATED", updatedVideo);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, updatedVideo, "Video updated successfully"));
 });
@@ -341,7 +341,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     );
   }
   // console.log("DELETED VIDEO", deletedVideo);
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, deletedVideo, "Video deleted successfully"));
 });
@@ -377,7 +377,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
   );
   // console.log("TOGGLE STATUS: ", updatedVideo);
 
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(200, updatedVideo, "Publish status toggled successfully")

@@ -8,6 +8,7 @@ import {
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { Video } from "../models/video.model.js";
 
 const generateAccessToken = async (userId) => {
   try {
@@ -496,17 +497,17 @@ const getUserChannelVideos = asyncHandler(async (req, res) => {
   }
   // Find the user by username
   const user = await User.findOne({ username });
-  console.log("USER", user);
+  // console.log("USER", user);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
-  const videos = await Video.find({ _id: user._id });
+  const videos = await Video.find({ owner: user._id });
 
   console.log("VIDEOS: ", videos);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });

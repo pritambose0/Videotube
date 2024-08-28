@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Video } from "../models/video.model.js";
+import { User } from "../models/user.model.js";
 
 const createPlaylist = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -23,21 +24,42 @@ const createPlaylist = asyncHandler(async (req, res) => {
   }
   //   console.log("PLAYLIST", playlist);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, playlist, "Playlist created successfully"));
 });
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-  if (!userId || !isValidObjectId(userId)) {
-    throw new ApiError(400, "getUserPlaylists :: User Id is not valid");
+  const { username } = req.params;
+  if (!username) {
+    throw new ApiError(400, "Username is not valid");
+  }
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
   }
 
   const playlists = await Playlist.aggregate([
     {
       $match: {
-        owner: new mongoose.Types.ObjectId(userId),
+        owner: new mongoose.Types.ObjectId(user._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "videos",
+        foreignField: "_id",
+        as: "videos",
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        description: 1,
+        createdAt: 1,
+        owner: 1,
+        "videos.thumbnail": 1,
       },
     },
   ]);
@@ -46,14 +68,8 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 
   // const playlist = await Playlist.find({ owner: userId });
 
-  // if (!playlists?.length) {
-  //   throw new ApiError(
-  //     400,
-  //     "getUserPlaylists :: No playlists found for this user"
-  //   );
-  // }
-  //   console.log("PLAYLISTS", playlists);
-  res
+  // console.log("PLAYLISTS", playlists);
+  return res
     .status(200)
     .json(new ApiResponse(200, playlists, "Playlists fetched successfully"));
 });
@@ -72,7 +88,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
   }
   //   console.log("PLAYLIST", playlist);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, playlist, "Playlist fetched successfully"));
 });
@@ -111,9 +127,8 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
   playlist.videos.push(videoId);
   await playlist.save({ validateBeforeSave: false });
-  // console.log("PLAYLIST", playlist);
 
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(200, playlist, "Video added to playlist successfully")
@@ -156,7 +171,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   await playlist.save({ validateBeforeSave: false });
   // console.log("PLAYLIST", playlist);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, playlist, "Video removed successfully"));
 });
@@ -185,7 +200,7 @@ const deletePlaylist = asyncHandler(async (req, res) => {
   }
   console.log("PLAYLIST", deletePlaylist);
 
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(200, deletePlaylist, "Playlist deleted successfully")
@@ -231,7 +246,7 @@ const updatePlaylist = asyncHandler(async (req, res) => {
   }
   // console.log("PLAYLIST", updatedPlaylist);
 
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(200, updatedPlaylist, "Playlist updated successfully")
