@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../services/axiosInstance";
 import { useEffect } from "react";
+
 function ProfileOutlet() {
   const { username } = useParams();
 
@@ -20,6 +21,7 @@ function ProfileOutlet() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  console.log("User", user);
 
   return (
     <>

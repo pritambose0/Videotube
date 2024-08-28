@@ -41,7 +41,7 @@ const toggleSubscription = asyncHandler(async (req, res) => {
   const subscribers = await Subscription.find({
     channel: channelId,
   }).countDocuments();
-  console.log(subscribers);
+  // console.log(subscribers);
 
   // console.log("SUBSCRIPTION STATUS", existingSubscriptionStatus);
 
@@ -78,7 +78,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "users",
-        localField: "subscriber",
+        localField: "channel",
         foreignField: "_id",
         as: "subscribers", // here we can use further pipeline too for more details
       },
@@ -129,7 +129,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "users",
-        localField: "channel",
+        localField: "subscriber",
         foreignField: "_id",
         as: "channels",
       },

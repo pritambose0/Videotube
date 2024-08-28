@@ -7,7 +7,8 @@ import UploadingModal from "./UploadingModal";
 
 function VideoUploadModal({ isOpen, onClose }) {
   const [isUploading, setIsUploading] = useState(false);
-  // const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [fileSize, setFileSize] = useState(0);
 
   const {
     register,
@@ -48,13 +49,15 @@ function VideoUploadModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const onSubmit = (data) => {
+    setFileName(data.video[0]?.name);
+    setFileSize(data.video[0]?.size);
     mutation.mutate(data);
     setIsUploading(true);
   };
 
   const handleCancel = () => {
-    setIsUploading(false);
     controller.abort();
+    setIsUploading(false);
   };
   return (
     <div className="absolute inset-0 z-50 bg-black/50 px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
@@ -187,13 +190,20 @@ function VideoUploadModal({ isOpen, onClose }) {
               Upload
             </button>
             {mutation.isError && (
-              <div className="text-red-500">
-                An error occurred: {mutation.error.response.data.message}
+              <div className="text-red-500 mt-3">
+                {mutation.error.response.data.message}
               </div>
             )}
           </div>
         </div>
-        {isUploading && <UploadingModal onCancel={handleCancel} />}
+        {isUploading && (
+          <UploadingModal
+            onCancel={handleCancel}
+            isUploading={isUploading}
+            fileName={fileName}
+            fileSize={fileSize}
+          />
+        )}
       </form>
     </div>
   );

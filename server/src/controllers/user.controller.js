@@ -505,7 +505,7 @@ const getUserChannelVideos = asyncHandler(async (req, res) => {
 
   const videos = await Video.find({ owner: user._id });
 
-  console.log("VIDEOS: ", videos);
+  // console.log("VIDEOS: ", videos);
 
   return res
     .status(200)

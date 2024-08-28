@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { timeAgoFormat } from "../../utils/timeAgoFormat";
+import { convertToTime } from "../../utils/convertToTime.js";
 
 const VideoCard = ({
   avatar,
@@ -10,17 +11,6 @@ const VideoCard = ({
   timeAgo,
   author,
 }) => {
-  function convertToTime(decimalNumber) {
-    // Extract the minutes
-    const minutes = Math.floor(decimalNumber);
-    // Convert the fractional part to seconds
-    const fractionalPart = decimalNumber - minutes;
-    const seconds = Math.floor(fractionalPart * 60);
-    // Ensure seconds are displayed as two digits
-    const formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
-    return `${minutes}:${formattedSeconds}`;
-  }
-
   return (
     <div className="w-full">
       <div className="relative mb-2 w-full pt-[56%]">

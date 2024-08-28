@@ -9,7 +9,8 @@ import { useEffect } from "react";
 
 function VideoPage() {
   const { videoId } = useParams();
-  const userId = useSelector((state) => state.auth.userData?._id);
+  const username = useSelector((state) => state.auth.userData?.username);
+  // console.log("USERNAME", username);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,21 +23,21 @@ function VideoPage() {
       const res = await axiosInstance.get(`/videos/${videoId}`);
       return res?.data?.data;
     },
-    staleTime: Infinity, // Never cache data
-    enabled: !!videoId, // Only run the query if videoId is defined
+    staleTime: Infinity,
+    enabled: !!videoId,
   });
 
   // Fetch playlists data
   const { data: playlists } = useQuery({
-    queryKey: ["playlists", userId],
+    queryKey: ["playlists", username],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/playlists/user/${userId}`);
+      const res = await axiosInstance.get(`/playlists/user/${username}`);
       return res?.data?.data || [];
     },
-    staleTime: 1000 * 60,
-    enabled: !!userId,
+    staleTime: Infinity,
+    enabled: !!username,
   });
-  console.log(video);
+  // console.log(video);
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">

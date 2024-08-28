@@ -69,7 +69,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   // console.log("LIKES", likes[0].likesCount);
 
   // console.log("EXISTING", existingLikeStatus);
-  res
+  return res
     .status(200)
     .json(
       new ApiResponse(
@@ -109,7 +109,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
   }
   console.log("EXISTING", existingLikeStatus);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, existingLikeStatus, "Like Status Updated"));
 });
@@ -143,7 +143,7 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
   }
   console.log("EXISTING", existingLikeStatus);
 
-  res
+  return res
     .status(200)
     .json(new ApiResponse(200, existingLikeStatus, "Like Status Updated"));
 });
@@ -211,7 +211,9 @@ const getLikedVideos = asyncHandler(async (req, res) => {
   }
   console.log("LIKED VIDEOS", likedVideos);
 
-  res.status(200).json(new ApiResponse(200, likedVideos, "Liked Videos Found"));
+  return res
+    .status(200)
+    .json(new ApiResponse(200, likedVideos, "Liked Videos Found"));
 });
 
 export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };

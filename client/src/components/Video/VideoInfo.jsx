@@ -36,7 +36,7 @@ const VideoInfo = ({
     }
   };
   return (
-    <div>
+    <>
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center gap-x-4">
           <div className="mt-2 h-12 w-12 shrink-0">
@@ -54,10 +54,7 @@ const VideoInfo = ({
           </Link>
         </div>
         <div className="block">
-          <button
-            className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto"
-            // onClick={onSubscribe}
-          >
+          <button className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">
             <span className="inline-block w-5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +81,7 @@ const VideoInfo = ({
       <div className="h-5 overflow-hidden group-focus:h-auto">
         <p className="text-sm">{description}</p>
       </div>
-    </div>
+    </>
   );
 };
 

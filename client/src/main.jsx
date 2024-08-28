@@ -12,7 +12,6 @@ import {
   Subscribed,
   Login,
   Signup,
-  Channel,
   Tweet,
   VideoPage,
 } from "./pages";
@@ -73,14 +72,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/channel/:id",
-        element: (
-          <AuthLayout authentication={false}>
-            <Channel />,
-          </AuthLayout>
-        ),
-      },
-      {
         path: "/c/:username/history",
         element: (
           <AuthLayout authentication={false}>
@@ -91,7 +82,7 @@ const router = createBrowserRouter([
       {
         path: "/c/:username",
         element: (
-          <AuthLayout authentication={true}>
+          <AuthLayout authentication={false}>
             <ProfileOutlet />,
           </AuthLayout>
         ),
@@ -99,7 +90,7 @@ const router = createBrowserRouter([
           {
             path: "/c/:username/videos",
             element: (
-              <AuthLayout authentication={true}>
+              <AuthLayout authentication={false}>
                 <MyChannel />,
               </AuthLayout>
             ),

@@ -1,6 +1,11 @@
 import PropTypes from "prop-types";
 
-function UploadingModal({ onCancel }) {
+function UploadingModal({ onCancel, isUploading, fileName, fileSize }) {
+  const bytesToMb = (bytes) => {
+    const mb = bytes / (1024 * 1024);
+    return mb.toFixed(2);
+  };
+
   return (
     <div className="absolute inset-x-0 top-0 z-10 flex h-[calc(100vh-66px)] items-center justify-center bg-black/50 px-4 pb-[86px] pt-4 sm:h-[calc(100vh-82px)] sm:px-14 sm:py-8">
       <div className="w-full max-w-lg overflow-auto rounded-lg border border-gray-700 bg-[#121212] p-4">
@@ -48,8 +53,8 @@ function UploadingModal({ onCancel }) {
             </span>
           </div>
           <div className="flex flex-col">
-            <h6>Dashboard prototype recording.mp4</h6>
-            <p className="text-sm">16 MB</p>
+            <h6>{fileName}</h6>
+            <p className="text-sm">{bytesToMb(fileSize)} MB</p>
             <div className="mt-2">
               <svg
                 aria-hidden="true"
@@ -78,7 +83,7 @@ function UploadingModal({ onCancel }) {
           </button>
           <button
             className="bg-[#ae7aff] px-4 py-3 text-black disabled:bg-[#E4D3FF]"
-            disabled=""
+            disabled={isUploading}
           >
             Finish
           </button>
@@ -90,6 +95,9 @@ function UploadingModal({ onCancel }) {
 
 UploadingModal.propTypes = {
   onCancel: PropTypes.any,
+  isUploading: PropTypes.bool,
+  fileName: PropTypes.string,
+  fileSize: PropTypes.number,
 };
 
 export default UploadingModal;

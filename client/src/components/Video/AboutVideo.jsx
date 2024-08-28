@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import PlaylistModal from "../PlaylistModel";
 import { useMutation } from "@tanstack/react-query";
+import { timeAgoFormat } from "../../utils/timeAgoFormat";
 
 const AboutVideo = ({
   title,
@@ -13,36 +14,6 @@ const AboutVideo = ({
   isLiked,
   playliists,
 }) => {
-  function timeAgoFormat(dateString) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now - date) / 1000);
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) {
-      return interval === 1 ? `${interval} year ago` : `${interval} years ago`;
-    }
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) {
-      return interval === 1
-        ? `${interval} month ago`
-        : `${interval} months ago`;
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) {
-      return interval === 1 ? `${interval} day ago` : `${interval} days ago`;
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) {
-      return interval === 1 ? `${interval} hour ago` : `${interval} hours ago`;
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1) {
-      return interval === 1
-        ? `${interval} minute ago`
-        : `${interval} minutes ago`;
-    }
-    return seconds <= 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
-  }
   const [liked, setLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
   const { videoId } = useParams();

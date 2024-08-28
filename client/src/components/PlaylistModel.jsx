@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PlaylistModal = ({ playlists }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState("");
-
+  const queryClient = useQueryClient();
   const { videoId } = useParams();
 
   const { mutate: saveToPlaylistMutation } = useMutation({
@@ -36,6 +36,7 @@ const PlaylistModal = ({ playlists }) => {
     },
     onSuccess: () => {
       alert("Playlist created successfully");
+      queryClient.invalidateQueries(["playlists"]);
     },
     onError: (error) => {
       console.log(error);

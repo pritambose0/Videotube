@@ -1,4 +1,3 @@
-import Channel from "./Channel.jsx";
 import Home from "./Home.jsx";
 import Login from "./Login.jsx";
 import Signup from "./Signup.jsx";
@@ -12,7 +11,6 @@ import ProfileOutlet from "../components/Profile/ProfileOutlet.jsx";
 import VideoPage from "./VideoPage.jsx";
 
 export {
-  Channel,
   Home,
   Login,
   Signup,
