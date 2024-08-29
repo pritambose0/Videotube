@@ -27,15 +27,19 @@ const createTweet = asyncHandler(async (req, res) => {
 });
 
 const getUserTweets = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
-  if (!userId || !isValidObjectId(userId)) {
-    throw new ApiError(400, "getUserTweets :: User Id is not valid");
+  const { username } = req.params;
+  if (!username) {
+    throw new ApiError(400, "Username is not valid");
+  }
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
   }
 
   const tweets = await Tweet.aggregate([
     {
       $match: {
-        owner: new mongoose.Types.ObjectId(userId),
+        owner: new mongoose.Types.ObjectId(user._id),
       },
     },
     {
@@ -54,19 +58,34 @@ const getUserTweets = asyncHandler(async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "owner",
+      },
+    },
+    {
+      $unwind: "$owner",
+    },
+    {
       $project: {
         _id: 1,
         content: 1,
         likesCount: 1,
         createdAt: 1,
         updatedAt: 1,
+        owner: {
+          username: "$owner.username",
+          fullName: "$owner.fullName",
+          avatar: "$owner.avatar",
+        },
+        // "owner.username": 1,
+        // "owner.fullName": 1,
       },
     },
   ]);
 
-  if (!tweets?.length) {
-    throw new ApiError(404, "getUserTweets :: No tweets found for this user");
-  }
   console.log("TWEETS", tweets);
 
   return res

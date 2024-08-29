@@ -92,19 +92,21 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     },
     {
       $project: {
+        _id: 0,
         subscribersCount: 1,
-        subscribers: {
-          _id: 1,
-          username: 1,
-          avatar: 1,
-          fullName: 1,
-        },
+        "subscribers._id": 1,
+        "subscribers.username": 1,
+        "subscribers.avatar": 1,
+        "subscribers.fullName": 1,
       },
     },
   ]);
 
   if (!subscribers) {
-    throw new ApiError(404, "getUserChannelSubscribers :: Channel not found");
+    throw new ApiError(
+      404,
+      "getUserChannelSubscribers :: No subscribers found"
+    );
   }
   // console.log("SUBSCRIBERS", subscribers);
   return res
@@ -123,7 +125,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
   const subscribedChannels = await Subscription.aggregate([
     {
       $match: {
-        subscriber: new mongoose.Types.ObjectId(subscriberId),
+        subscriber: new mongoose.Types.ObjectId(channelId),
       },
     },
     {
@@ -143,12 +145,11 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     },
     {
       $project: {
+        _id: 0,
         channelsCount: 1,
-        channels: {
-          _id: 1,
-          username: 1,
-          avatar: 1,
-        },
+        "channels._id": 1,
+        "channels.username": 1,
+        "channels.avatar": 1,
       },
     },
   ]);

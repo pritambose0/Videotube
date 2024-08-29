@@ -91,8 +91,15 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({
     fullName,
-    avatar: avatar.url,
-    coverImage: coverImage?.url || "",
+    avatar: {
+      url: avatar.url,
+      publicId: avatar.public_id,
+    },
+    coverImage:
+      {
+        url: coverImage.url,
+        publicId: coverImage.public_id,
+      } || "",
     email,
     password,
     username: username.toLowerCase(),
@@ -290,30 +297,38 @@ const updateUserDetails = asyncHandler(async (req, res) => {
 const updateAvatar = asyncHandler(async (req, res) => {
   const avatarLocalPath = req.file?.path;
   if (!avatarLocalPath) throw new ApiError(400, "Avatar is required");
+
+  const user = await User.findById(req.user?._id);
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
+
   const avatar = await uploadOnCloudinary(avatarLocalPath);
-  if (!avatar.url) {
+  if (!avatar?.url) {
     throw new ApiError(400, "Error while uploading on Cloudinary");
   }
+
+  const oldAvatarPublicId = user.avatar?.publicId;
+
   // console.log("AVATAR: ", avatar);
   const updatedAvatar = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
-        avatar: avatar.url,
+        avatar: {
+          url: avatar.url,
+          publicId: avatar.public_id,
+        },
       },
     },
     { new: true }
   ).select("-password -refreshToken");
 
-  const oldAvatar = req.user?.avatar;
-  // console.log("oldAvatar", oldAvatar);
-  let publicId;
-  if (oldAvatar) {
-    const urlParts = oldAvatar.split("/");
-    const publicIdWithExtension = urlParts[urlParts.length - 1];
-    publicId = publicIdWithExtension.split(".")[0];
+  if (!updatedAvatar) {
+    throw new ApiError(400, "Error while updating avatar");
   }
-  const deleteImage = await deleteFromCloudinary(publicId);
+
+  const deleteImage = await deleteFromCloudinary(oldAvatarPublicId);
 
   if (!deleteImage) {
     throw new ApiError(400, "Error while deleting from Cloudinary");
@@ -328,29 +343,37 @@ const updateAvatar = asyncHandler(async (req, res) => {
 const updateCoverImage = asyncHandler(async (req, res) => {
   const coverImageLocalPath = req.file?.path;
   if (!coverImageLocalPath) throw new ApiError(400, "Cover Image is required");
+
+  const user = await User.findById(req.user?._id);
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
+  }
+
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
-  if (!coverImage.url) {
+  if (!coverImage?.url) {
     throw new ApiError(400, "Error while uploading on Cloudinary");
   }
+
+  const oldAvatarPublicId = user.coverImage?.publicId;
+
   const updatedCoverImage = await User.findByIdAndUpdate(
     req.user?._id,
     {
       $set: {
-        coverImage: coverImage.url,
+        coverImage: {
+          url: coverImage.url,
+          publicId: coverImage.public_id,
+        },
       },
     },
     { new: true }
   ).select("-password -refreshToken");
 
-  const oldCoverImage = req.user?.coverImage;
-  console.log("oldCoverImage", oldCoverImage);
-  let publicId;
-  if (oldCoverImage) {
-    const urlParts = oldCoverImage.split("/");
-    const publicIdWithExtension = urlParts[urlParts.length - 1];
-    publicId = publicIdWithExtension.split(".")[0];
+  if (!updatedCoverImage) {
+    throw new ApiError(400, "Error while updating cover image");
   }
-  const deleteImage = await deleteFromCloudinary(publicId);
+
+  const deleteImage = await deleteFromCloudinary(oldAvatarPublicId);
 
   if (!deleteImage) {
     throw new ApiError(400, "Error while deleting from Cloudinary");
