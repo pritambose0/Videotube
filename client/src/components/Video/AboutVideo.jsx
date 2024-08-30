@@ -20,7 +20,7 @@ const AboutVideo = ({
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const res = await axiosInstance.post(`likes/toggle/v/${videoId}`);
+      const res = await axiosInstance.post(`/likes/toggle/v/${videoId}`);
       return res.data;
     },
     onSuccess: (data) => {

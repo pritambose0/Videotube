@@ -55,6 +55,13 @@ const getUserTweets = asyncHandler(async (req, res) => {
         likesCount: {
           $size: "$likes",
         },
+        isLiked: {
+          $cond: {
+            if: { $in: [req.user?._id, "$likes.likedBy"] },
+            then: true,
+            else: false,
+          },
+        },
       },
     },
     {
@@ -73,6 +80,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
         _id: 1,
         content: 1,
         likesCount: 1,
+        isLiked: 1,
         createdAt: 1,
         updatedAt: 1,
         owner: {

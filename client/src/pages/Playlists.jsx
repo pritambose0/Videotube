@@ -57,7 +57,7 @@ function Playlists() {
           {playlists?.map((playlist) => (
             <PlaylistListPage
               key={playlist._id}
-              thumbnail={playlist.videos[0].thumbnail?.url}
+              thumbnail={playlist.videos && playlist.videos[0]?.thumbnail?.url}
               description={playlist.description}
               playlistId={playlist._id}
               playlistName={playlist.name}
