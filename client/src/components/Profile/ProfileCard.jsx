@@ -101,10 +101,11 @@ function ProfileCard({
             <li className="w-full" key={index}>
               <Link to={tab.path}>
                 <button
-                  className={`w-full border-b-2 px-3 py-1.5 ${location.pathname === tab.path
-                    ? "border-[#ae7aff] bg-white text-[#ae7aff]"
-                    : "border-transparent text-gray-400"
-                    }`}
+                  className={`w-full border-b-2 px-3 py-1.5 ${
+                    location.pathname === tab.path
+                      ? "border-[#ae7aff] bg-white text-[#ae7aff]"
+                      : "border-transparent text-gray-400"
+                  }`}
                 >
                   {tab.name}
                 </button>

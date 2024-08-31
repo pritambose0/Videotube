@@ -2,6 +2,7 @@ import VideoCard from "../components/Video/VideoCard";
 import axiosInstance from "../services/axiosInstance";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import VideoCardSkeleton from "../components/VideoCardSkeleton";
 
 function Home() {
   const {
@@ -28,8 +29,10 @@ function Home() {
           </div>
         )}
         {isLoading ? (
-          <div className="flex h-screen items-center justify-center text-center">
-            <h1 className="text-2xl font-bold">Loading...</h1>
+          <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <VideoCardSkeleton key={index} />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
