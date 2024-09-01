@@ -41,7 +41,7 @@ function Home() {
                 <VideoCard
                   duration={Math.round(video.duration)}
                   author={video.owner[0]?.fullName}
-                  avatar={video.owner[0]?.avatar}
+                  avatar={video.owner[0]?.avatar?.url}
                   thumbnailSrc={video.thumbnail?.url}
                   title={video.title}
                   views={video.views}

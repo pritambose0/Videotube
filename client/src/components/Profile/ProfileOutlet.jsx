@@ -4,10 +4,17 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../services/axiosInstance";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function ProfileOutlet() {
   const { username } = useParams();
+  const ownerUsername = useSelector((state) => state.auth.userData?.username);
 
+  let owner = false;
+
+  if (username === ownerUsername) {
+    owner = true;
+  }
   const { data: user, isLoading } = useQuery({
     queryKey: ["video", username],
     queryFn: async () => {
@@ -34,6 +41,7 @@ function ProfileOutlet() {
             channelHandle={user?.username}
             subscribers={user?.subscribersCount}
             subscribed={user?.subscribedToCount}
+            owner={owner}
           />
         ) : (
           <>

@@ -4,6 +4,8 @@ import { Video } from "../models/video.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { Tweet } from "../models/tweet.model.js";
+import { Comment } from "../models/comment.model.js";
 
 const toggleVideoLike = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
@@ -107,11 +109,46 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
       throw new ApiError(500, "toggleCommentLike :: Error while adding like");
     }
   }
-  console.log("EXISTING", existingLikeStatus);
+
+  const likes = await Comment.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(commentId),
+      },
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "comment",
+        as: "likes",
+      },
+    },
+    {
+      $addFields: {
+        likesCount: {
+          $size: "$likes",
+        },
+      },
+    },
+    {
+      $project: {
+        likesCount: 1,
+      },
+    },
+  ]);
+
+  // console.log("EXISTING", existingLikeStatus);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, existingLikeStatus, "Like Status Updated"));
+    .json(
+      new ApiResponse(
+        200,
+        { isLiked: !existingLikeStatus, likes: likes[0].likesCount },
+        "Like Status Updated"
+      )
+    );
 });
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
@@ -141,11 +178,46 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
       throw new ApiError(500, "toggleTweetLike :: Error while adding like");
     }
   }
-  console.log("EXISTING", existingLikeStatus);
+
+  const likes = await Tweet.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(tweetId),
+      },
+    },
+    {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "tweet",
+        as: "likes",
+      },
+    },
+    {
+      $addFields: {
+        likesCount: {
+          $size: "$likes",
+        },
+      },
+    },
+    {
+      $project: {
+        likesCount: 1,
+      },
+    },
+  ]);
+
+  // console.log("EXISTING", existingLikeStatus);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, existingLikeStatus, "Like Status Updated"));
+    .json(
+      new ApiResponse(
+        200,
+        { isLiked: !existingLikeStatus, likes: likes[0].likesCount },
+        "Like Status Updated"
+      )
+    );
 });
 
 const getLikedVideos = asyncHandler(async (req, res) => {

@@ -116,16 +116,21 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
 // controller to return channel list to which user has subscribed
 const getSubscribedChannels = asyncHandler(async (req, res) => {
-  const { channelId } = req.params;
+  const { username } = req.params;
+  console.log(username);
 
-  if (!channelId || !isValidObjectId(channelId)) {
-    throw new ApiError(400, "getSubscribedChannels :: Channel id is not valid");
+  if (!username) {
+    throw new ApiError(400, "Username is not valid");
+  }
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new ApiError(404, "User does not exist");
   }
 
   const subscribedChannels = await Subscription.aggregate([
     {
       $match: {
-        subscriber: new mongoose.Types.ObjectId(channelId),
+        subscriber: new mongoose.Types.ObjectId(user._id),
       },
     },
     {
@@ -157,7 +162,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
   if (!subscribedChannels) {
     throw new ApiError(404, "getSubscribedChannels :: Channel not found");
   }
-  // console.log("SUBSCRIBED CHANNELS", subscribedChannels);
+  console.log("SUBSCRIBED CHANNELS", subscribedChannels);
 
   return res
     .status(200)

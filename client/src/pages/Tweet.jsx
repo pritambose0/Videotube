@@ -4,12 +4,20 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 function Tweet() {
   const { username } = useParams();
   const [isOpenCreateTweet, setIsOpenCreateTweet] = useState(false);
   const [tweet, setTweet] = useState("");
   const queryClient = useQueryClient();
+  const ownerUsername = useSelector((state) => state.auth.userData?.username);
+
+  let owner = false;
+
+  if (username === ownerUsername) {
+    owner = true;
+  }
 
   const { data: tweets, isLoading } = useQuery({
     queryKey: ["tweets", username],
@@ -28,9 +36,9 @@ function Tweet() {
     },
     onSuccess: () => {
       setTweet("");
-      toast.success("Tweet Created Successfully");
       setIsOpenCreateTweet(false);
-      queryClient.invalidateQueries(["tweets", username]);
+      queryClient.invalidateQueries(["tweets"]);
+      toast.success("Tweet Created Successfully");
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Error creating tweet");
@@ -44,17 +52,21 @@ function Tweet() {
     }
   };
 
+  console.log(tweets);
+
   return (
     <>
-      <Toaster position="top-right" />
-      <div className="mx-auto w-full flex items-center justify-end px-5">
-        <button
-          className="rounded-sm bg-[#E4D3FF] p-2 text-black"
-          onClick={() => setIsOpenCreateTweet(!isOpenCreateTweet)}
-        >
-          {!isOpenCreateTweet ? "Create Tweet" : "Close"}
-        </button>
-      </div>
+      <Toaster />
+      {owner && (
+        <div className="mx-auto w-full flex items-center justify-end px-5">
+          <button
+            className="rounded-sm bg-[#E4D3FF] p-2 text-black"
+            onClick={() => setIsOpenCreateTweet(!isOpenCreateTweet)}
+          >
+            {!isOpenCreateTweet ? "Create Tweet" : "Close"}
+          </button>
+        </div>
+      )}
 
       {isOpenCreateTweet && (
         <div className="mt-2 border pb-2 mx-3">
@@ -105,6 +117,7 @@ function Tweet() {
                 likes={tweet.likesCount}
                 isLiked={tweet.isLiked}
                 tweetId={tweet._id}
+                owner={owner}
               />
             ))}
           </div>

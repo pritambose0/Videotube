@@ -39,10 +39,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
     },
     // This step converts the owner array into an object
     {
-      $unwind: {
-        path: "$owner",
-        preserveNullAndEmptyArrays: true,
-      },
+      $unwind: "$owner",
     },
     {
       $lookup: {
@@ -57,6 +54,13 @@ const getVideoComments = asyncHandler(async (req, res) => {
         likesCount: {
           $size: "$likes",
         },
+        isLiked: {
+          $cond: {
+            if: { $in: [req.user?._id, "$likes.likedBy"] },
+            then: true,
+            else: false,
+          },
+        },
       },
     },
     {
@@ -66,6 +70,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
         username: 1,
         avatar: 1,
         likesCount: 1,
+        isLiked: 1,
         content: 1,
         owner: 1,
       },
@@ -77,7 +82,9 @@ const getVideoComments = asyncHandler(async (req, res) => {
       $limit: parseInt(limit),
     },
   ]);
+
   const totalComments = await Comment.countDocuments({ video: videoId });
+  // console.log("COMMENTS", comments);
 
   return res
     .status(200)

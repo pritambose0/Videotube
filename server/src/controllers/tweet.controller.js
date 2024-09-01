@@ -94,7 +94,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
     },
   ]);
 
-  console.log("TWEETS", tweets);
+  // console.log("TWEETS", tweets);
 
   return res
     .status(200)

@@ -14,6 +14,7 @@ const Comments = () => {
   const { videoId } = useParams();
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
+  const { ref, inView } = useInView();
 
   const {
     data: comments,
@@ -28,7 +29,7 @@ const Comments = () => {
       });
       return res?.data?.data;
     },
-    staleTime: 1000 * 60,
+    staleTime: Infinity,
     enabled: !!videoId,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
@@ -38,14 +39,6 @@ const Comments = () => {
       return nextPage;
     },
   });
-
-  const { ref, inView } = useInView();
-
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage, hasNextPage]);
 
   const addCommentMutation = useMutation({
     mutationFn: async () => {
@@ -64,11 +57,18 @@ const Comments = () => {
     },
   });
 
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
+
   const handleAddComment = () => {
     if (videoId) {
       addCommentMutation.mutate();
     }
   };
+  // console.log(comments);
 
   return (
     <>
@@ -109,9 +109,10 @@ const Comments = () => {
                   ownerAvatar={comment.owner?.avatar}
                   comment={comment.content}
                   timeAgo={timeAgoFormat(comment.createdAt)}
-                  fullName={comment.owner?.fullName}
                   username={comment.owner?.username}
                   commentId={comment._id}
+                  likes={comment.likesCount}
+                  isLiked={comment.isLiked}
                 />
               ))}
             </div>

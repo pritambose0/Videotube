@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../services/axiosInstance";
 import UploadingModal from "./UploadingModal";
+import toast, { Toaster } from "react-hot-toast";
 
 function VideoUploadModal({ isOpen, onClose }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -36,9 +37,13 @@ function VideoUploadModal({ isOpen, onClose }) {
       return res.data;
     },
     onSuccess: () => {
-      console.log("UPLOADED");
+      onClose(true);
+      toast.success("Video Uploaded Successfully");
     },
     onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Error while uploading video"
+      );
       console.error("Error while uploading video :", error);
     },
     onSettled: () => {
@@ -61,6 +66,7 @@ function VideoUploadModal({ isOpen, onClose }) {
   };
   return (
     <div className="absolute inset-0 z-50 bg-black/50 px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
+      <Toaster />
       <form
         className="h-full overflow-auto border bg-[#121212]"
         onSubmit={handleSubmit(onSubmit)}

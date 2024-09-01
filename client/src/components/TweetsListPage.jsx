@@ -13,6 +13,7 @@ function TweetsListPage({
   likes: likesCount,
   isLiked,
   tweetId,
+  owner,
 }) {
   const [liked, setLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
@@ -21,18 +22,21 @@ function TweetsListPage({
   const [editTweet, setEditTweet] = useState(tweet);
 
   const queryClient = useQueryClient();
+
   // Mutation for toggling like
   const likeMutation = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance.post(`/likes/toggle/t/${tweetId}`);
+      console.log(res);
+
       return res.data;
     },
     onSuccess: (data) => {
-      setLiked(data.data?.isLiked ?? liked);
-      setLikes(data.data?.likes ?? likes);
-      queryClient.invalidateQueries(["tweets"]);
+      setLiked(data.data?.isLiked);
+      setLikes(data.data?.likes);
     },
     onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error liking tweet");
       console.error("Like toggle error:", error.response?.data.message);
     },
   });
@@ -40,33 +44,37 @@ function TweetsListPage({
   // Mutation for updating the tweet
   const updateTweetMutation = useMutation({
     mutationFn: async () => {
-      const res = await axiosInstance.put(`/tweets/update/${tweetId}`, {
-        tweet: editTweet,
+      const res = await axiosInstance.patch(`/tweets/${tweetId}`, {
+        content: editTweet,
       });
+      console.log(res);
+
       return res.data;
     },
     onSuccess: (data) => {
       setIsEditing(false);
-      toast.success("Tweet Updated Successfully");
       setEditTweet(data.data?.tweet);
+      queryClient.invalidateQueries(["tweets"]);
+      toast.success("Tweet Updated Successfully");
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Error updating tweet");
       console.error("Update tweet error:", error.response?.data.message);
+      toast.error(error?.response?.data?.message || "Error updating tweet");
     },
   });
 
   // Mutation for deleting the tweet
   const deleteTweetMutation = useMutation({
     mutationFn: async () => {
-      await axiosInstance.delete(`/tweets/delete/${tweetId}`);
+      await axiosInstance.delete(`/tweets/${tweetId}`);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(["tweets"]);
       toast.success("Tweet Deleted Successfully");
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Error deleting tweet");
       console.error("Delete tweet error:", error.response?.data.message);
+      toast.error(error?.response?.data?.message || "Error deleting tweet");
     },
   });
 
@@ -82,20 +90,23 @@ function TweetsListPage({
   };
 
   const handleUpdate = () => {
-    if (editTweet.trim()) {
+    setDropdownOpen(false);
+    if (editTweet?.trim()) {
       updateTweetMutation.mutate();
     }
   };
 
   const handleDelete = () => {
+    setDropdownOpen(false);
     if (tweetId) {
       deleteTweetMutation.mutate();
     }
   };
+  // console.log(editTweet);
 
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster />
       <div className="flex gap-3 border-b border-gray-700 p-4 last:border-b-transparent">
         <div className="h-14 w-14 shrink-0">
           <img
@@ -137,7 +148,7 @@ function TweetsListPage({
           )}
           <div className="flex gap-4">
             <button
-              className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
+              className="group/btn flex items-center gap-x-2 border-gray-700 px-4 py-1.5 after:content-[attr(data-like)]  focus:after:content-[attr(data-like-alt)]"
               data-like={likes}
               data-like-alt={likes}
               onClick={handleLike}
@@ -186,30 +197,32 @@ function TweetsListPage({
             </button>
           </div>
         </div>
-        <div className="relative my-auto">
-          <button
-            className="text-gray-400"
-            onClick={() => setDropdownOpen((prev) => !prev)}
-          >
-            &#8942;
-          </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded shadow-lg">
-              <button
-                className="block px-4 py-2 text-left text-sm text-white"
-                onClick={handleEdit}
-              >
-                Edit
-              </button>
-              <button
-                className="block px-4 py-2 text-left text-sm text-white"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
+        {owner && (
+          <div className="relative my-auto">
+            <button
+              className="text-gray-400 text-lg"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            >
+              &#8942;
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded shadow-lg">
+                <button
+                  className="block px-4 w-full hover:bg-gray-500 py-2 text-left text-sm text-white"
+                  onClick={handleEdit}
+                >
+                  Edit
+                </button>
+                <button
+                  className="block px-4 py-2 w-full hover:bg-gray-500 text-left text-sm text-white"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
@@ -223,6 +236,7 @@ TweetsListPage.propTypes = {
   likes: PropTypes.number,
   isLiked: PropTypes.bool,
   tweetId: PropTypes.string.isRequired,
+  owner: PropTypes.bool,
 };
 
 export default TweetsListPage;
