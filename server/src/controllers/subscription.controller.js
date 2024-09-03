@@ -57,7 +57,6 @@ const toggleSubscription = asyncHandler(async (req, res) => {
   );
 });
 
-// controller to return subscriber list of a channel
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   const { channelId } = req.params;
   // console.log("CHANNEL ID", channelId);
@@ -111,13 +110,11 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
   // console.log("SUBSCRIBERS", subscribers);
   return res
     .status(200)
-    .json(new ApiResponse(200, subscribers, "Subscribers fetched"));
+    .json(new ApiResponse(200, subscribers[0], "Subscribers fetched"));
 });
 
-// controller to return channel list to which user has subscribed
 const getSubscribedChannels = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  console.log(username);
 
   if (!username) {
     throw new ApiError(400, "Username is not valid");
@@ -136,33 +133,46 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "users",
-        localField: "subscriber",
+        localField: "channel",
         foreignField: "_id",
         as: "channels",
+        pipeline: [
+          {
+            $lookup: {
+              from: "subscriptions",
+              localField: "_id",
+              foreignField: "subscriber",
+              as: "subscribers",
+            },
+          },
+          {
+            $addFields: {
+              subscriberCount: {
+                $size: "$subscribers",
+              },
+            },
+          },
+          {
+            $project: {
+              _id: 1,
+              username: 1,
+              fullName: 1,
+              "avatar.url": 1,
+              subscriberCount: 1,
+            },
+          },
+        ],
       },
     },
+    { $unwind: "$channels" },
     {
-      $addFields: {
-        channelsCount: {
-          $size: "$channels",
-        },
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        channelsCount: 1,
-        "channels._id": 1,
-        "channels.username": 1,
-        "channels.avatar": 1,
+      $replaceRoot: {
+        newRoot: "$channels", // Replaces the root with the channel object, effectively removing nesting
       },
     },
   ]);
 
-  if (!subscribedChannels) {
-    throw new ApiError(404, "getSubscribedChannels :: Channel not found");
-  }
-  console.log("SUBSCRIBED CHANNELS", subscribedChannels);
+  // console.log("SUBSCRIBED CHANNELS", subscribedChannels);
 
   return res
     .status(200)

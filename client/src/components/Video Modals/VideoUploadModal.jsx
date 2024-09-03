@@ -10,15 +10,14 @@ function VideoUploadModal({ isOpen, onClose }) {
   const [isUploading, setIsUploading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [fileSize, setFileSize] = useState(0);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const controller = new AbortController();
-
   const mutation = useMutation({
     mutationFn: async (data) => {
       const formData = new FormData();
@@ -64,6 +63,12 @@ function VideoUploadModal({ isOpen, onClose }) {
     controller.abort();
     setIsUploading(false);
   };
+
+  const handleClose = () => {
+    onClose();
+    reset();
+  };
+
   return (
     <div className="absolute inset-0 z-50 bg-black/50 px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
       <Toaster />
@@ -74,7 +79,11 @@ function VideoUploadModal({ isOpen, onClose }) {
         <div className="flex items-center justify-between border-b p-4">
           <h2 className="text-xl font-semibold">Upload Videos</h2>
           <div className="flex gap-5">
-            <button className="h-6 w-6 my-auto" onClick={onClose} type="button">
+            <button
+              className="h-6 w-6 my-auto"
+              onClick={handleClose}
+              type="button"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -178,9 +187,7 @@ function VideoUploadModal({ isOpen, onClose }) {
             <textarea
               id="desc"
               className="h-40 w-full resize-none border bg-transparent px-2 py-1 outline-none"
-              {...register("description", {
-                required: "Description is required",
-              })}
+              {...register("description")}
             ></textarea>
             {errors.description && (
               <p className="text-red-500 text-sm mt-1">

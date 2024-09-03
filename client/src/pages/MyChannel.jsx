@@ -5,6 +5,7 @@ import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import VideoListPage from "../components/VideoListPage";
 import VideoCardSkeleton from "../components/VideoCardSkeleton";
+import { useSelector } from "react-redux";
 
 function MyChannel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,6 +13,12 @@ function MyChannel() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const { username } = useParams();
+  const ownerUsername = useSelector((state) => state.auth.userData?.username);
+
+  let owner = false;
+  if (username === ownerUsername) {
+    owner = true;
+  }
 
   const { data: videos, isLoading } = useQuery({
     queryKey: ["channelVideos"],
@@ -25,6 +32,33 @@ function MyChannel() {
 
   return (
     <>
+      {owner && (
+        <div className="mx-auto w-full flex items-center justify-end px-5">
+          <button
+            className="inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black ml-5 "
+            onClick={openModal}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              aria-hidden="true"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              ></path>
+            </svg>{" "}
+            New video
+          </button>
+        </div>
+      )}
+      <VideoUploadModal isOpen={isModalOpen} onClose={closeModal} />
+
       {isLoading ? (
         <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
           {Array.from({ length: 6 }).map((_, index) => (
@@ -75,28 +109,6 @@ function MyChannel() {
                 This page has yet to upload a video. Search another page in
                 order to find more videos.
               </p>
-              <button
-                className="mt-4 inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black"
-                onClick={openModal}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                  className="h-5 w-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15"
-                  ></path>
-                </svg>{" "}
-                New video
-              </button>
-              <VideoUploadModal isOpen={isModalOpen} onClose={closeModal} />
             </div>
           </div>
         ))}

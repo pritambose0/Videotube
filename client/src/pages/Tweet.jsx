@@ -5,16 +5,21 @@ import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 function Tweet() {
   const { username } = useParams();
   const [isOpenCreateTweet, setIsOpenCreateTweet] = useState(false);
-  const [tweet, setTweet] = useState("");
   const queryClient = useQueryClient();
   const ownerUsername = useSelector((state) => state.auth.userData?.username);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   let owner = false;
-
   if (username === ownerUsername) {
     owner = true;
   }
@@ -30,12 +35,11 @@ function Tweet() {
   });
 
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (tweet) => {
       const res = await axiosInstance.post(`/tweets`, { content: tweet });
       return res.data;
     },
     onSuccess: () => {
-      setTweet("");
       setIsOpenCreateTweet(false);
       queryClient.invalidateQueries(["tweets"]);
       toast.success("Tweet Created Successfully");
@@ -46,13 +50,16 @@ function Tweet() {
     },
   });
 
-  const handleCreateTweet = () => {
-    if (tweet?.trim()) {
-      mutation.mutate();
+  const onSubmit = (data) => {
+    if (data?.tweet?.trim()) {
+      mutation.mutate(data.tweet);
     }
   };
 
-  console.log(tweets);
+  const handleCreateTweetToggle = () => {
+    setIsOpenCreateTweet((prev) => !prev);
+    reset();
+  };
 
   return (
     <>
@@ -61,7 +68,7 @@ function Tweet() {
         <div className="mx-auto w-full flex items-center justify-end px-5">
           <button
             className="rounded-sm bg-[#E4D3FF] p-2 text-black"
-            onClick={() => setIsOpenCreateTweet(!isOpenCreateTweet)}
+            onClick={handleCreateTweetToggle}
           >
             {!isOpenCreateTweet ? "Create Tweet" : "Close"}
           </button>
@@ -69,23 +76,33 @@ function Tweet() {
       )}
 
       {isOpenCreateTweet && (
-        <div className="mt-2 border pb-2 mx-3">
+        <form
+          className="mt-2 border pb-2 mx-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <textarea
             className="mb-2 h-10 w-full resize-none border-none bg-transparent px-3 pt-2 outline-none"
             placeholder="Write a tweet"
-            value={tweet}
-            onChange={(e) => setTweet(e.target.value)}
+            {...register("tweet", {
+              required: "Tweet is required",
+              maxLength: {
+                value: 280,
+                message: "Tweet cannot exceed 280 characters",
+              },
+            })}
           ></textarea>
-
+          {errors.tweet && (
+            <p className="text-red-500">{errors.tweet.message}</p>
+          )}
           <div className="flex items-center justify-end gap-x-3 px-3">
             <button
               className="bg-[#ae7aff] px-3 py-2 font-semibold text-black"
-              onClick={handleCreateTweet}
+              type="submit"
             >
               {mutation.isPending ? "Creating..." : "Post"}
             </button>
           </div>
-        </div>
+        </form>
       )}
 
       {isLoading ? (
