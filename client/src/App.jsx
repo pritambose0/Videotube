@@ -21,7 +21,7 @@ function App() {
         }
       })
       .catch((error) => {
-        console.log(error.data?.message);
+        console.log(error);
       });
   }, [dispatch, userStatus]);
 

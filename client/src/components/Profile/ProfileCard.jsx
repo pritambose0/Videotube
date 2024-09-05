@@ -98,6 +98,18 @@ function ProfileCard({
               </div>
             </div>
           )}
+
+          {owner && (
+            <Link className="" to={`/c/${channelHandle}/edit`}>
+              <div className="inline-flex min-w-[145px] justify-end">
+                <button className="flex w-full items-center bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto">
+                  <span className="group-focus/btn" onClick={handleSubscribe}>
+                    Edit Channel
+                  </span>
+                </button>
+              </div>
+            </Link>
+          )}
         </div>
         <ul className="no-scrollbar sticky top-[66px] z-[2] flex flex-row gap-x-2 overflow-auto border-b-2 border-gray-400 bg-[#121212] py-2 sm:top-[82px]">
           {tabs.map((tab, index) => (

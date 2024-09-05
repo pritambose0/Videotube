@@ -21,6 +21,7 @@ import store from "./store/store.js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ChannelPage from "./components/ChannelPage.jsx";
+import EditChannel from "./pages/EditChannel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -119,8 +120,42 @@ const router = createBrowserRouter([
               </AuthLayout>
             ),
           },
+          {
+            path: "/c/:username/edit",
+            element: (
+              <AuthLayout authentication={true}>
+                <EditChannel />
+              </AuthLayout>
+            ),
+          },
         ],
       },
+      // {
+      //   path: "/c/:username/edit",
+      //   element: (
+      //     <AuthLayout authentication={true}>
+      //       <EditChannel />
+      //     </AuthLayout>
+      //   ),
+      //   children: [
+      //     {
+      //       path: "/c/:username/edit/personal-info",
+      //       element: (
+      //         <AuthLayout authentication={true}>
+      //           <EditChannel />
+      //         </AuthLayout>
+      //       ),
+      //     },
+      //     {
+      //       path: "/c/:username/edit/channel-info",
+      //       element: (
+      //         <AuthLayout authentication={true}>
+      //           <EditChannelInfo />
+      //         </AuthLayout>
+      //       ),
+      //     },
+      //   ],
+      // },
     ],
   },
   {

@@ -6,7 +6,7 @@ import SubscribedChannelsList from "../components/SubscribedChannelsList";
 
 function Subscribed() {
   const { username } = useParams();
-  console.log(username);
+  // console.log(username);
 
   const {
     data: channels,
@@ -30,7 +30,7 @@ function Subscribed() {
         error?.response?.data?.message || error.message || "An error occurred."
       );
   }
-  console.log("CHANNELS", channels);
+  // console.log("CHANNELS", channels);
 
   return (
     <div className="flex flex-col gap-y-4 py-4 mx-4">

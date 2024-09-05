@@ -274,119 +274,111 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateUserDetails = asyncHandler(async (req, res) => {
-  const { fullName, email } = req.body;
-
-  if (!fullName || !email) throw new ApiError(400, "All fields are required");
-
-  const user = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-      $set: {
-        fullName,
-        email,
-      },
-    },
-    { new: true }
-  ).select("-password -refreshToken");
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, user, "User details updated successfully"));
-});
-
-const updateAvatar = asyncHandler(async (req, res) => {
-  const avatarLocalPath = req.file?.path;
-  if (!avatarLocalPath) throw new ApiError(400, "Avatar is required");
+  const { fullName, email, username } = req.body;
+  const avatarLocalPath = req.files?.avatar?.[0]?.path;
+  const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
 
   const user = await User.findById(req.user?._id);
-  if (!user) {
-    throw new ApiError(404, "User does not exist");
+  if (!user) throw new ApiError(404, "User does not exist");
+
+  // Create update object dynamically based on provided fields
+  const updateFields = {};
+  if (fullName) updateFields.fullName = fullName;
+  if (email) updateFields.email = email;
+  if (username) updateFields.username = username;
+
+  // Update user details if there are fields to update
+  if (Object.keys(updateFields).length > 0) {
+    await User.findByIdAndUpdate(
+      req.user?._id,
+      { $set: updateFields },
+      { new: true }
+    ).select("-password -refreshToken");
   }
 
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
-  if (!avatar?.url) {
-    throw new ApiError(400, "Error while uploading on Cloudinary");
-  }
+  // Update avatar if a file is uploaded
+  let updatedAvatar;
+  if (avatarLocalPath) {
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar?.url)
+      throw new ApiError(400, "Error while uploading avatar to Cloudinary");
 
-  const oldAvatarPublicId = user.avatar?.publicId;
+    const oldAvatarPublicId = user.avatar?.publicId;
 
-  // console.log("AVATAR: ", avatar);
-  const updatedAvatar = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-      $set: {
-        avatar: {
-          url: avatar.url,
-          publicId: avatar.public_id,
+    updatedAvatar = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          avatar: {
+            url: avatar.url,
+            publicId: avatar.public_id,
+          },
         },
       },
-    },
-    { new: true }
-  ).select("-password -refreshToken");
+      { new: true }
+    ).select("-password -refreshToken");
 
-  if (!updatedAvatar) {
-    throw new ApiError(400, "Error while updating avatar");
+    if (!updatedAvatar) throw new ApiError(400, "Error while updating avatar");
+
+    // Delete old avatar from Cloudinary
+    if (oldAvatarPublicId) {
+      const deleteImage = await deleteFromCloudinary(oldAvatarPublicId);
+      if (!deleteImage)
+        throw new ApiError(
+          400,
+          "Error while deleting old avatar from Cloudinary"
+        );
+    }
   }
 
-  const deleteImage = await deleteFromCloudinary(oldAvatarPublicId);
+  // Update cover image if a file is uploaded
+  let updatedCoverImage;
+  if (coverImageLocalPath) {
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    if (!coverImage?.url)
+      throw new ApiError(
+        400,
+        "Error while uploading cover image to Cloudinary"
+      );
 
-  if (!deleteImage) {
-    throw new ApiError(400, "Error while deleting from Cloudinary");
-  }
-  // console.log("oldAvatar", oldAvatar);
+    const oldCoverImagePublicId = user.coverImage?.publicId;
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, updatedAvatar, "Avatar updated successfully"));
-});
-
-const updateCoverImage = asyncHandler(async (req, res) => {
-  const coverImageLocalPath = req.file?.path;
-  if (!coverImageLocalPath) throw new ApiError(400, "Cover Image is required");
-
-  const user = await User.findById(req.user?._id);
-  if (!user) {
-    throw new ApiError(404, "User does not exist");
-  }
-
-  const coverImage = await uploadOnCloudinary(coverImageLocalPath);
-  if (!coverImage?.url) {
-    throw new ApiError(400, "Error while uploading on Cloudinary");
-  }
-
-  const oldAvatarPublicId = user.coverImage?.publicId;
-
-  const updatedCoverImage = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-      $set: {
-        coverImage: {
-          url: coverImage.url,
-          publicId: coverImage.public_id,
+    updatedCoverImage = await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          coverImage: {
+            url: coverImage.url,
+            publicId: coverImage.public_id,
+          },
         },
       },
-    },
-    { new: true }
-  ).select("-password -refreshToken");
+      { new: true }
+    ).select("-password -refreshToken");
 
-  if (!updatedCoverImage) {
-    throw new ApiError(400, "Error while updating cover image");
+    if (!updatedCoverImage)
+      throw new ApiError(400, "Error while updating cover image");
+
+    // Delete old cover image from Cloudinary
+    if (oldCoverImagePublicId) {
+      const deleteImage = await deleteFromCloudinary(oldCoverImagePublicId);
+      if (!deleteImage)
+        throw new ApiError(
+          400,
+          "Error while deleting old cover image from Cloudinary"
+        );
+    }
   }
 
-  const deleteImage = await deleteFromCloudinary(oldAvatarPublicId);
-
-  if (!deleteImage) {
-    throw new ApiError(400, "Error while deleting from Cloudinary");
-  }
+  // Get the updated user to send in the response
+  const updatedUser = await User.findById(req.user?._id).select(
+    "-password -refreshToken"
+  );
 
   return res
     .status(200)
     .json(
-      new ApiResponse(
-        200,
-        updatedCoverImage,
-        "Cover Image updated successfully"
-      )
+      new ApiResponse(200, updatedUser, "User details updated successfully")
     );
 });
 
@@ -543,8 +535,6 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   updateUserDetails,
-  updateAvatar,
-  updateCoverImage,
   getUserChannelProfile,
   getWatchHistory,
   getUserChannelVideos,
