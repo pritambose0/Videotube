@@ -5,8 +5,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     proxy: {
-      "/api": "https://videotube-5y31.onrender.com",
+      "/api": import.meta.env.VITE_API_BASE_URL_DEV,
     },
+    changeOrigin: true,
+    secure: false,
   },
   plugins: [react()],
 });
