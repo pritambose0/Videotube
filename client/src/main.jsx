@@ -130,32 +130,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-      // {
-      //   path: "/c/:username/edit",
-      //   element: (
-      //     <AuthLayout authentication={true}>
-      //       <EditChannel />
-      //     </AuthLayout>
-      //   ),
-      //   children: [
-      //     {
-      //       path: "/c/:username/edit/personal-info",
-      //       element: (
-      //         <AuthLayout authentication={true}>
-      //           <EditChannel />
-      //         </AuthLayout>
-      //       ),
-      //     },
-      //     {
-      //       path: "/c/:username/edit/channel-info",
-      //       element: (
-      //         <AuthLayout authentication={true}>
-      //           <EditChannelInfo />
-      //         </AuthLayout>
-      //       ),
-      //     },
-      //   ],
-      // },
     ],
   },
   {

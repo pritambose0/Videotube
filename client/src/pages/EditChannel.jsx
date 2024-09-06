@@ -74,7 +74,7 @@ function EditPersonalInfo() {
                 </label>
                 <div className="flex rounded-lg border">
                   <p className="flex shrink-0 items-center border-r border-white px-3 align-middle">
-                    vidplay.com/
+                    videotube.com/
                   </p>
                   <input
                     type="text"

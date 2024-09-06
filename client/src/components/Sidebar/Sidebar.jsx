@@ -95,7 +95,7 @@ function Sidebar() {
         </svg>
       ),
       label: "My Channel",
-      isHiddenOnSmall: true,
+      isHiddenOnSmall: false,
     },
     {
       to: username ? `/c/${username}/playlists` : "/login",
@@ -117,7 +117,7 @@ function Sidebar() {
       ),
 
       label: "Playlists",
-      isHiddenOnSmall: false,
+      isHiddenOnSmall: true,
     },
     {
       to: "/",
