@@ -3,6 +3,7 @@ import axiosInstance from "../../services/axiosInstance";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const VideoInfo = ({
   channelImage,
@@ -26,6 +27,7 @@ const VideoInfo = ({
       setIsSubscribed(data.data?.isSubscribed);
     },
     onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error creating account");
       console.error("Subscription toggle error:", error.response?.data.message);
     },
   });
@@ -38,6 +40,7 @@ const VideoInfo = ({
   return (
     <>
       <div className="mt-4 flex items-center justify-between">
+        <Toaster />
         <div className="flex items-center gap-x-4">
           <div className="mt-2 h-12 w-12 shrink-0">
             <img

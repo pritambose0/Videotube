@@ -9,12 +9,16 @@ import axiosInstance from "../../services/axiosInstance";
 import { timeAgoFormat } from "../../utils/timeAgoFormat";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
+import { useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
 
 const Comments = () => {
   const { videoId } = useParams();
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
   const { ref, inView } = useInView();
+  const authStatus = useSelector((state) => state.auth.status);
+  console.log("AUTHSTATUS", authStatus);
 
   const {
     data: comments,
@@ -64,6 +68,10 @@ const Comments = () => {
   }, [inView, fetchNextPage, hasNextPage]);
 
   const handleAddComment = () => {
+    if (!authStatus) {
+      toast.success("Please login to add comment");
+      return;
+    }
     if (videoId) {
       addCommentMutation.mutate();
     }
@@ -106,7 +114,7 @@ const Comments = () => {
               {page?.comments?.map((comment) => (
                 <Comment
                   key={comment._id}
-                  ownerAvatar={comment.owner?.avatar}
+                  ownerAvatar={comment.owner?.avatar?.url}
                   comment={comment.content}
                   timeAgo={timeAgoFormat(comment.createdAt)}
                   username={comment.owner?.username}
@@ -121,6 +129,7 @@ const Comments = () => {
         <div ref={ref} className="w-full text-center">
           {isFetchingNextPage && "Loading..."}
         </div>
+        <Toaster />
         {/* <button onClick={() => fetchNextPage()}>Load More</button> */}
       </div>
     </>

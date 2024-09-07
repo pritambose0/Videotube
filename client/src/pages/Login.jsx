@@ -1,29 +1,39 @@
-import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
 import axiosInstance from "../services/axiosInstance";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 function Login() {
-  const { register, handleSubmit } = useForm();
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    setError("");
-    try {
-      const session = await axiosInstance.post("/users/login", data);
-      if (session) {
-        dispatch(login(session.data?.data));
-        navigate("/");
-      }
-    } catch (error) {
+  const mutation = useMutation({
+    mutationFn: async (data) => {
+      const response = axiosInstance.post("/users/login", data);
+      return response.data?.data;
+    },
+    onSuccess: (data) => {
+      dispatch(login(data));
+      navigate("/");
+      toast.success("Login successful");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error creating account");
       console.log(error);
-      setError(error.data?.message);
-    }
+    },
+  });
+
+  const onSubmit = (data) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -87,35 +97,48 @@ function Login() {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
-            label="Username*"
+            label="Username"
             placeholder="Enter your username"
             {...register("username", { required: true })}
           />
           <Input
-            label="Email*"
+            label="Email"
             placeholder="Enter your email"
             {...register("email", {
               required: true,
               validate: {
                 matchPatern: (value) =>
                   /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                  "Email address must be a valid address",
+                  "Email is not valid",
               },
             })}
           />
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
           <Input
-            label="Password*"
+            label="Password"
             type="password"
             placeholder="Enter your password"
             {...register("password", {
               required: true,
             })}
           />
-          {error && <p className="text-red-500 my-3">{error}</p>}
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
 
-          <button className="bg-[#ae7aff] px-4 py-3 text-black" type="submit">
-            Sign in with Email
+          <button
+            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md"
+            type="submit"
+          >
+            Sign in
           </button>
+          <Link to={"/signup"}>
+            <button className="bg-[#ae7aff] px-4 py-2 text-black rounded-md ml-5">
+              Signup
+            </button>
+          </Link>
         </form>
       </div>
     </div>

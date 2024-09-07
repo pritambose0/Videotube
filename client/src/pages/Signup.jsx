@@ -1,22 +1,23 @@
-import { useState } from "react";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
-// import { createAccount } from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 import axiosInstance from "../services/axiosInstance";
+import { useMutation } from "@tanstack/react-query";
+import toast, { Toaster } from "react-hot-toast";
 
 function Signup() {
-  const { register, handleSubmit } = useForm();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmit = async (data) => {
-    setError("");
-    try {
+  const mutation = useMutation({
+    mutationFn: async (data) => {
       const response = await axiosInstance.post(
         "/users/register",
         {
@@ -30,20 +31,26 @@ function Signup() {
           },
         }
       );
-      // console.log("RESPONSE", response.data.data);
-      if (response) {
-        dispatch(login(response.data.data));
-        navigate("/login");
-      }
-    } catch (error) {
-      setError(error.response?.data?.message || error.message);
-    } finally {
-      setLoading(false);
-    }
+      return response.data?.data;
+    },
+    onSuccess: () => {
+      toast.success("Account created successfully");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error creating account");
+      console.log(error);
+    },
+  });
+
+  const onSubmit = (data) => {
+    mutation.mutate(data);
+    dispatch(login(mutation.data?.data));
+    navigate("/login");
   };
 
   return (
-    <div className="h-screen w-full overflow-y-auto bg-[#121212] text-white">
+    <div className="min-h-screen w-full overflow-y-auto bg-[#121212] text-white">
+      <Toaster />
       <div className="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
         <div className="mx-auto inline-block w-16">
           <svg
@@ -100,7 +107,7 @@ function Signup() {
             </defs>
           </svg>
         </div>
-        {error && <p className="text-red-600 my-3 text-center">{error}</p>}
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           encType="multipart/form-data"
@@ -111,11 +118,17 @@ function Signup() {
             placeholder="Enter your Full Name"
             {...register("fullName", { required: true })}
           />
+          {errors.fullName && (
+            <p className="text-red-500">{errors.fullName.message}</p>
+          )}
           <Input
             label="Username*"
             placeholder="Enter your username"
             {...register("username", { required: true })}
           />
+          {errors.username && (
+            <p className="text-red-500">{errors.username.message}</p>
+          )}
           <Input
             label="Email*"
             placeholder="Enter your email"
@@ -128,6 +141,9 @@ function Signup() {
               },
             })}
           />
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
           <Input
             label="Password*"
             type="password"
@@ -136,12 +152,19 @@ function Signup() {
               required: true,
             })}
           />
+          {errors.password && (
+            <p className="text-red-500">{errors.password.message}</p>
+          )}
+
           <Input
             label="Avatar*"
             type="file"
             name="avatar"
             {...register("avatar", { required: true })}
           />
+          {errors.avatar && (
+            <p className="text-red-500">{errors.avatar.message}</p>
+          )}
           <Input
             label="Cover Image"
             name="coverImage"
@@ -152,9 +175,15 @@ function Signup() {
           <button
             className="bg-[#ae7aff] px-4 py-2 text-black rounded-md"
             type="submit"
+            disabled={mutation.isPending}
           >
-            {loading ? "Loading..." : "Sign Up"}
+            {mutation.isPending ? "Loading..." : "Sign Up"}
           </button>
+          <Link to={"/login"}>
+            <button className="bg-[#ae7aff] px-4 py-2 text-black rounded-md ml-5">
+              Login
+            </button>
+          </Link>
         </form>
       </div>
     </div>

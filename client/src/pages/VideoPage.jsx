@@ -45,12 +45,21 @@ function VideoPage() {
         <div className="col-span-12 w-full">
           <div className="relative mb-4 w-full pt-[56%]">
             <div className="absolute inset-0">
-              <video className="h-full w-full" controls>
-                <source src={video?.videoFile?.url} type="video/mp4" />
-              </video>
+              {video ? (
+                <video className="h-full w-full" controls>
+                  <source src={video?.videoFile?.url} type="video/mp4" />
+                </video>
+              ) : (
+                <div className="w-full animate-pulse">
+                  <div className="relative mb-2 w-full pt-[56%] bg-gray-700">
+                    <div className="absolute inset-0 bg-gray-600"></div>
+                    <span className="absolute bottom-1 right-1 inline-block rounded bg-gray-500 px-1.5 text-sm h-4 w-10"></span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          {video && (
+          {video ? (
             <div
               className="group mb-4 w-full rounded-lg border p-4 duration-200 hover:bg-white/5 focus:bg-white/5"
               role="button"
@@ -75,9 +84,25 @@ function VideoPage() {
                 subscribeStatus={video?.owner?.isSubscribed}
               />
             </div>
+          ) : (
+            <div className="flex flex-wrap gap-y-2 animate-pulse">
+              <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
+                <div className="h-6 w-3/4 bg-gray-700 rounded"></div>
+                <div className="mt-2 h-4 w-1/2 bg-gray-700 rounded"></div>
+              </div>
+              <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
+                <div className="flex items-center justify-between gap-x-4 md:justify-end lg:justify-between xl:justify-end">
+                  <div className="flex overflow-hidden rounded-lg border">
+                    <div className="h-10 w-20 bg-gray-700 rounded-l"></div>
+                    <div className="h-10 w-10 bg-gray-700"></div>
+                  </div>
+                  <div className="h-10 w-28 bg-gray-700 rounded"></div>
+                </div>
+              </div>
+            </div>
           )}
 
-          <Comments />
+          {video ? <Comments /> : ""}
         </div>
         <div className="col-span-12 flex w-full shrink-0 flex-col gap-3 lg:w-[350px] xl:w-[400px]">
           <div className="w-full gap-x-2 border pr-2 md:flex">

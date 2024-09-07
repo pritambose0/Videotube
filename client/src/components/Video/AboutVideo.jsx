@@ -5,6 +5,8 @@ import { useState } from "react";
 import PlaylistModal from "../PlaylistModel";
 import { useMutation } from "@tanstack/react-query";
 import { timeAgoFormat } from "../../utils/timeAgoFormat";
+import toast, { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const AboutVideo = ({
   title,
@@ -17,6 +19,7 @@ const AboutVideo = ({
   const [liked, setLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
   const { videoId } = useParams();
+  const authStatus = useSelector((state) => state.auth.status);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -28,11 +31,16 @@ const AboutVideo = ({
       setLikes(data.data?.likes);
     },
     onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error creating account");
       console.error("Like toggle error:", error.response?.data.message);
     },
   });
 
   const handleLike = () => {
+    if (!authStatus) {
+      toast.error("Please login to like video");
+      return;
+    }
     if (videoId) {
       mutation.mutate();
     }
@@ -42,6 +50,7 @@ const AboutVideo = ({
 
   return (
     <div className="flex flex-wrap gap-y-2">
+      <Toaster />
       <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
         <h1 className="text-lg font-bold">{title}</h1>
         <p className="flex text-sm text-gray-200">

@@ -3,7 +3,8 @@ import { QueryClient, useMutation } from "@tanstack/react-query";
 import PropTypes from "prop-types";
 import axiosInstance from "../../services/axiosInstance";
 import { useParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 function Comment({
   ownerAvatar,
@@ -22,6 +23,7 @@ function Comment({
   const [liked, setLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
   const inputRef = useRef(null);
+  const authStatus = useSelector((state) => state.auth.status);
 
   const { mutate: deleteComment } = useMutation({
     mutationFn: async () => {
@@ -77,6 +79,10 @@ function Comment({
   };
 
   const handleEdit = () => {
+    if (!authStatus) {
+      toast.error("Please login to edit comment");
+      return;
+    }
     setIsEditing(true);
     setDropdownOpen(false);
   };
@@ -93,6 +99,10 @@ function Comment({
   }, [isEditing]);
 
   const handleLike = () => {
+    if (!authStatus) {
+      toast.error("Please login to like comment");
+      return;
+    }
     if (commentId) {
       likeMutation.mutate();
     }
@@ -100,6 +110,7 @@ function Comment({
 
   return (
     <div>
+      <Toaster />
       <div className="flex gap-x-4">
         <div className="mt-2 h-11 w-11 shrink-0">
           <img
