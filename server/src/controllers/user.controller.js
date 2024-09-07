@@ -165,7 +165,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "Lax",
+    sameSite: "none",
   };
 
   // Send Cookie
@@ -195,7 +195,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "Lax",
+    sameSite: "none",
   };
 
   return res
