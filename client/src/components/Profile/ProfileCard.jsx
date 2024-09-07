@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../services/axiosInstance";
+import { useSelector } from "react-redux";
+import { toast, Toaster } from "react-hot-toast";
 
 function ProfileCard({
   coverPhoto,
@@ -16,10 +18,7 @@ function ProfileCard({
   owner,
 }) {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
-  // console.log("SUBSCRIBE STATUS", subscribeStatus);
-  // console.log("IS SUBSCRIBED", isSubscribed);
-  // console.log("SUBSCRIBERS", subscribers);
-  // console.log("SUBSCRIBED", subscribed);
+  const authStatus = useSelector((state) => state.auth.authStatus);
 
   const tabs = [
     { name: "Videos", path: `/c/${channelHandle}/videos` },
@@ -42,6 +41,10 @@ function ProfileCard({
   });
 
   const handleSubscribe = () => {
+    if (!authStatus) {
+      toast.error("Please login");
+      return;
+    }
     if (channelId) {
       mutation.mutate();
     }
@@ -49,6 +52,7 @@ function ProfileCard({
   return (
     <>
       <div className="relative min-h-[150px] w-full pt-[16.28%]">
+        <Toaster />
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={coverPhoto}
@@ -74,7 +78,10 @@ function ProfileCard({
           {!owner && (
             <div className="inline-block">
               <div className="inline-flex min-w-[145px] justify-end">
-                <button className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto">
+                <button
+                  className="group/btn mr-1 flex w-full items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto"
+                  onClick={handleSubscribe}
+                >
                   <span className="inline-block w-5">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +98,7 @@ function ProfileCard({
                       ></path>
                     </svg>
                   </span>
-                  <span className="group-focus/btn" onClick={handleSubscribe}>
+                  <span className="group-focus/btn">
                     {isSubscribed ? "Subscribed" : "Subscribe"}
                   </span>
                 </button>

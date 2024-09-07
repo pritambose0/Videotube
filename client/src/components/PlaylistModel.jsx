@@ -3,12 +3,15 @@ import { useState } from "react";
 import axiosInstance from "../services/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import { toast, Toaster } from "react-hot-toast";
 
 const PlaylistModal = ({ playlists }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const queryClient = useQueryClient();
   const { videoId } = useParams();
+  const authStatus = useSelector((state) => state.auth.status);
 
   const { mutate: saveToPlaylistMutation } = useMutation({
     mutationFn: async (playlistId) => {
@@ -18,9 +21,12 @@ const PlaylistModal = ({ playlists }) => {
       return res.data;
     },
     onSuccess: () => {
-      alert("Added to playlist");
+      toast.success("Added to playlist");
     },
     onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Failed to add to playlist"
+      );
       console.log(error);
     },
   });
@@ -30,25 +36,32 @@ const PlaylistModal = ({ playlists }) => {
       const res = await axiosInstance.post("/playlists/", {
         name: newPlaylistName,
       });
-      console.log(res);
 
       return res.data;
     },
     onSuccess: () => {
-      alert("Playlist created successfully");
+      toast.success("Playlist created successfully");
       queryClient.invalidateQueries(["playlists"]);
     },
     onError: (error) => {
+      toast.error(
+        error?.response?.data?.message || "Failed to create playlist"
+      );
       console.log(error);
     },
   });
 
   const onCreatePlaylist = () => {
+    if (!authStatus) {
+      toast.error("Please login to create playlist");
+      return;
+    }
     createPlaylistMutation.mutate();
   };
 
   return (
     <div className="absolute right-0 top-full z-10 hidden w-64 overflow-hidden rounded-lg bg-[#121212] p-4 shadow shadow-slate-50/30 hover:block peer-focus:block">
+      <Toaster />
       <h3 className="mb-4 text-center text-lg font-semibold">
         Save to playlist
       </h3>

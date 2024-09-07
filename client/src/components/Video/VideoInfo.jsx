@@ -3,7 +3,8 @@ import axiosInstance from "../../services/axiosInstance";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const VideoInfo = ({
   channelImage,
@@ -17,6 +18,7 @@ const VideoInfo = ({
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
   console.log(isSubscribed);
   // console.log(subscribeStatus);
+  const authStatus = useSelector((state) => state.auth.status);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -27,12 +29,16 @@ const VideoInfo = ({
       setIsSubscribed(data.data?.isSubscribed);
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Error creating account");
+      toast.error(error?.response?.data?.message || "Error toggling subscribe");
       console.error("Subscription toggle error:", error.response?.data.message);
     },
   });
 
   const handleSubscribe = () => {
+    if (!authStatus) {
+      toast.error("Please login");
+      return;
+    }
     if (channelId) {
       mutation.mutate();
     }

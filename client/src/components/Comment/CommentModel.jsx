@@ -10,7 +10,7 @@ import { timeAgoFormat } from "../../utils/timeAgoFormat";
 import { useParams } from "react-router-dom";
 import Comment from "./Comment";
 import { useSelector } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 const Comments = () => {
   const { videoId } = useParams();
@@ -18,7 +18,6 @@ const Comments = () => {
   const queryClient = useQueryClient();
   const { ref, inView } = useInView();
   const authStatus = useSelector((state) => state.auth.status);
-  console.log("AUTHSTATUS", authStatus);
 
   const {
     data: comments,
@@ -53,10 +52,11 @@ const Comments = () => {
     },
     onSuccess: () => {
       setComment("");
+      toast.success("Comment added successfully");
       queryClient.invalidateQueries(["comments", videoId]);
-      alert("Comment added successfully");
     },
     onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error adding comment");
       console.error("Comment error:", error.response?.data.message);
     },
   });
@@ -69,7 +69,7 @@ const Comments = () => {
 
   const handleAddComment = () => {
     if (!authStatus) {
-      toast.success("Please login to add comment");
+      toast.error("Please login");
       return;
     }
     if (videoId) {
@@ -126,7 +126,7 @@ const Comments = () => {
             </div>
           ))}
         </div>
-        <div ref={ref} className="w-full text-center">
+        <div ref={ref} className="w-full text-center py-3">
           {isFetchingNextPage && "Loading..."}
         </div>
         <Toaster />

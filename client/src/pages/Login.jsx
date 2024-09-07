@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
 import axiosInstance from "../services/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 function Login() {
   const {
@@ -18,16 +18,16 @@ function Login() {
 
   const mutation = useMutation({
     mutationFn: async (data) => {
-      const response = axiosInstance.post("/users/login", data);
+      const response = await axiosInstance.post("/users/login", data);
       return response.data?.data;
     },
     onSuccess: (data) => {
       dispatch(login(data));
-      navigate("/");
       toast.success("Login successful");
+      navigate("/");
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Error creating account");
+      toast.error(error?.response?.data?.message || "Error logging in");
       console.log(error);
     },
   });
@@ -38,6 +38,7 @@ function Login() {
 
   return (
     <div className="h-screen w-full overflow-y-auto bg-[#121212] text-white">
+      <Toaster />
       <div className="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
         <div className="mx-auto inline-block w-16">
           <svg
