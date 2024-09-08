@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (error) {
         console.error(error.response);
-        return Promise.reject(serverError ? serverError.response : error);
+        return Promise.reject(serverError ? serverError : error);
       }
     }
     // If the error is not a 401 or the retry fails, pass it along
