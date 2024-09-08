@@ -177,6 +177,12 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
 
+  const options = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  };
+
   // Send Cookie
   setCookies(res, accessToken, refreshToken);
 
@@ -203,6 +209,7 @@ const logoutUser = asyncHandler(async (req, res) => {
   const options = {
     httpOnly: true,
     secure: true,
+    sameSite: "Strict",
   };
 
   return res
@@ -236,6 +243,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: true,
+      sameSite: "strict",
     };
 
     const accessToken = await generateAccessToken(user._id);
