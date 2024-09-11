@@ -14,10 +14,12 @@ function VideoListPage({ thumbnail, title, views, timeAgo, id, duration }) {
             {convertToTime(duration)}
           </span>
         </div>
-        <h6 className="mb-1 font-semibold">{title}</h6>
-        <p className="flex text-sm text-gray-200">
-          {views} Views · {timeAgoFormat(timeAgo)}
-        </p>
+        <div className="px-4">
+          <h6 className="mb-1 font-semibold">{title}</h6>
+          <p className="flex text-sm text-gray-200">
+            {views} Views · {timeAgoFormat(timeAgo)}
+          </p>
+        </div>
       </div>
     </Link>
   );

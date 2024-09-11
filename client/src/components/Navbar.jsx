@@ -32,7 +32,7 @@ function Navbar() {
     mutation.mutate();
   };
   return (
-    <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white bg-[#121212] px-4">
+    <header className="sticky inset-x-0 top-0 z-50 w-full bg-[#121212] px-4">
       <Toaster />
       <nav className="mx-auto flex max-w-7xl items-center py-2">
         <div className="mr-4 w-12 shrink-0 sm:w-16">

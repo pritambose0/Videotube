@@ -47,7 +47,7 @@ function ProfileOutlet() {
           <>
             <div className="relative min-h-[150px] w-full pt-[16.28%] bg-gray-800 animate-pulse"></div>
 
-            <div className="px-4 pb-4">
+            <div className="px-2">
               <div className="flex flex-wrap gap-4 pb-4 pt-6">
                 <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full bg-gray-700 animate-pulse"></span>
                 <div className="mr-auto inline-block">

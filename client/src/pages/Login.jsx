@@ -130,10 +130,11 @@ function Login() {
           )}
 
           <button
-            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md"
+            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md disabled:opacity-50"
             type="submit"
+            disabled={mutation.isPending}
           >
-            Sign in
+            {mutation.isPending ? "Logging in..." : "Login"}
           </button>
           <Link to={"/signup"}>
             <button className="bg-[#ae7aff] px-4 py-2 text-black rounded-md ml-5">

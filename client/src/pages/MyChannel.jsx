@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VideoUploadModal from "../components/Video Modals/VideoUploadModal";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../services/axiosInstance";
@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 
 function MyChannel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const { username } = useParams();
@@ -29,6 +28,10 @@ function MyChannel() {
     staleTime: Infinity,
     enabled: !!username,
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -60,13 +63,13 @@ function MyChannel() {
       <VideoUploadModal isOpen={isModalOpen} onClose={closeModal} />
 
       {isLoading ? (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
+        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
           {Array.from({ length: 6 }).map((_, index) => (
             <VideoCardSkeleton key={index} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
+        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
           {videos?.map((video) => (
             <VideoListPage
               key={video._id}
