@@ -21,7 +21,7 @@ const VideoCard = ({
           {convertToTime(duration)}
         </span>
       </div>
-      <div className="flex gap-x-2">
+      <div className="flex gap-x-2 mx-2">
         <div className="h-10 w-10 shrink-0">
           <img
             src={avatar}

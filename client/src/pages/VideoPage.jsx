@@ -76,7 +76,7 @@ function VideoPage() {
 
               <VideoInfo
                 channelUsername={video?.owner?.username}
-                channelImage={video?.thumbnail?.url}
+                channelImage={video?.owner?.avatar?.url}
                 channelName={video?.owner?.fullName}
                 description={video?.description}
                 channelId={video?.owner?._id}

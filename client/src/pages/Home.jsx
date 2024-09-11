@@ -9,6 +9,7 @@ function Home() {
     data: videos,
     isError,
     isLoading,
+    error,
   } = useQuery({
     queryKey: ["videos"],
     queryFn: async () => {
@@ -25,17 +26,19 @@ function Home() {
       <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
         {isError && (
           <div className="flex h-full items-center justify-center text-center">
-            <h1 className="text-2xl font-bold text-red-500">Error Occurred </h1>
+            <h3 className="text-xl font-bold text-red-500">
+              {error.response?.data?.message}
+            </h3>
           </div>
         )}
         {isLoading ? (
-          <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
+          <div className="h-screen grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
             {Array.from({ length: 6 }).map((_, index) => (
               <VideoCardSkeleton key={index} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 p-4">
+          <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
             {videos?.map((video) => (
               <Link to={`videos/${video._id}`} key={video._id}>
                 <VideoCard

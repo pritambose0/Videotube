@@ -22,6 +22,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ChannelPage from "./components/ChannelPage.jsx";
 import EditChannel from "./pages/EditChannel.jsx";
+import Admin from "./pages/Admin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <Signup />,
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/c/:username/admin",
+        element: (
+          <AuthLayout authentication={false}>
+            <Admin />,
           </AuthLayout>
         ),
       },
