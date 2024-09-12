@@ -41,7 +41,7 @@ function VideoPage() {
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">
-      <div className="flex w-full flex-wrap gap-4 p-4 lg:flex-nowrap">
+      <div className="flex w-full flex-wrap gap-4 md:p-1 lg:flex-nowrap">
         <div className="col-span-12 w-full">
           <div className="relative mb-4 w-full pt-[56%]">
             <div className="absolute inset-0">
@@ -85,7 +85,7 @@ function VideoPage() {
               />
             </div>
           ) : (
-            <div className="flex flex-wrap gap-y-2 animate-pulse">
+            <div className="flex flex-wrap gap-y-2 animate-pulse p-1">
               <div className="w-full md:w-1/2 lg:w-full xl:w-1/2">
                 <div className="h-6 w-3/4 bg-gray-700 rounded"></div>
                 <div className="mt-2 h-4 w-1/2 bg-gray-700 rounded"></div>
