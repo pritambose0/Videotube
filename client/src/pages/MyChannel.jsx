@@ -38,7 +38,7 @@ function MyChannel() {
       {owner && (
         <div className="mx-auto w-full flex items-center justify-end p-3">
           <button
-            className="inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-bold text-black ml-5"
+            className="bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px]"
             onClick={openModal}
           >
             <svg
@@ -69,7 +69,7 @@ function MyChannel() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
+        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1 pt-2">
           {videos?.map((video) => (
             <VideoListPage
               key={video._id}

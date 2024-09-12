@@ -18,7 +18,7 @@ function ProfileCard({
   owner,
 }) {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
-  const authStatus = useSelector((state) => state.auth.authStatus);
+  const authStatus = useSelector((state) => state.auth.status);
 
   const tabs = [
     { name: "Videos", path: `/c/${channelHandle}/videos` },
@@ -63,8 +63,8 @@ function ProfileCard({
         </div>
       </div>
 
-      <div className="px-2 md:px-4">
-        <div className="flex flex-col gap-4 pb-4 pt-6 md:flex-row md:items-center">
+      <div className="px-2 sm:px-4">
+        <div className="flex flex-col gap-4 pb-4 pt-6 sm:flex-row sm:items-center">
           <span className="relative -mt-12 inline-block h-28 w-28 shrink-0 overflow-hidden rounded-full border-2">
             <img
               src={avatar}
@@ -73,7 +73,7 @@ function ProfileCard({
             />
           </span>
           <div className="flex-1">
-            <h1 className="text-lg font-bold md:text-xl">{channelName}</h1>
+            <h1 className="text-lg font-bold sm:text-xl">{channelName}</h1>
             <p className="text-sm text-gray-400">@{channelHandle}</p>
             <p className="text-sm text-gray-400">
               {subscribers || 0} Subscribers · {subscribed || 0} Subscribed
@@ -81,7 +81,7 @@ function ProfileCard({
           </div>
           {!owner && (
             <button
-              className="group/btn flex w-full items-center justify-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e] sm:w-auto"
+              className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px]"
               onClick={handleSubscribe}
             >
               <span className="inline-block w-5">
@@ -108,16 +108,16 @@ function ProfileCard({
             <>
               <Link
                 to={`/c/${channelHandle}/edit`}
-                className="flex w-full md:w-auto"
+                className="flex w-full sm:w-auto"
               >
-                <button className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm">
+                <button className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm active:translate-x-[5px] active:translate-y-[5px]">
                   Edit Channel
                 </button>
               </Link>
 
               <Link
-                to={`/c/${channelHandle}/edit`}
-                className="flex w-full md:w-auto"
+                to={`/c/${channelHandle}/admin`}
+                className="flex w-full sm:w-auto"
               >
                 <button className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm">
                   Dashboard
@@ -126,14 +126,14 @@ function ProfileCard({
             </>
           )}
         </div>
-        <ul className="no-scrollbar flex gap-x-2 overflow-x-auto border-b-2 border-gray-400 bg-[#121212] py-2">
+        <ul className="no-scrollbar flex gap-x-2 overflow-x-auto border-b  bg-[#121212] py-2">
           {tabs.map((tab, index) => (
             <li className="shrink-0" key={index}>
               <Link to={tab.path}>
                 <button
                   className={`w-full px-3 py-1.5 border-b-2 ${
                     location.pathname === tab.path
-                      ? "border-[#ae7aff] bg-white text-[#ae7aff]"
+                      ? "border-[#ae7aff] font-semibold bg-white text-[#ae7aff]"
                       : "border-transparent text-gray-400"
                   }`}
                 >

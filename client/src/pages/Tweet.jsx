@@ -67,7 +67,7 @@ function Tweet() {
       {owner && (
         <div className="mx-auto w-full flex items-center justify-end px-5 py-3">
           <button
-            className="rounded-sm bg-[#E4D3FF] p-2 text-black"
+            className="bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px]"
             onClick={handleCreateTweetToggle}
           >
             {!isOpenCreateTweet ? "Create Tweet" : "Close"}

@@ -1,6 +1,6 @@
 function Admin() {
   return (
-    <div className="mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-1 pb-[80px]">
+    <div className="mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-2 pb-[80px]">
       <div className="flex flex-wrap justify-between gap-4 px-1">
         <div className="block">
           <h1 className="text-2xl font-bold">Welcome Back, React Patterns</h1>
@@ -103,51 +103,49 @@ function Admin() {
         </div>
       </div>
       <div className="overflow-hidden">
-        <table className="w-full border-collapse border text-white md:table">
+        <table className="w-full border-collapse text-white">
           <thead className="hidden md:table-header-group">
             <tr>
-              <th className="border-b p-2 md:p-4">Status</th>
-              <th className="border-b p-2 md:p-4">Uploaded</th>
-              <th className="border-b p-2 md:p-4">Rating</th>
-              <th className="border-b p-2 md:p-4">Date Uploaded</th>
-              <th className="border-b p-2 md:p-4"></th>
+              <th className="border-b p-4 text-left">Status</th>
+              <th className="border-b p-4 text-left">Uploaded</th>
+              <th className="border-b p-4 text-left">Rating</th>
+              <th className="border-b p-4 text-left">Date Uploaded</th>
+              <th className="border-b p-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody className="block md:table-row-group">
-            <tr className="flex flex-col md:table-row p-4 mb-4 rounded-lg md:p-0 bg-transparent">
+            <tr className="flex flex-col gap-2 p-4 mb-4 bg-[#1e1e1e] rounded-lg shadow md:table-row md:p-0 md:shadow-none">
               <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
                 <span className="font-semibold md:hidden">Status:</span>
-                <span className="rounded-2xl border px-1.5 py-0.5 border-green-600 text-green-600">
+                <span className="rounded-2xl border px-2 py-0.5 border-green-600 text-green-600">
                   Published
                 </span>
               </td>
-              <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+              <td className="flex flex-col md:flex-row items-start md:items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
                 <span className="font-semibold md:hidden">Uploaded:</span>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold">
-                    Getting Started with Express.js
-                  </h3>
-                </div>
+                <h3 className="text-sm font-semibold">
+                  Getting Started with Express.js
+                </h3>
               </td>
               <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
                 <span className="font-semibold md:hidden">Rating:</span>
                 <div className="flex gap-1">
-                  <span className="bg-green-200 text-green-700 text-xs px-1 py-0.5 rounded-lg">
+                  <span className="bg-green-200 text-green-700 text-xs px-2 py-0.5 rounded-lg">
                     137 likes
                   </span>
-                  <span className="bg-red-200 text-red-700 text-xs px-1 py-0.5 rounded-lg">
+                  <span className="bg-red-200 text-red-700 text-xs px-2 py-0.5 rounded-lg">
                     107 dislikes
                   </span>
                 </div>
               </td>
               <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
                 <span className="font-semibold md:hidden">Date Uploaded:</span>
-                9/17/2023
+                <span>9/17/2023</span>
               </td>
               <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
                 <span className="font-semibold md:hidden">Actions:</span>
                 <div className="flex gap-2">
-                  <button className="h-5 w-5 hover:text-[#ae7aff]">
+                  <button className="h-6 w-6 hover:text-[#ae7aff]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -163,7 +161,7 @@ function Admin() {
                       ></path>
                     </svg>
                   </button>
-                  <button className="h-5 w-5 hover:text-[#ae7aff]">
+                  <button className="h-6 w-6 hover:text-[#ae7aff]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
