@@ -14,7 +14,7 @@ function Subscribed() {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["subscribedToChannels"],
+    queryKey: ["subscribedToChannels", username],
     queryFn: async () => {
       const res = await axiosInstance.get(
         `subscriptions/c/subscribed-to/${username}`

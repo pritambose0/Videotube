@@ -107,7 +107,7 @@ function TweetsListPage({
   return (
     <>
       <Toaster />
-      <div className="flex gap-3 border-b border-gray-700 p-4 last:border-b-transparent">
+      <div className="flex gap-3 border-b border-gray-700 md:p-1 last:border-b-transparent">
         <div className="h-14 w-14 shrink-0">
           <img
             src={avatar}

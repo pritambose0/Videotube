@@ -17,7 +17,7 @@ const VideoCard = ({
         <div className="absolute inset-0">
           <img src={thumbnailSrc} alt={title} className="h-full w-full" />
         </div>
-        <span className="absolute bottom-1 right-1 inline-block rounded bg-black px-1.5 text-sm">
+        <span className="absolute bottom-1 right-1 inline-block rounded-sm bg-black bg-opacity-60 px-1.5 text-xs">
           {convertToTime(duration)}
         </span>
       </div>
@@ -30,8 +30,8 @@ const VideoCard = ({
           />
         </div>
         <div className="w-full">
-          <h6 className="mb-1 font-semibold">{title}</h6>
-          <p className="flex text-sm text-gray-200">
+          <h6 className="text-sm font-semibold">{title}</h6>
+          <p className="flex text-xs text-gray-300">
             {author} · {views} Views · {timeAgoFormat(timeAgo)}
           </p>
         </div>

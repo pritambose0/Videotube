@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       {
         path: "/c/:username/admin",
         element: (
-          <AuthLayout authentication={false}>
+          <AuthLayout authentication={true}>
             <Admin />,
           </AuthLayout>
         ),

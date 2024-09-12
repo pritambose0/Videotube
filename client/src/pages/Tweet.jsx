@@ -65,7 +65,7 @@ function Tweet() {
     <>
       <Toaster />
       {owner && (
-        <div className="mx-auto w-full flex items-center justify-end px-5">
+        <div className="mx-auto w-full flex items-center justify-end px-5 py-3">
           <button
             className="rounded-sm bg-[#E4D3FF] p-2 text-black"
             onClick={handleCreateTweetToggle}

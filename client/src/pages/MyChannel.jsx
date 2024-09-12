@@ -36,9 +36,9 @@ function MyChannel() {
   return (
     <>
       {owner && (
-        <div className="mx-auto w-full flex items-center justify-end px-5">
+        <div className="mx-auto w-full flex items-center justify-end p-3">
           <button
-            className="inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black ml-5 "
+            className="inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-bold text-black ml-5"
             onClick={openModal}
           >
             <svg

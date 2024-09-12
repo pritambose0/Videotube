@@ -12,12 +12,8 @@ function App() {
   const userStatus = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    console.log("HII");
-
     getCurrentUser()
       .then((userData) => {
-        console.log("HI", userData);
-
         if (userData) {
           dispatch(login(userData?.data?.data));
         } else {

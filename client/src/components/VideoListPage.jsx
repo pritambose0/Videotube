@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { timeAgoFormat } from "../utils/timeAgoFormat";
 import { convertToTime } from "../utils/convertToTime";
 import { Link } from "react-router-dom";
+
 function VideoListPage({ thumbnail, title, views, timeAgo, id, duration }) {
   return (
     <Link to={`/videos/${id}`}>

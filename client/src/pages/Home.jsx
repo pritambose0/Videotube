@@ -23,7 +23,7 @@ function Home() {
 
   return (
     <>
-      <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+      <section className="w-full pb-[80px] sm:ml-[70px] sm:pb-0 lg:ml-0">
         {isError && (
           <div className="flex h-full items-center justify-center text-center">
             <h3 className="text-xl font-bold text-red-500">

@@ -17,7 +17,7 @@ function Playlists() {
     enabled: !!username,
   });
 
-  console.log("PLAYLISTS", playlists);
+  // console.log("PLAYLISTS", playlists);
   // const thumbnail = playlists && playlists[0]?.thumbnail?.url;
 
   return (
