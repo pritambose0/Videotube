@@ -36,9 +36,9 @@ function MyChannel() {
   return (
     <>
       {owner && (
-        <div className="mx-auto w-full flex items-center justify-end p-3">
+        <div className="flex items-center justify-end p-3 w-full max-w-screen-lg mx-auto">
           <button
-            className="bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px]"
+            className="bg-[#ae7aff] px-4 py-2 font-bold text-black transition-transform duration-150 ease-in-out rounded-sm flex gap-2 items-center active:translate-x-[2px] active:translate-y-[2px] hover:bg-[#9c6de2]"
             onClick={openModal}
           >
             <svg
@@ -55,7 +55,7 @@ function MyChannel() {
                 strokeLinejoin="round"
                 d="M12 4.5v15m7.5-7.5h-15"
               ></path>
-            </svg>{" "}
+            </svg>
             New video
           </button>
         </div>
@@ -63,13 +63,13 @@ function MyChannel() {
       <VideoUploadModal isOpen={isModalOpen} onClose={closeModal} />
 
       {isLoading ? (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 py-2">
           {Array.from({ length: 6 }).map((_, index) => (
             <VideoCardSkeleton key={index} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1 pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 py-2">
           {videos?.map((video) => (
             <VideoListPage
               key={video._id}
@@ -86,9 +86,9 @@ function MyChannel() {
 
       {!videos ||
         (videos.length === 0 && (
-          <div className="flex justify-center p-4">
-            <div className="w-full max-w-sm text-center">
-              <p className="mb-3 w-full">
+          <div className="flex justify-center items-center p-6">
+            <div className="w-full max-w-sm text-center bg-[#1e1e1e] p-6 rounded-md shadow-md">
+              <p className="mb-3">
                 <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -107,8 +107,10 @@ function MyChannel() {
                   </svg>
                 </span>
               </p>
-              <h5 className="mb-2 font-semibold">No videos uploaded</h5>
-              <p>
+              <h5 className="mb-2 font-semibold text-white">
+                No videos uploaded
+              </h5>
+              <p className="text-gray-300">
                 This page has yet to upload a video. Search another page in
                 order to find more videos.
               </p>

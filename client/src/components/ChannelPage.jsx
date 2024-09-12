@@ -17,20 +17,20 @@ function ChannelPage() {
     enabled: !!username,
   });
 
-  console.log(owner);
+  // console.log(owner);
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       {owner && (
         <ProfileCard
-          coverPhoto={owner?.coverImage}
-          avatar={owner?.avatar}
-          channelName={owner?.fullName}
-          channelHandle={owner?.username}
-          isSubscribed={owner?.isSubscribed}
-          channelId={owner?._id}
-          subscribers={owner?.subscribersCount}
-          subscribed={owner?.subscribedToCount}
+          coverPhoto={owner.coverImage}
+          avatar={owner.avatar}
+          channelName={owner.fullName}
+          channelHandle={owner.username}
+          isSubscribed={owner.isSubscribed}
+          channelId={owner._id}
+          subscribers={owner.subscribersCount}
+          subscribed={owner.subscribedToCount}
         />
       )}
       <Outlet />

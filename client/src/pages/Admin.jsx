@@ -29,8 +29,8 @@ function Admin() {
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4">
-        <div className="border p-4">
+      <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 ">
+        <div className="rounded-md bg-[#1e1e1e] p-4">
           <div className="mb-4 block">
             <span className="inline-block h-7 w-7 rounded-full bg-[#E4D3FF] p-1 text-[#ae7aff]">
               <svg
@@ -57,7 +57,7 @@ function Admin() {
           <h6 className="text-gray-300">Total views</h6>
           <p className="text-3xl font-semibold">221,234</p>
         </div>
-        <div className="border p-4">
+        <div className="rounded-md bg-[#1e1e1e] p-4">
           <div className="mb-4 block">
             <span className="inline-block h-7 w-7 rounded-full bg-[#E4D3FF] p-1 text-[#ae7aff]">
               <svg
@@ -79,7 +79,7 @@ function Admin() {
           <h6 className="text-gray-300">Total subscribers</h6>
           <p className="text-3xl font-semibold">4,053</p>
         </div>
-        <div className="border p-4">
+        <div className="rounded-md bg-[#1e1e1e] p-4">
           <div className="mb-4 block">
             <span className="inline-block h-7 w-7 rounded-full bg-[#E4D3FF] p-1 text-[#ae7aff]">
               <svg
@@ -114,72 +114,84 @@ function Admin() {
             </tr>
           </thead>
           <tbody className="block md:table-row-group">
-            <tr className="flex flex-col gap-2 p-4 mb-4 bg-[#1e1e1e] rounded-lg shadow md:table-row md:p-0 md:shadow-none">
-              <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
-                <span className="font-semibold md:hidden">Status:</span>
-                <span className="rounded-2xl border px-2 py-0.5 border-green-600 text-green-600">
-                  Published
-                </span>
-              </td>
-              <td className="flex flex-col md:flex-row items-start md:items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
-                <span className="font-semibold md:hidden">Uploaded:</span>
-                <h3 className="text-sm font-semibold">
-                  Getting Started with Express.js
-                </h3>
-              </td>
-              <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
-                <span className="font-semibold md:hidden">Rating:</span>
-                <div className="flex gap-1">
-                  <span className="bg-green-200 text-green-700 text-xs px-2 py-0.5 rounded-lg">
-                    137 likes
-                  </span>
-                  <span className="bg-red-200 text-red-700 text-xs px-2 py-0.5 rounded-lg">
-                    107 dislikes
-                  </span>
-                </div>
-              </td>
-              <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
-                <span className="font-semibold md:hidden">Date Uploaded:</span>
-                <span>9/17/2023</span>
-              </td>
-              <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
-                <span className="font-semibold md:hidden">Actions:</span>
-                <div className="flex gap-2">
-                  <button className="h-6 w-6 hover:text-[#ae7aff]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button className="h-6 w-6 hover:text-[#ae7aff]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
+            {[...Array(3)].map(
+              (
+                _,
+                index // Replace with your actual data map
+              ) => (
+                <tr
+                  key={index}
+                  className="flex flex-col gap-2 p-4 mb-4 bg-[#1e1e1e] rounded-lg shadow md:table-row md:p-0 md:shadow-none"
+                >
+                  <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+                    <span className="font-semibold md:hidden">Status:</span>
+                    <span className="rounded-2xl px-2 py-0.5  text-green-600">
+                      Published
+                    </span>
+                  </td>
+                  <td className="flex flex-col md:flex-row items-start md:items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+                    <span className="font-semibold md:hidden">Uploaded:</span>
+                    <h3 className="text-sm font-semibold">
+                      Getting Started with Express.js
+                    </h3>
+                  </td>
+                  <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+                    <span className="font-semibold md:hidden">Rating:</span>
+                    <div className="flex gap-1">
+                      <span className="bg-green-200 text-green-700 text-xs px-2 py-0.5 rounded-lg">
+                        137 likes
+                      </span>
+                      <span className="bg-red-200 text-red-700 text-xs px-2 py-0.5 rounded-lg">
+                        107 dislikes
+                      </span>
+                    </div>
+                  </td>
+                  <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+                    <span className="font-semibold md:hidden">
+                      Date Uploaded:
+                    </span>
+                    <span>9/17/2023</span>
+                  </td>
+                  <td className="flex items-center justify-between md:table-cell border-b border-gray-600 py-2 md:py-3">
+                    <span className="font-semibold md:hidden">Actions:</span>
+                    <div className="flex gap-2">
+                      <button className="h-6 w-6 hover:text-[#ae7aff]">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                          ></path>
+                        </svg>
+                      </button>
+                      <button className="h-6 w-6 hover:text-[#ae7aff]">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                          ></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
