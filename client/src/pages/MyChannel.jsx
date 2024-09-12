@@ -69,7 +69,7 @@ function MyChannel() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 py-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-2">
           {videos?.map((video) => (
             <VideoListPage
               key={video._id}
