@@ -81,7 +81,7 @@ function ProfileCard({
           </div>
           {!owner && (
             <button
-              className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px]"
+              className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm inline-flex gap-2 items-center active:translate-x-[5px] active:translate-y-[5px] justify-center hover:bg-[#9c6de2]"
               onClick={handleSubscribe}
             >
               <span className="inline-block w-5">

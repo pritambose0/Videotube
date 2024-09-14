@@ -1,4 +1,6 @@
 function Admin() {
+  const userData = useSelector((state) => state.auth.userData);
+
   return (
     <div className="mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-2 pb-[80px]">
       <div className="flex flex-wrap justify-between gap-4 px-1">

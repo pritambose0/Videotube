@@ -45,7 +45,7 @@ function Playlists() {
           <section className="w-full pb-[70px] sm:pb-0 lg:ml-0">
             <div className="px-4 py-8">
               <div className="flex justify-center p-4">
-                <div className="w-full max-w-md text-center  shadow-md rounded-lg p-6">
+                <div className="w-full max-w-md text-center shadow-md rounded-lg p-6">
                   <p className="mb-4 flex justify-center">
                     <span className="inline-flex items-center justify-center rounded-full bg-[#E4D3FF] p-3 text-[#AE7AFF]">
                       <svg

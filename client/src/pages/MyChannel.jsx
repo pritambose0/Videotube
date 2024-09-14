@@ -20,7 +20,7 @@ function MyChannel() {
   }
 
   const { data: videos, isLoading } = useQuery({
-    queryKey: ["channelVideos"],
+    queryKey: ["channelVideos", username],
     queryFn: async () => {
       const res = await axiosInstance.get(`/users/c/${username}/videos`);
       return res?.data?.data;
