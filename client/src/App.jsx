@@ -1,18 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
-import { getCurrentUser } from "./services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "./store/authSlice";
+import axiosInstance from "./services/axiosInstance";
 
 function App() {
   const dispatch = useDispatch();
   const userStatus = useSelector((state) => state.auth.status);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getCurrentUser()
+    axiosInstance
+      .get("/users/current-user")
       .then((userData) => {
         if (userData) {
           dispatch(login(userData?.data?.data));
@@ -22,8 +24,19 @@ function App() {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [dispatch, userStatus]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <>

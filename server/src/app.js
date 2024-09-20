@@ -16,8 +16,7 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
-//Routes
-//http://localhost:8000/api/v1/users/register
+// Import Routes
 import userRouter from "./routes/user.routes.js";
 import videoRouter from "./routes/video.routes.js";
 import subscriptionRouter from "./routes/subscription.routes.js";
@@ -27,7 +26,7 @@ import playlistRouter from "./routes/playlist.routes.js";
 import tweetRouter from "./routes/tweet.routes.js";
 import healthCheckRouter from "./routes/healthcheck.routes.js";
 
-//Routes Declarations
+// Routes Declarations
 app.use("/api/v1/healthcheck", healthCheckRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/videos", videoRouter);
@@ -36,6 +35,20 @@ app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/playlists", playlistRouter);
 app.use("/api/v1/tweets", tweetRouter);
+
+setInterval(() => {
+  const req = { method: "GET", url: "/api/v1/healthcheck" };
+  const res = {
+    status: (statusCode) => {
+      console.log(`Health check status: ${statusCode}`);
+      return {
+        send: (message) => console.log(message),
+      };
+    },
+  };
+
+  healthCheckRouter(req, res, () => {});
+}, 300000);
 
 app.use(errorHandler);
 
