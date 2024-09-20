@@ -36,20 +36,6 @@ app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/playlists", playlistRouter);
 app.use("/api/v1/tweets", tweetRouter);
 
-setInterval(() => {
-  const req = { method: "GET", url: "/api/v1/healthcheck" };
-  const res = {
-    status: (statusCode) => {
-      console.log(`Health check status: ${statusCode}`);
-      return {
-        send: (message) => console.log(message),
-      };
-    },
-  };
-
-  healthCheckRouter(req, res, () => {});
-}, 300000);
-
 app.use(errorHandler);
 
 export { app };
