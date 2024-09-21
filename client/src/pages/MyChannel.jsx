@@ -13,11 +13,7 @@ function MyChannel() {
   const closeModal = () => setIsModalOpen(false);
   const { username } = useParams();
   const ownerUsername = useSelector((state) => state.auth.userData?.username);
-
-  let owner = false;
-  if (username === ownerUsername) {
-    owner = true;
-  }
+  const owner = username === ownerUsername;
 
   const { data: videos, isLoading } = useQuery({
     queryKey: ["channelVideos", username],
@@ -69,54 +65,53 @@ function MyChannel() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-2">
-          {videos?.map((video) => (
-            <VideoListPage
-              key={video._id}
-              views={video.views}
-              title={video.title}
-              thumbnail={video.thumbnail?.url}
-              timeAgo={video.createdAt}
-              duration={video.duration}
-              id={video._id}
-            />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-2 ">
+          {videos?.length > 0 ? (
+            videos.map((video) => (
+              <VideoListPage
+                key={video._id}
+                views={video.views}
+                title={video.title}
+                thumbnail={video.thumbnail?.url}
+                timeAgo={video.createdAt}
+                duration={video.duration}
+                id={video._id}
+              />
+            ))
+          ) : (
+            <div className="flex justify-center items-center p-6">
+              <div className="w-full max-w-sm text-center ">
+                <p className="mb-3">
+                  <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                      className="w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
+                      ></path>
+                    </svg>
+                  </span>
+                </p>
+                <h5 className="mb-2 font-semibold text-white">
+                  No videos uploaded
+                </h5>
+                <p className="text-gray-300">
+                  This page has yet to upload a video. Search another page in
+                  order to find more videos.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       )}
-
-      {!videos ||
-        (videos.length === 0 && (
-          <div className="flex justify-center items-center p-6">
-            <div className="w-full max-w-sm text-center bg-[#1e1e1e] p-6 rounded-md shadow-md">
-              <p className="mb-3">
-                <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    className="w-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                    ></path>
-                  </svg>
-                </span>
-              </p>
-              <h5 className="mb-2 font-semibold text-white">
-                No videos uploaded
-              </h5>
-              <p className="text-gray-300">
-                This page has yet to upload a video. Search another page in
-                order to find more videos.
-              </p>
-            </div>
-          </div>
-        ))}
     </>
   );
 }

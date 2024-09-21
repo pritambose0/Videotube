@@ -6,7 +6,6 @@ import SubscribedChannelsList from "../components/SubscribedChannelsList";
 
 function Subscribed() {
   const { username } = useParams();
-  // console.log(username);
 
   const {
     data: channels,
@@ -24,13 +23,12 @@ function Subscribed() {
     staleTime: Infinity,
     enabled: !!username,
   });
-  {
-    isError &&
-      toast.error(
-        error?.response?.data?.message || error.message || "An error occurred."
-      );
+
+  if (isError) {
+    toast.error(
+      error?.response?.data?.message || error.message || "An error occurred."
+    );
   }
-  // console.log("CHANNELS", channels);
 
   return (
     <div className="flex flex-col gap-y-4 py-4 mx-4">
@@ -78,9 +76,10 @@ function Subscribed() {
                 </span>
               </span>
             </p>
-            <h5 className="mb-2 font-semibold">No people subscribers</h5>
+            <h5 className="mb-2 font-semibold">No subscriptions found</h5>
             <p>
-              This channel has yet to <strong>subscribe</strong> a new channel.
+              This channel has not <strong>subscribed</strong> to any other
+              channels yet.
             </p>
           </div>
         </div>

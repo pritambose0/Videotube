@@ -1,5 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
+import axiosInstance from "../services/axiosInstance";
+
 function Admin() {
   const userData = useSelector((state) => state.auth.userData);
+
+  const { data } = useQuery({
+    queryKey: async () => {
+      const response = axiosInstance.get(
+        `/users/c/${userData?.username}/dashboard`
+      );
+
+      return response.data?.data;
+    },
+  });
+  console.log("DATA", data);
 
   return (
     <div className="mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-2 pb-[80px]">

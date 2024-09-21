@@ -21,29 +21,29 @@ function Home() {
 
   return (
     <section className="w-full pb-[80px] sm:ml-[70px] sm:pb-0 lg:ml-0">
+      {/* Error State */}
       {isError && (
-        <div className="flex h-full items-center justify-center text-center">
+        <div className="flex h-full items-center justify-center text-center p-4">
           <h3 className="text-xl font-bold text-red-500">
             {error.response?.data?.message ||
               "An error occurred while fetching videos."}
           </h3>
         </div>
       )}
+
+      {/* Loading State */}
       {isLoading ? (
-        <div className="h-screen grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
-          {Array.from({ length: 6 }).map((_, index) => (
+        <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+          {Array.from({ length: 8 }).map((_, index) => (
             <VideoCardSkeleton key={index} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4 md:p-1">
+        // Videos Grid
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-4">
           {videos?.length ? (
             videos.map((video) => (
-              <Link
-                to={`videos/${video._id}`}
-                key={video._id}
-                className="block hover:shadow-lg transition"
-              >
+              <Link to={`videos/${video._id}`} key={video._id}>
                 <VideoCard
                   duration={Math.round(video.duration)}
                   author={video.owner[0]?.fullName}
@@ -56,8 +56,9 @@ function Home() {
               </Link>
             ))
           ) : (
+            // No Videos Available
             <div className="flex items-center justify-center text-center p-4">
-              <h4 className="text-lg font-semibold text-gray-300">
+              <h4 className="text-lg font-semibold text-gray-400">
                 No videos available at the moment. Please check back later.
               </h4>
             </div>

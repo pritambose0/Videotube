@@ -112,7 +112,7 @@ const registerUser = asyncHandler(async (req, res) => {
     },
     coverImage:
       {
-        url: coverImage.url,
+        url: coverImage.secure_url,
         publicId: coverImage.public_id,
       } || "",
     email,
@@ -537,6 +537,82 @@ const getUserChannelVideos = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });
 
+const getDashboardData = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  if (!username) {
+    throw new ApiError(400, "Username not found");
+  }
+
+  const user = await User.findOne({ username });
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (user._id.toString() !== req.user?._id.toString()) {
+    throw new ApiError(401, "You are not an admin");
+  }
+
+  const totalViews = await Video.aggregate([
+    {
+      $match: {
+        owner: user._id,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalViews: { $sum: "$views" },
+      },
+    },
+  ]);
+
+  const videos = await Video.find({ owner: user._id });
+
+  const subscribers = await User.aggregate([
+    {
+      $match: {
+        subscriber: user._id,
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "channel",
+        foreignField: "_id",
+        as: "subscribers",
+      },
+    },
+    {
+      $addFields: {
+        subscribersCount: {
+          $size: "$subscribers",
+        },
+      },
+    },
+    {
+      $project: {
+        subscribersCount: 1,
+      },
+    },
+  ]);
+  console.log("SUBSCRIBERS", subscribers);
+
+  // console.log("TOTAL VIDEOS", videos.length);
+  // console.log("TOTAL VIEWS", totalViews);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        totalViews: totalViews[0]?.totalViews || 0,
+        totalSubscribers: subscribers[0]?.subscribersCount || 0,
+        totalVideos: videos.length || 0,
+      },
+      "Dashboard data fetched successfully"
+    )
+  );
+});
+
 export {
   registerUser,
   loginUser,
@@ -548,4 +624,5 @@ export {
   getUserChannelProfile,
   getWatchHistory,
   getUserChannelVideos,
+  getDashboardData,
 };

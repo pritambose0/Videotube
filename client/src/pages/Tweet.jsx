@@ -19,10 +19,7 @@ function Tweet() {
     reset,
   } = useForm();
 
-  let owner = false;
-  if (username === ownerUsername) {
-    owner = true;
-  }
+  const owner = username === ownerUsername;
 
   const { data: tweets, isLoading } = useQuery({
     queryKey: ["tweets", username],
@@ -41,7 +38,7 @@ function Tweet() {
     },
     onSuccess: () => {
       setIsOpenCreateTweet(false);
-      queryClient.invalidateQueries(["tweets"]);
+      queryClient.invalidateQueries(["tweets", username]);
       toast.success("Tweet Created Successfully");
     },
     onError: (error) => {
@@ -141,7 +138,7 @@ function Tweet() {
         </div>
       ) : (
         <div className="flex justify-center p-4">
-          <div className="w-full max-w-sm text-center p-6 shadow-md">
+          <div className="w-full max-w-sm text-center shadow-md ">
             <p className="mb-3 w-full">
               <span className="inline-flex rounded-full bg-[#E4D3FF] p-2 text-[#AE7AFF]">
                 <span className="inline-block w-6">

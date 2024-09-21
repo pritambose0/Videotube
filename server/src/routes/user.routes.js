@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   changeCurrentPassword,
   getCurrentUser,
+  getDashboardData,
   getUserChannelProfile,
   getUserChannelVideos,
   getWatchHistory,
@@ -49,4 +50,5 @@ router.route("/edit-account").patch(
 router.route("/c/:username").get(getUserChannelProfile);
 router.route("/history").get(verifyJWT, getWatchHistory);
 router.route("/c/:username/videos").get(getUserChannelVideos);
+router.route("/c/:username/dashboard").get(verifyJWT, getDashboardData);
 export default router;
