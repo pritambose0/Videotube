@@ -243,13 +243,9 @@ const getVideoById = asyncHandler(async (req, res) => {
 const updateVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
-  // if (!(title || description)) {
-  //   throw new ApiError(400, "updateVideo :: Title or Description is required");
-  // }
-
   const { videoId } = req.params;
   if (!videoId || !isValidObjectId(videoId)) {
-    throw new ApiError(400, "updateVideo :: VideoId not found");
+    throw new ApiError(400, "VideoId not found");
   }
 
   const video = await Video.findById(videoId);
@@ -258,21 +254,18 @@ const updateVideo = asyncHandler(async (req, res) => {
   if (req.user?._id.toString() !== video?.owner._id.toString()) {
     throw new ApiError(
       401,
-      "updateVideo :: You do not have permission to perform this action"
+      "You do not have permission to perform this action"
     );
   }
 
   const thumbnailLocalPath = req.file?.path;
 
-  if (!thumbnailLocalPath) {
-    throw new ApiError(400, "updateVideo :: Thumbnail is required");
-  }
-  const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
-  if (!thumbnail) {
-    throw new ApiError(
-      400,
-      "updateVideo :: Error while uploading thumbnail on Cloudinary"
-    );
+  let thumbnail;
+  if (thumbnailLocalPath) {
+    thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+    if (!thumbnail) {
+      throw new ApiError(400, "Error while uploading thumbnail on Cloudinary");
+    }
   }
 
   const updatedVideo = await Video.findByIdAndUpdate(
@@ -281,33 +274,33 @@ const updateVideo = asyncHandler(async (req, res) => {
       $set: {
         title: title || video?.title,
         description: description || video?.description,
-        thumbnail: {
-          url: thumbnail?.url,
-          publicId: thumbnail?.public_id,
-        },
+        thumbnail: thumbnail
+          ? {
+              url: thumbnail.url,
+              publicId: thumbnail.public_id,
+            }
+          : video?.thumbnail,
       },
     },
     { new: true }
   );
 
   if (!updatedVideo) {
-    throw new ApiError(400, "updateVideo :: Error while updating video");
+    throw new ApiError(400, "Error while updating video");
   }
 
-  const oldThumbnailPublicId = video?.thumbnail?.publicId;
-
-  if (!oldThumbnailPublicId) {
-    throw new ApiError(500, " updateVideo :: oldThumbnailPublicId not found");
-  }
-
-  const deleteOldThumbnail = await deleteFromCloudinary(oldThumbnailPublicId);
-
-  if (!deleteOldThumbnail) {
-    throw new ApiError(
-      500,
-      "updateVideo :: Error while deleting old thumbnail from Cloudinary"
+  if (thumbnail && video?.thumbnail?.publicId) {
+    const deleteOldThumbnail = await deleteFromCloudinary(
+      video.thumbnail.publicId
     );
+    if (!deleteOldThumbnail) {
+      throw new ApiError(
+        500,
+        "Error while deleting old thumbnail from Cloudinary"
+      );
+    }
   }
+
   // console.log("VIDEO UPDATED", updatedVideo);
   return res
     .status(200)

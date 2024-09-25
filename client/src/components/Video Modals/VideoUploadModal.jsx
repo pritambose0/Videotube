@@ -189,11 +189,6 @@ function VideoUploadModal({ isOpen, onClose }) {
               className="h-40 w-full resize-none border bg-transparent px-2 py-1 outline-none"
               {...register("description")}
             ></textarea>
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.description.message}
-              </p>
-            )}
           </div>
           <div className="w-full mx-auto">
             <button

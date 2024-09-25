@@ -8,8 +8,11 @@ const Input = React.forwardRef(function Input(
   return (
     <div className="w-full text-sm flex flex-col">
       {label && (
-        <label className="mb-1 inline-block text-white" htmlFor={id}>
-          {label}
+        <label
+          htmlFor="desc"
+          className="mb-2 inline-block text-sm font-medium text-gray-300"
+        >
+          {label} <sup className="text-red-500">*</sup>
         </label>
       )}
 

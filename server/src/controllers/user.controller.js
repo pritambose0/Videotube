@@ -9,6 +9,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { Video } from "../models/video.model.js";
+import { Like } from "../models/like.model.js";
 
 const generateAccessToken = async (userId) => {
   try {
@@ -566,7 +567,34 @@ const getDashboardData = asyncHandler(async (req, res) => {
     },
   ]);
 
-  const videos = await Video.find({ owner: user._id });
+  const totalLikes = await Like.aggregate([
+    {
+      $lookup: {
+        from: "videos",
+        localField: "video",
+        foreignField: "_id",
+        as: "videoDetails",
+      },
+    },
+    {
+      $unwind: "$videoDetails",
+    },
+    {
+      $match: {
+        "videoDetails.owner": user._id,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalLikes: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const totalVideos = await Video.find({ owner: user._id }).select(
+    "-password -refreshToken"
+  );
 
   const subscribers = await User.aggregate([
     {
@@ -606,7 +634,8 @@ const getDashboardData = asyncHandler(async (req, res) => {
       {
         totalViews: totalViews[0]?.totalViews || 0,
         totalSubscribers: subscribers[0]?.subscribersCount || 0,
-        totalVideos: videos.length || 0,
+        totalVideos: totalVideos || 0,
+        totalLikes: totalLikes[0]?.totalLikes || 0,
       },
       "Dashboard data fetched successfully"
     )
