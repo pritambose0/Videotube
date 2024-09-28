@@ -36,28 +36,12 @@ function Login() {
     mutation.mutate(data);
   };
 
-  const testLoginMutation = useMutation({
-    mutationFn: async () => {
-      const response = await axiosInstance.post("/users/login", {
-        username: "Test123",
-        email: "test@gmail.com",
-        password: "test12345",
-      });
-      return response.data?.data;
-    },
-    onSuccess: (data) => {
-      dispatch(login(data));
-      toast.success("Login successful");
-      navigate("/");
-    },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Error logging in");
-      console.log(error);
-    },
-  });
-
   const handleTestLogin = () => {
-    testLoginMutation.mutate();
+    mutation.mutate({
+      username: "Test123",
+      email: "test@gmail.com",
+      password: "test12345",
+    });
   };
 
   return (
@@ -169,9 +153,9 @@ function Login() {
             <button
               className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50 "
               onClick={handleTestLogin}
-              disabled={testLoginMutation.isPending}
+              disabled={mutation.isPending}
             >
-              {testLoginMutation.isPending ? "Logging in..." : "Test Login"}
+              {mutation.isPending ? "Logging in..." : "Test Login"}
             </button>
           </div>
         </form>
