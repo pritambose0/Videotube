@@ -37,6 +37,8 @@ function VideoPage() {
     enabled: !!username,
   });
 
+  console.log(video);
+
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">
       <div className="flex flex-col lg:flex-row lg:gap-4">
@@ -61,11 +63,7 @@ function VideoPage() {
 
           {/* Video Information */}
           {video ? (
-            <div
-              className="group mb-4 w-full rounded-lg border border-gray-700 p-4 hover:bg-gray-800 transition duration-200"
-              role="button"
-              tabIndex="0"
-            >
+            <div className="group mb-4 w-full rounded-lg border border-gray-700 p-4 transition duration-200">
               <AboutVideo
                 title={video?.title}
                 views={video?.views}

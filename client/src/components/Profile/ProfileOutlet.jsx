@@ -39,6 +39,7 @@ function ProfileOutlet() {
             avatar={user?.avatar?.url}
             channelName={user?.fullName}
             channelHandle={user?.username}
+            isSubscribed={user?.isSubscribed}
             subscribers={user?.subscribersCount}
             subscribed={user?.subscribedToCount}
             channelId={user?._id}

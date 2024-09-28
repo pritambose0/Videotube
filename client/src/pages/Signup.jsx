@@ -49,7 +49,7 @@ function Signup() {
   };
 
   return (
-    <div className="w-full overflow-y-auto bg-[#121212] text-white">
+    <div className="w-full bg-[#121212] text-white mb-16 sm:mb-0">
       <Toaster />
       <div className="mx-auto my-8 flex w-full max-w-sm flex-col px-4">
         <div className="mx-auto inline-block w-16">
@@ -114,7 +114,7 @@ function Signup() {
           method="POST"
         >
           <Input
-            label="Full Name*"
+            label="Full Name"
             placeholder="Enter your Full Name"
             {...register("fullName", { required: true })}
           />
@@ -122,7 +122,7 @@ function Signup() {
             <p className="text-red-500">{errors.fullName.message}</p>
           )}
           <Input
-            label="Username*"
+            label="Username"
             placeholder="Enter your username"
             {...register("username", { required: true })}
           />
@@ -130,7 +130,7 @@ function Signup() {
             <p className="text-red-500">{errors.username.message}</p>
           )}
           <Input
-            label="Email*"
+            label="Email"
             placeholder="Enter your email"
             {...register("email", {
               required: true,
@@ -145,7 +145,7 @@ function Signup() {
             <p className="text-red-500">{errors.email.message}</p>
           )}
           <Input
-            label="Password*"
+            label="Password"
             type="password"
             placeholder="Enter your password"
             {...register("password", {
@@ -157,9 +157,11 @@ function Signup() {
           )}
 
           <Input
-            label="Avatar*"
+            label="Avatar"
             type="file"
             name="avatar"
+            accept="image/png, image/jpg, image/jpeg, image/gif"
+            className="file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
             {...register("avatar", { required: true })}
           />
           {errors.avatar && (
@@ -169,18 +171,20 @@ function Signup() {
             label="Cover Image"
             name="coverImage"
             type="file"
+            accept="image/png, image/jpg, image/jpeg, image/gif"
+            className="file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
             {...register("coverImage")}
           />
 
           <button
-            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md disabled:opacity-50"
+            className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50"
             type="submit"
             disabled={mutation.isPending}
           >
             {mutation.isPending ? "Signing Up..." : "Sign Up"}
           </button>
           <Link to={"/login"}>
-            <button className="bg-[#ae7aff] px-4 py-2 text-black rounded-md ml-5">
+            <button className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50 ml-4">
               Login
             </button>
           </Link>

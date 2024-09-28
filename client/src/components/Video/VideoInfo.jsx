@@ -16,7 +16,7 @@ const VideoInfo = ({
   channelUsername,
 }) => {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
-  console.log(isSubscribed);
+  // console.log(isSubscribed);
   // console.log(subscribeStatus);
   const authStatus = useSelector((state) => state.auth.status);
 

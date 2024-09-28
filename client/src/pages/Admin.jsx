@@ -15,7 +15,7 @@ function Admin() {
   const username = userData?.username;
   const { register, handleSubmit, reset } = useForm();
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["dashboardData", username],
     queryFn: async () => {
       const response = await axiosInstance.get(
@@ -73,6 +73,55 @@ function Admin() {
   const onSubmit = (data) => {
     updateMutation.mutate(data);
   };
+
+  if (isLoading) {
+    return (
+      <div className="animate-pulse mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-2 pb-[80px]">
+        <div className="grid grid-cols-[repeat(auto-fit,_minmax(300px,_1fr))] gap-4">
+          {Array(3)
+            .fill()
+            .map((_, index) => (
+              <div
+                key={index}
+                className="rounded-md bg-[#1e1e1e] p-4 space-y-4"
+              >
+                <div className="h-7 w-7 rounded-full bg-gray-700"></div>
+                <div className="h-6 bg-gray-700 rounded-md"></div>
+                <div className="h-8 bg-gray-700 rounded-md"></div>
+              </div>
+            ))}
+        </div>
+
+        <div className="overflow-hidden mt-6">
+          {Array(3)
+            .fill()
+            .map((_, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-2 p-4 mb-4 bg-[#1e1e1e] rounded-lg shadow animate-pulse"
+              >
+                <div className="flex justify-between items-center">
+                  <div className="h-6 w-16 bg-gray-700 rounded-md"></div>
+                  <div className="h-6 w-40 bg-gray-700 rounded-md"></div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="h-6 w-24 bg-gray-700 rounded-md"></div>
+                  <div className="h-6 w-32 bg-gray-700 rounded-md"></div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen text-red-500">
+        An error occurred while fetching history.
+      </div>
+    );
+  }
   return (
     <div className="mx-auto flex w-full sm:ml-[70px] sm:pb-0 lg:ml-0 flex-col gap-y-6 py-8 px-2 pb-[80px]">
       <div className="flex flex-wrap justify-between gap-4 px-1">
@@ -83,26 +132,6 @@ function Admin() {
           <p className="text-sm text-gray-300">
             Seamless Video Management, Elevated Results.
           </p>
-        </div>
-        <div className="block">
-          <button className="inline-flex items-center gap-x-2 bg-[#ae7aff] px-3 py-2 font-semibold text-black">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              aria-hidden="true"
-              className="h-5 w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              ></path>
-            </svg>{" "}
-            Upload video
-          </button>
         </div>
       </div>
 
@@ -280,7 +309,6 @@ function Admin() {
                   id="title"
                   label="Title"
                   type="text"
-                  className="w-full border border-gray-600 bg-transparent px-4 py-2 rounded-md text-white placeholder-gray-400 outline-none focus:border-[#ae7aff] focus:ring-2 focus:ring-[#ae7aff]"
                   placeholder="Enter video title"
                   {...register("title")}
                 />
@@ -307,21 +335,21 @@ function Admin() {
                   label="Thumbnail"
                   type="file"
                   accept="image/png, image/jpg, image/jpeg, image/gif"
-                  className="w-full border border-gray-600 bg-transparent px-4 py-2 rounded-md text-white file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
+                  className="file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
                 />
               </div>
 
               <div className="flex space-x-4">
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#ae7aff] text-white rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50"
+                  className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50"
                   disabled={updateMutation.isPending}
                 >
                   {updateMutation.isPending ? "Updating..." : "Save Changes"}
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-red-600 text-black rounded-md hover:bg-red-700 transition-colors"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancel

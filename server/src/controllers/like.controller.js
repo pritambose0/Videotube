@@ -70,7 +70,6 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   ]);
   // console.log("LIKES", likes[0].likesCount);
 
-  // console.log("EXISTING", existingLikeStatus);
   return res
     .status(200)
     .json(
@@ -232,60 +231,51 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         from: "videos",
         localField: "video",
         foreignField: "_id",
-        as: "video",
+        as: "videos",
+        pipeline: [
+          {
+            $lookup: {
+              from: "users",
+              localField: "owner",
+              foreignField: "_id",
+              as: "owner",
+            },
+          },
+          {
+            $unwind: "$owner",
+          },
+          {
+            $project: {
+              _id: 1,
+              title: 1,
+              thumbnail: 1,
+              duration: 1,
+              views: 1,
+              createdAt: 1,
+              owner: {
+                _id: 1,
+                username: 1,
+                "avatar.url": 1,
+                fullName: 1,
+              },
+            },
+          },
+        ],
       },
-    },
-    {
-      $unwind: "$video",
     },
     {
       $project: {
-        video: 1,
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "video.owner",
-        foreignField: "_id",
-        as: "owner",
-      },
-    },
-    {
-      $unwind: "$owner",
-    },
-    {
-      $project: {
-        video: 1,
-      },
-    },
-    {
-      $project: {
-        _id: 1,
-        "owner.username": 1,
-        "owner._id": 1,
-        "owner.avatar.url": 1,
-        "videos.videoFile.url": 1,
-        "videos.thumbnail.url": 1,
-        "videos.views": 1,
-        "videos.duration": 1,
-        "videos.title": 1,
-        "videos.createdAt": 1,
+        _id: 0,
+        videos: 1,
       },
     },
   ]);
 
-  if (!likedVideos?.length) {
-    throw new ApiError(
-      500,
-      "getLikedVideos :: No liked videos found for this user"
-    );
-  }
-  console.log("LIKED VIDEOS", likedVideos);
+  // console.log("LIKED VIDEOS", likedVideos);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, likedVideos, "Liked Videos Found"));
+    .json(new ApiResponse(200, likedVideos?.[0]?.videos, "Liked Videos Found"));
 });
 
 export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };

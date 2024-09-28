@@ -36,6 +36,30 @@ function Login() {
     mutation.mutate(data);
   };
 
+  const testLoginMutation = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.post("/users/login", {
+        username: "Test123",
+        email: "test@gmail.com",
+        password: "test12345",
+      });
+      return response.data?.data;
+    },
+    onSuccess: (data) => {
+      dispatch(login(data));
+      toast.success("Login successful");
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Error logging in");
+      console.log(error);
+    },
+  });
+
+  const handleTestLogin = () => {
+    testLoginMutation.mutate();
+  };
+
   return (
     <div className="w-full bg-[#121212] text-white">
       <Toaster />
@@ -129,18 +153,27 @@ function Login() {
             <p className="text-red-500">{errors.password.message}</p>
           )}
 
-          <button
-            className="bg-[#ae7aff] px-4 py-2 text-black rounded-md disabled:opacity-50"
-            type="submit"
-            disabled={mutation.isPending}
-          >
-            {mutation.isPending ? "Logging in..." : "Login"}
-          </button>
-          <Link to={"/signup"}>
-            <button className="bg-[#ae7aff] px-4 py-2 text-black rounded-md ml-5">
-              Signup
+          <div className="flex gap-4">
+            <button
+              className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50 "
+              type="submit"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Logging in..." : "Login"}
             </button>
-          </Link>
+            <Link to={"/signup"}>
+              <button className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50">
+                Signup
+              </button>
+            </Link>
+            <button
+              className="px-4 py-2 bg-[#ae7aff] text-black rounded-md hover:bg-[#965dff] transition-colors disabled:opacity-50 "
+              onClick={handleTestLogin}
+              disabled={testLoginMutation.isPending}
+            >
+              {testLoginMutation.isPending ? "Logging in..." : "Test Login"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

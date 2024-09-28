@@ -19,6 +19,7 @@ function ProfileCard({
 }) {
   const [isSubscribed, setIsSubscribed] = useState(subscribeStatus);
   const authStatus = useSelector((state) => state.auth.status);
+  // console.log("ISSUBSCRIBED", isSubscribed);
 
   const tabs = [
     { name: "Videos", path: `/c/${channelHandle}/videos` },

@@ -47,8 +47,8 @@ router.route("/edit-account").patch(
   updateUserDetails
 );
 
-router.route("/c/:username").get(getUserChannelProfile);
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
 router.route("/history").get(verifyJWT, getWatchHistory);
-router.route("/c/:username/videos").get(getUserChannelVideos);
+router.route("/c/:username/videos").get(verifyJWT, getUserChannelVideos);
 router.route("/c/:username/dashboard").get(verifyJWT, getDashboardData);
 export default router;

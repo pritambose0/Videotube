@@ -20,6 +20,7 @@ const AboutVideo = ({
   const [likes, setLikes] = useState(likesCount);
   const { videoId } = useParams();
   const authStatus = useSelector((state) => state.auth.status);
+  console.log(isLiked);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -61,7 +62,7 @@ const AboutVideo = ({
         <div className="flex items-center justify-between gap-x-4 md:justify-end lg:justify-between xl:justify-end">
           <div className="flex overflow-hidden rounded-lg border">
             <button
-              className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)] hover:bg-white/10 focus:after:content-[attr(data-like-alt)]"
+              className="group/btn flex items-center gap-x-2 border-r border-gray-700 px-4 py-1.5 after:content-[attr(data-like)]  focus:after:content-[attr(data-like-alt)]"
               data-like={likes}
               data-like-alt={likes}
               onClick={handleLike}

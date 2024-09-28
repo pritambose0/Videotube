@@ -120,7 +120,7 @@ const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
 
   if (!videoId) throw new ApiError(404, "Video not found");
-  // console.log("USER: ", req.user?._id);
+  console.log("USER: ", req.user);
 
   const video = await Video.aggregate([
     {
