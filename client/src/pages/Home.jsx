@@ -34,7 +34,7 @@ function Home() {
       {/* Loading State */}
       {isLoading ? (
         <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-          {Array.from({ length: 8 }).map((_, index) => (
+          {Array.from({ length: 6 }).map((_, index) => (
             <VideoCardSkeleton key={index} />
           ))}
         </div>
@@ -45,7 +45,7 @@ function Home() {
             videos.map((video) => (
               <Link to={`videos/${video._id}`} key={video._id}>
                 <VideoCard
-                  duration={Math.round(video.duration)}
+                  duration={video.duration}
                   author={video.owner[0]?.fullName}
                   avatar={video.owner[0]?.avatar?.url}
                   thumbnailSrc={video.thumbnail?.url}

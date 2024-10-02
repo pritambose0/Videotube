@@ -92,7 +92,7 @@ function Navbar() {
         </div>
         <div className="relative mx-auto hidden w-[50%] max-w-md overflow-hidden sm:block">
           <input
-            className="w-full border bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2"
+            className="w-full border border-slate-500 bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2 rounded-md"
             placeholder="Search"
           />
           <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">

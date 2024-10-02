@@ -16,7 +16,7 @@ const uploadOnCloudinary = async (localFilePath) => {
       resource_type: "auto",
       secure: true,
     });
-    // console.log("Cloudinary Response - ", response);
+    console.log("Cloudinary Response - ", response);
 
     // console.log(
     //   "File has been uploaded successfully on cloudinay",

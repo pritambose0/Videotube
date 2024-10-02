@@ -73,6 +73,41 @@ const getAllVideos = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, videos, "Videos fetched successfully"));
 });
 
+const getAllRecommendedVideos = asyncHandler(async (req, res) => {
+  const { videoId } = req.params;
+  const video = await Video.findById(videoId);
+
+  const { title, description } = video;
+  const titleKeywords = title?.split(" ");
+  const descriptionKeywords = description?.split(" ").slice(0, 10);
+
+  const keywords = [
+    ...new Set([...titleKeywords, ...descriptionKeywords]),
+  ].join("|");
+
+  const recommendedVideos = await Video.find({
+    _id: { $ne: videoId },
+    $or: [
+      { title: { $regex: keywords, $options: "i" } },
+      { description: { $regex: keywords, $options: "i" } },
+    ],
+  })
+    .populate("owner", "fullName avatar")
+    .limit(10);
+
+  // console.log("Recommended Videos", recommendedVideos);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        recommendedVideos,
+        "Recommended videos fetched successfully"
+      )
+    );
+});
+
 const publishVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
@@ -384,4 +419,5 @@ export {
   updateVideo,
   deleteVideo,
   togglePublishStatus,
+  getAllRecommendedVideos,
 };

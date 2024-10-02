@@ -1,11 +1,13 @@
 import axiosInstance from "../services/axiosInstance";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AboutVideo from "../components/Video/AboutVideo";
 import VideoInfo from "../components/Video/VideoInfo";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import Comments from "../components/Comment/CommentModel";
 import { useEffect } from "react";
+import VideoCard from "../components/Video/VideoCard";
+import VideoCardSkeleton from "../components/VideoCardSkeleton";
 
 function VideoPage() {
   const { videoId } = useParams();
@@ -37,11 +39,23 @@ function VideoPage() {
     enabled: !!username,
   });
 
-  console.log(video);
+  const { data: recommendedVideos, isLoading: isLoadingRecommendedVideos } =
+    useQuery({
+      queryKey: ["recommendedVideos", videoId],
+      queryFn: async () => {
+        const res = await axiosInstance.get(
+          `/videos/recommendation/${videoId}`
+        );
+        return res.data?.data;
+      },
+      staleTime: 1000 * 60,
+    });
+
+  console.log("Recommended Videos", recommendedVideos);
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">
-      <div className="flex flex-col lg:flex-row lg:gap-4">
+      <div className="flex flex-col lg:flex-row lg:gap-4 pl-1">
         {/* Video Player Section */}
         <div className="w-full lg:w-3/4">
           <div className="relative mb-4 w-full pt-[56%]">
@@ -65,21 +79,21 @@ function VideoPage() {
           {video ? (
             <div className="group mb-4 w-full rounded-lg border border-gray-700 p-4 transition duration-200">
               <AboutVideo
-                title={video?.title}
-                views={video?.views}
-                timeAgo={video?.createdAt}
-                likes={video?.likesCount || 0}
-                isLiked={video?.isLiked}
+                title={video.title}
+                views={video.views}
+                timeAgo={video.createdAt}
+                likes={video.likesCount || 0}
+                isLiked={video.isLiked}
                 playlists={playlists}
               />
               <VideoInfo
-                channelUsername={video?.owner?.username}
-                channelImage={video?.owner?.avatar?.url}
-                channelName={video?.owner?.fullName}
-                description={video?.description}
-                channelId={video?.owner?._id}
-                subscribers={video?.owner?.subscriberCount}
-                subscribeStatus={video?.owner?.isSubscribed}
+                channelUsername={video.owner?.username}
+                channelImage={video.owner?.avatar?.url}
+                channelName={video.owner?.fullName}
+                description={video.description}
+                channelId={video.owner?._id}
+                subscribers={video.owner?.subscriberCount}
+                subscribeStatus={video.owner?.isSubscribed}
               />
             </div>
           ) : (
@@ -104,28 +118,29 @@ function VideoPage() {
           {video && <Comments />}
         </div>
 
-        {/* Suggested Videos / Playlists */}
-        <div className="w-full lg:w-1/4 flex flex-col gap-4">
-          <div className="border border-gray-700 rounded-lg p-4">
-            <div className="relative w-full pt-[56%]">
-              <img
-                src="https://images.pexels.com/photos/3561339/pexels-photo-3561339.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="JavaScript Fundamentals"
-                className="absolute inset-0 h-full w-full object-cover rounded-lg"
-              />
-              <span className="absolute bottom-2 right-2 bg-black text-white px-2 py-1 text-sm rounded">
-                20:45
-              </span>
+        {/* Suggested Videos  */}
+        <div className="w-full lg:w-1/3 flex flex-col gap-4 py-5">
+          {isLoadingRecommendedVideos ? (
+            <div>
+              {Array.from({ length: 1 }).map((_, index) => (
+                <VideoCardSkeleton key={index} />
+              ))}
             </div>
-            <div className="mt-2">
-              <h6 className="text-sm font-semibold">
-                JavaScript Fundamentals: Variables and Data Types
-              </h6>
-              <p className="text-xs text-gray-400">
-                Code Master · 10.3k Views · 44 minutes ago
-              </p>
-            </div>
-          </div>
+          ) : (
+            recommendedVideos?.map((video) => (
+              <Link to={`videos/${video._id}`} key={video._id}>
+                <VideoCard
+                  duration={video.duration}
+                  author={video.owner?.fullName}
+                  avatar={video.owner?.avatar?.url}
+                  thumbnailSrc={video.thumbnail?.url}
+                  title={video.title}
+                  views={video.views}
+                  timeAgo={video.createdAt}
+                />
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </section>

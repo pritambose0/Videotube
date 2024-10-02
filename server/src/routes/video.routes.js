@@ -3,6 +3,7 @@ import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   deleteVideo,
+  getAllRecommendedVideos,
   getAllVideos,
   getVideoById,
   publishVideo,
@@ -11,7 +12,9 @@ import {
 } from "../controllers/video.controller.js";
 
 const router = Router();
+
 router.route("/").get(getAllVideos);
+router.route("/recommendation/:videoId").get(getAllRecommendedVideos);
 
 router.use(verifyJWT); // It applies every route in this file
 router.route("/upload-video").post(
