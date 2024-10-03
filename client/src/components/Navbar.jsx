@@ -5,6 +5,7 @@ import { logout } from "../store/authSlice";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 function Navbar() {
   const authStatus = useSelector((state) => state.auth.status);
@@ -12,6 +13,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { register, handleSubmit, reset } = useForm();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -31,6 +33,12 @@ function Navbar() {
   const handleLogout = () => {
     mutation.mutate();
   };
+
+  const onSubmit = (data) => {
+    console.log("Search query:", data.searchQuery);
+    reset();
+  };
+
   return (
     <header className="sticky inset-x-0 top-0 z-50 w-full border-b bg-[#121212] px-4">
       <Toaster />
@@ -90,29 +98,36 @@ function Navbar() {
             </defs>
           </svg>
         </div>
-        <div className="relative mx-auto hidden w-[50%] max-w-md overflow-hidden sm:block">
-          <input
-            className="w-full border border-slate-500 bg-transparent py-1 pl-8 pr-3 placeholder-white outline-none sm:py-2 rounded-md"
-            placeholder="Search"
-          />
-          <span className="absolute left-2.5 top-1/2 inline-block -translate-y-1/2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-              className="h-4 w-4"
+        <div className="relative mx-auto hidden w-[50%] max-w-md sm:block">
+          <form onSubmit={handleSubmit(onSubmit)} className="relative">
+            <input
+              {...register("searchQuery")}
+              className="w-full border-2 border-slate-500 bg-transparent py-1 pl-8 pr-3 placeholder-slate-300 outline-none sm:py-2 rounded-md"
+              placeholder="Type here..."
+            />
+            <button
+              type="submit"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white hover:text-indigo-500 transition duration-200"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              ></path>
-            </svg>
-          </span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+            </button>
+          </form>
         </div>
+
         <button className="ml-auto sm:hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"

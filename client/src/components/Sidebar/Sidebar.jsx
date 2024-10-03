@@ -8,6 +8,7 @@ function Sidebar() {
   const items = [
     {
       to: "/",
+
       icon: (
         <svg
           width="100%"
@@ -29,6 +30,7 @@ function Sidebar() {
     },
     {
       to: username ? `/c/${username}/liked-videos` : "/login",
+
       icon: (
         <svg
           width="100%"
@@ -50,6 +52,7 @@ function Sidebar() {
     },
     {
       to: username ? `/c/${username}/history` : "/login",
+
       icon: (
         <svg
           width="100%"
@@ -71,6 +74,7 @@ function Sidebar() {
     },
     {
       to: username ? `/c/${username}/videos` : "/login",
+
       icon: (
         <svg
           width="100%"
@@ -99,6 +103,7 @@ function Sidebar() {
     },
     {
       to: username ? `/c/${username}/playlists` : "/login",
+
       icon: (
         <svg
           width="100%"
@@ -115,12 +120,11 @@ function Sidebar() {
           ></path>
         </svg>
       ),
-
       label: "Playlists",
       isHiddenOnSmall: true,
     },
     {
-      to: "/",
+      to: "/support",
 
       icon: (
         <svg
@@ -143,7 +147,7 @@ function Sidebar() {
       isHiddenOnSmall: true,
     },
     {
-      to: "/",
+      to: "/settings",
       icon: (
         <svg
           width="100%"

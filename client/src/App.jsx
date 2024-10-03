@@ -33,7 +33,67 @@ function App() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-xl font-semibold">Loading...</p>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 100"
+          width="100"
+          height="100"
+        >
+          <circle
+            fill="#AE7AFF"
+            stroke="#AE7AFF"
+            strokeWidth="2"
+            r="5"
+            cx="20"
+            cy="25"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2s"
+              values="25;45;25"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.4s"
+            />
+          </circle>
+          <circle
+            fill="#AE7AFF"
+            stroke="#AE7AFF"
+            strokeWidth="2"
+            r="5"
+            cx="50"
+            cy="25"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2s"
+              values="25;45;25"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="-.2s"
+            />
+          </circle>
+          <circle
+            fill="#AE7AFF"
+            stroke="#AE7AFF"
+            strokeWidth="2"
+            r="5"
+            cx="80"
+            cy="25"
+          >
+            <animate
+              attributeName="cy"
+              calcMode="spline"
+              dur="2s"
+              values="25;45;25"
+              keySplines=".5 0 .5 1;.5 0 .5 1"
+              repeatCount="indefinite"
+              begin="0s"
+            />
+          </circle>
+        </svg>
       </div>
     );
   }

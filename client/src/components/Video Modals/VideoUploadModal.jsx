@@ -151,7 +151,7 @@ function VideoUploadModal({ isOpen, onClose }) {
               label="Thumbnail"
               type="file"
               accept="image/png, image/jpg, image/jpeg, image/gif"
-              className="w-full border p-1 file:mr-4 file:border-none file:bg-[#ae7aff] file:px-3 file:py-1.5"
+              className="file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
               {...register("thumbnail", { required: "Thumbnail is required" })}
             />
             {errors.thumbnail && (

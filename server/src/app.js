@@ -36,6 +36,6 @@ app.use("/api/v1/likes", likeRouter);
 app.use("/api/v1/playlists", playlistRouter);
 app.use("/api/v1/tweets", tweetRouter);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 export { app };

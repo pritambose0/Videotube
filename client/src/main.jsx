@@ -14,6 +14,8 @@ import {
   Signup,
   Tweet,
   VideoPage,
+  Settings,
+  Support,
 } from "./pages";
 import AuthLayout from "./components/AuthLayout.jsx";
 import { Provider } from "react-redux";
@@ -46,6 +48,22 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <Signup />,
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/settings",
+        element: (
+          <AuthLayout authentication={true}>
+            <Settings />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/support",
+        element: (
+          <AuthLayout authentication={true}>
+            <Support />
           </AuthLayout>
         ),
       },

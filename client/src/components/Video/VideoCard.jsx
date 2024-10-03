@@ -15,7 +15,11 @@ const VideoCard = ({
     <div className="w-full">
       <div className="relative mb-2 w-full pt-[56%]">
         <div className="absolute inset-0">
-          <img src={thumbnailSrc} alt={title} className="h-full w-full" />
+          <img
+            src={thumbnailSrc}
+            alt={title}
+            className="h-full w-full rounded-md"
+          />
         </div>
         <span className="absolute bottom-1 right-1 inline-block rounded-sm bg-black bg-opacity-60 px-1.5 text-xs">
           {convertToTime(duration)}
