@@ -51,7 +51,7 @@ function VideoPage() {
       staleTime: 1000 * 60,
     });
 
-  console.log("Recommended Videos", recommendedVideos);
+  // console.log("Recommended Videos", recommendedVideos);
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">

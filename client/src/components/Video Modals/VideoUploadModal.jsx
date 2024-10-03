@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../services/axiosInstance";
 import UploadingModal from "./UploadingModal";
 import toast, { Toaster } from "react-hot-toast";
+import Input from "../Input";
 
 function VideoUploadModal({ isOpen, onClose }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -70,7 +71,7 @@ function VideoUploadModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-black/50 px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
+    <div className="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm px-4 pb-[86px] pt-4 sm:px-14 sm:py-8">
       <Toaster />
       <form
         className="h-full overflow-auto border bg-[#121212]"
@@ -102,7 +103,7 @@ function VideoUploadModal({ isOpen, onClose }) {
           </div>
         </div>
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-y-4 p-4">
-          <div className="w-full border-2 border-dashed px-4 py-12 text-center">
+          <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
             <span className="mb-4 inline-block w-24 rounded-full bg-[#E4D3FF] p-4 text-[#AE7AFF]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +128,7 @@ function VideoUploadModal({ isOpen, onClose }) {
             </p>
             <label
               htmlFor="upload-video"
-              className="group/btn mt-4 inline-flex w-auto cursor-pointer items-center gap-x-2 bg-[#ae7aff] px-3 py-2 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]"
+              className="group/btn mt-4 inline-flex w-auto cursor-pointer items-center gap-x-2 text-center px-4 py-2 bg-[#AE7AFF] text-black rounded-md font-bold hover:bg-[#985EEB] transition"
             >
               <input
                 type="file"
@@ -136,7 +137,7 @@ function VideoUploadModal({ isOpen, onClose }) {
                 accept="video/mp4, video/x-m4v, video/*"
                 {...register("video", { required: "Video is required" })}
               />
-              Select Files
+              Select File
             </label>
             {errors.video && (
               <p className="text-red-500 text-sm mt-1">
@@ -145,12 +146,9 @@ function VideoUploadModal({ isOpen, onClose }) {
             )}
           </div>
           <div className="w-full">
-            <label htmlFor="thumbnail" className="mb-1 inline-block">
-              Thumbnail
-              <sup>*</sup>
-            </label>
-            <input
+            <Input
               id="thumbnail"
+              label="Thumbnail"
               type="file"
               accept="image/png, image/jpg, image/jpeg, image/gif"
               className="w-full border p-1 file:mr-4 file:border-none file:bg-[#ae7aff] file:px-3 file:py-1.5"
@@ -163,12 +161,9 @@ function VideoUploadModal({ isOpen, onClose }) {
             )}
           </div>
           <div className="w-full">
-            <label htmlFor="title" className="mb-1 inline-block">
-              Title
-              <sup>*</sup>
-            </label>
-            <input
+            <Input
               id="title"
+              label="Title"
               type="text"
               className="w-full border bg-transparent px-2 py-1 outline-none"
               {...register("title", { required: "Title is required" })} //
@@ -182,26 +177,28 @@ function VideoUploadModal({ isOpen, onClose }) {
           <div className="w-full">
             <label htmlFor="desc" className="mb-1 inline-block">
               Description
-              <sup>*</sup>
+              <sup className="text-red-500">*</sup>
             </label>
             <textarea
               id="desc"
-              className="h-40 w-full resize-none border bg-transparent px-2 py-1 outline-none"
+              className="w-full h-32 p-2 mt-2 rounded-lg border border-gray-600 bg-transparent text-white resize-none focus:border-[#ae7aff] focus:ring-2 focus:ring-[#ae7aff] outline-none"
               {...register("description")}
             ></textarea>
           </div>
-          <div className="w-full mx-auto">
+          <div className="mt-6 flex justify-end gap-4">
+            <button
+              type="button"
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500 transition"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
             <button
               type="submit"
-              className=" bg-[#ae7aff] px-3 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out w-24"
+              className="px-4 py-2 bg-[#AE7AFF] text-black rounded-md font-bold hover:bg-[#985EEB] transition"
             >
               Upload
             </button>
-            {mutation.isError && (
-              <div className="text-red-500 mt-3">
-                {mutation.error.response.data.message}
-              </div>
-            )}
           </div>
         </div>
         {isUploading && (
