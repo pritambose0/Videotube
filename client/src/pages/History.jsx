@@ -49,7 +49,7 @@ function History() {
   return (
     <section className="w-full pb-[80px] sm:ml-[70px] sm:pb-0 lg:ml-0">
       {isError && (
-        <div className="flex h-full items-center justify-center text-center p-4">
+        <div className="flex h-full items-center justify-center text-center p-1">
           <h3 className="text-xl font-bold text-red-500">
             {error.response?.data?.message ||
               "An error occurred while fetching videos."}
@@ -58,18 +58,18 @@ function History() {
       )}
 
       {isLoading ? (
-        <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        <div className="min-h-screen grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
           {Array.from({ length: 6 }).map((_, index) => (
             <VideoCardSkeleton key={index} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-1">
           {videos?.length ? (
             videos.map((video) => (
-              <Link to={`videos/${video._id}`} key={video._id}>
+              <Link to={`/videos/${video._id}`} key={video._id}>
                 <VideoCard
-                  duration={Math.round(video.duration)}
+                  duration={video.duration}
                   author={video.owner?.fullName}
                   avatar={video.owner?.avatar?.url}
                   thumbnailSrc={video.thumbnail?.url}

@@ -14,13 +14,13 @@ const AboutVideo = ({
   timeAgo,
   likes: likesCount,
   isLiked,
-  playliists,
+  playlists,
 }) => {
   const [liked, setLiked] = useState(isLiked);
   const [likes, setLikes] = useState(likesCount);
   const { videoId } = useParams();
   const authStatus = useSelector((state) => state.auth.status);
-  console.log(isLiked);
+  // console.log(isLiked);
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -131,7 +131,7 @@ const AboutVideo = ({
               </span>
               Playlist
             </button>
-            <PlaylistModal playlists={playliists} />
+            <PlaylistModal playlists={playlists} />
           </div>
         </div>
       </div>
@@ -147,7 +147,7 @@ AboutVideo.propTypes = {
   timeAgo: PropTypes.string,
   author: PropTypes.string,
   likes: PropTypes.number,
-  playliists: PropTypes.array,
+  playlists: PropTypes.array,
   onCreatePlaylist: PropTypes.func,
 };
 

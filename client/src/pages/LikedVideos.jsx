@@ -42,7 +42,7 @@ function LikedVideos() {
       </div>
     );
   }
-  console.log(videos);
+  // console.log(videos);
 
   return (
     <section className="w-full pb-[80px] sm:ml-[70px] sm:pb-0 lg:ml-0">
@@ -63,7 +63,7 @@ function LikedVideos() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-6 p-4">
           {videos?.length ? (
             videos.map((video) => (
-              <Link to={`videos/${video._id}`} key={video._id}>
+              <Link to={`/videos/${video._id}`} key={video._id}>
                 <VideoCard
                   duration={Math.round(video.duration)}
                   author={video.owner?.fullName}

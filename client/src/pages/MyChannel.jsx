@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import VideoUploadModal from "../components/Video Modals/VideoUploadModal";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../services/axiosInstance";
-import { useParams } from "react-router-dom";
-import VideoListPage from "../components/VideoListPage";
+import { Link, useParams } from "react-router-dom";
 import VideoCardSkeleton from "../components/VideoCardSkeleton";
 import { useSelector } from "react-redux";
+import VideoCard from "../components/Video/VideoCard";
 
 function MyChannel() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +24,7 @@ function MyChannel() {
     staleTime: Infinity,
     enabled: !!username,
   });
+  console.log("Videos", videos);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -65,18 +66,20 @@ function MyChannel() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-2 pl-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 py-2 sm:pl-1">
           {videos?.length > 0 ? (
             videos.map((video) => (
-              <VideoListPage
-                key={video._id}
-                views={video.views}
-                title={video.title}
-                thumbnail={video.thumbnail?.url}
-                timeAgo={video.createdAt}
-                duration={video.duration}
-                id={video._id}
-              />
+              <Link to={`videos/${video._id}`} key={video._id}>
+                <VideoCard
+                  duration={video.duration}
+                  author={video.owner?.fullName}
+                  avatar={video.owner?.avatar?.url}
+                  thumbnailSrc={video.thumbnail?.url}
+                  title={video.title}
+                  views={video.views}
+                  timeAgo={video.createdAt}
+                />
+              </Link>
             ))
           ) : (
             <div className="flex justify-center items-center p-6">

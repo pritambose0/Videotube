@@ -50,11 +50,11 @@ function App() {
             <animate
               attributeName="cy"
               calcMode="spline"
-              dur="2s"
+              dur="1.5s"
               values="25;45;25"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
+              keySplines=".5 0 .5 1"
               repeatCount="indefinite"
-              begin="-.9s"
+              begin="0s"
             />
           </circle>
           <circle
@@ -68,11 +68,11 @@ function App() {
             <animate
               attributeName="cy"
               calcMode="spline"
-              dur="2s"
+              dur="1.5s"
               values="25;45;25"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
+              keySplines=".5 0 .5 1"
               repeatCount="indefinite"
-              begin="-.2s"
+              begin="-.3s"
             />
           </circle>
           <circle
@@ -86,11 +86,11 @@ function App() {
             <animate
               attributeName="cy"
               calcMode="spline"
-              dur="2s"
+              dur="1.5s"
               values="25;45;25"
-              keySplines=".5 0 .5 1;.5 0 .5 1"
+              keySplines=".5 0 .5 1"
               repeatCount="indefinite"
-              begin="0s"
+              begin="-.6s"
             />
           </circle>
         </svg>

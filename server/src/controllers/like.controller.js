@@ -275,7 +275,9 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, likedVideos?.[0]?.videos, "Liked Videos Found"));
+    .json(
+      new ApiResponse(200, likedVideos?.[0]?.videos || 0, "Liked Videos Found")
+    );
 });
 
 export { toggleCommentLike, toggleTweetLike, toggleVideoLike, getLikedVideos };

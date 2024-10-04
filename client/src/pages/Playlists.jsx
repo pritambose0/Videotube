@@ -26,7 +26,7 @@ function Playlists() {
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 p-4 sm:grid-cols-[repeat(auto-fit,_minmax(400px,_1fr))]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1 md:ml-1">
           {playlists?.length > 0 ? (
             playlists.map((playlist) => (
               <PlaylistListPage

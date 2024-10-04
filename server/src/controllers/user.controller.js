@@ -540,7 +540,10 @@ const getUserChannelVideos = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found");
   }
 
-  const videos = await Video.find({ owner: user._id });
+  const videos = await Video.find({ owner: user._id }).populate(
+    "owner",
+    "fullName avatar"
+  );
 
   // console.log("VIDEOS: ", videos);
 

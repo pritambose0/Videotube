@@ -36,7 +36,6 @@ const PlaylistModal = ({ playlists }) => {
       const res = await axiosInstance.post("/playlists/", {
         name: newPlaylistName,
       });
-
       return res.data;
     },
     onSuccess: () => {

@@ -128,7 +128,7 @@ function VideoPage() {
             </div>
           ) : (
             recommendedVideos?.map((video) => (
-              <Link to={`videos/${video._id}`} key={video._id}>
+              <Link to={`/videos/${video._id}`} key={video._id}>
                 <VideoCard
                   duration={video.duration}
                   author={video.owner?.fullName}
