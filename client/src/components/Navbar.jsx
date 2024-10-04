@@ -262,7 +262,7 @@ function Navbar() {
                   to={username ? `/c/${username}/liked-videos` : "/login"}
                   className="w-full"
                 >
-                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
+                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black rounded-md">
                     <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                       <svg
                         width="100%"
@@ -286,7 +286,7 @@ function Navbar() {
                   to={username ? `/c/${username}/videos` : "/login"}
                   className="w-full"
                 >
-                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
+                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black rounded-md">
                     <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                       <svg
                         width="100%"
@@ -315,7 +315,7 @@ function Navbar() {
                 </Link>
 
                 <li className="w-full">
-                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black">
+                  <button className="flex w-full items-center justify-start gap-x-4 border border-white px-4 py-1.5 text-left hover:bg-[#ae7aff] hover:text-black focus:border-[#ae7aff] focus:bg-[#ae7aff] focus:text-black rounded-md">
                     <span className="inline-block w-full max-w-[20px] group-hover:mr-4 lg:mr-4">
                       <svg
                         width="100%"

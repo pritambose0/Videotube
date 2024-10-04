@@ -98,7 +98,7 @@ function Sidebar() {
           ></path>
         </svg>
       ),
-      label: "You",
+      label: "My Channel",
       isHiddenOnSmall: false,
     },
     {

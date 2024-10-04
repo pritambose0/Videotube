@@ -54,7 +54,7 @@ function App() {
               values="25;45;25"
               keySplines=".5 0 .5 1;.5 0 .5 1"
               repeatCount="indefinite"
-              begin="-.4s"
+              begin="-.9s"
             />
           </circle>
           <circle
