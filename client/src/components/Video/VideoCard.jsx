@@ -34,7 +34,9 @@ const VideoCard = ({
           />
         </div>
         <div className="w-full">
-          <h6 className="text-sm font-semibold">{title}</h6>
+          <h6 className="text-[0.92rem] font-semibold text-gray-200">
+            {title}
+          </h6>
           <p className="flex text-xs text-gray-300">
             {author} · {views} Views · {timeAgoFormat(timeAgo)}
           </p>

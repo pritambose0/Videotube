@@ -25,6 +25,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import ChannelPage from "./components/ChannelPage.jsx";
 import EditChannel from "./pages/EditChannel.jsx";
 import Admin from "./pages/Admin.jsx";
+import Playlist from "./pages/Playlist.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
+        element: <Home />,
+      },
+      {
+        path: "/search/:query",
         element: <Home />,
       },
       {
@@ -104,6 +109,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <History />,
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/c/:username/playlists/:playlistId",
+        element: (
+          <AuthLayout authentication={false}>
+            <Playlist />
           </AuthLayout>
         ),
       },

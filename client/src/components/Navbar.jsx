@@ -35,7 +35,9 @@ function Navbar() {
   };
 
   const onSubmit = (data) => {
-    console.log("Search query:", data.searchQuery);
+    if (data.searchQuery.trim()) {
+      navigate(`/search/${data.searchQuery}`);
+    }
     reset();
   };
 
