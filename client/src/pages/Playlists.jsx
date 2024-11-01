@@ -38,6 +38,7 @@ function Playlists() {
                 playlistId={playlist._id}
                 playlistName={playlist.name}
                 totalVideos={playlist.videos.length}
+                username={username}
               />
             ))
           ) : (

@@ -33,64 +33,32 @@ function App() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
+        {/* <p className="text-lg">Loading...</p> */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 100"
-          width="100"
-          height="100"
+          viewBox="0 0 50 50"
+          width="50"
+          height="50"
         >
           <circle
-            fill="#AE7AFF"
-            stroke="#AE7AFF"
-            strokeWidth="2"
-            r="5"
-            cx="20"
+            cx="25"
             cy="25"
+            r="20"
+            stroke="#ae7aff"
+            strokeWidth="4"
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray="31.4 31.4"
+            strokeDashoffset="0"
           >
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="1.5s"
-              values="25;45;25"
-              keySplines=".5 0 .5 1"
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 25 25"
+              to="360 25 25"
+              dur="1s"
               repeatCount="indefinite"
-              begin="0s"
-            />
-          </circle>
-          <circle
-            fill="#AE7AFF"
-            stroke="#AE7AFF"
-            strokeWidth="2"
-            r="5"
-            cx="50"
-            cy="25"
-          >
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="1.5s"
-              values="25;45;25"
-              keySplines=".5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.3s"
-            />
-          </circle>
-          <circle
-            fill="#AE7AFF"
-            stroke="#AE7AFF"
-            strokeWidth="2"
-            r="5"
-            cx="80"
-            cy="25"
-          >
-            <animate
-              attributeName="cy"
-              calcMode="spline"
-              dur="1.5s"
-              values="25;45;25"
-              keySplines=".5 0 .5 1"
-              repeatCount="indefinite"
-              begin="-.6s"
+              begin="-.5s"
             />
           </circle>
         </svg>

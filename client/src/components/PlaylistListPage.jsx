@@ -7,9 +7,10 @@ function PlaylistListPage({
   totalVideos,
   description,
   playlistId,
+  username,
 }) {
   return (
-    <Link to={`/playlists/${playlistId}`}>
+    <Link to={`/c/${username}/playlists/${playlistId}`}>
       <div className="w-full">
         <div className="relative mb-2 w-full pt-[56%]">
           <div className="absolute inset-0">
@@ -45,5 +46,6 @@ PlaylistListPage.propTypes = {
   totalVideos: PropTypes.number,
   description: PropTypes.string,
   playlistId: PropTypes.string,
+  username: PropTypes.string,
 };
 export default PlaylistListPage;
