@@ -28,7 +28,7 @@ function Playlists() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1 md:ml-1">
           {playlists?.length > 0 ? (
-            playlists.map((playlist) => (
+            playlists.reverse().map((playlist) => (
               <PlaylistListPage
                 key={playlist._id}
                 thumbnail={

@@ -68,8 +68,8 @@ function MyChannel() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1 md:ml-1">
           {videos?.length > 0 ? (
-            videos.map((video) => (
-              <Link to={`videos/${video._id}`} key={video._id}>
+            videos.reverse().map((video) => (
+              <Link to={`/videos/${video._id}`} key={video._id}>
                 <VideoCard
                   duration={video.duration}
                   author={video.owner?.fullName}

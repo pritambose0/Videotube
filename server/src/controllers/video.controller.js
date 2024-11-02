@@ -111,7 +111,7 @@ const getAllRecommendedVideos = asyncHandler(async (req, res) => {
 const publishVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
 
-  if ([title, description].some((field) => field?.trim() === "")) {
+  if (!title) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -129,8 +129,8 @@ const publishVideo = asyncHandler(async (req, res) => {
   if (!thumbnail) throw new ApiError(400, "Cloudinary: Thumbnail is required");
 
   const video = await Video.create({
-    title,
-    description,
+    title: title || "",
+    description: description || "",
     thumbnail: {
       url: thumbnail.url,
       publicId: thumbnail.public_id,
@@ -155,7 +155,7 @@ const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
 
   if (!videoId) throw new ApiError(404, "Video not found");
-  console.log("USER: ", req.user);
+  // console.log("USER: ", req.user);
 
   const video = await Video.aggregate([
     {

@@ -637,7 +637,7 @@ const getDashboardData = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  console.log("SUBSCRIBERS", subscribers);
+  // console.log("SUBSCRIBERS", subscribers);
 
   // console.log("TOTAL VIDEOS", videos.length);
   // console.log("TOTAL VIEWS", totalViews);
