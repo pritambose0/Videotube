@@ -44,7 +44,7 @@ const router = createBrowserRouter([
         path: "/login",
         element: (
           <AuthLayout authentication={false}>
-            <Login />,
+            <Login />
           </AuthLayout>
         ),
       },
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         path: "/signup",
         element: (
           <AuthLayout authentication={false}>
-            <Signup />,
+            <Signup />
           </AuthLayout>
         ),
       },
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
         path: "/c/:username/admin",
         element: (
           <AuthLayout authentication={true}>
-            <Admin />,
+            <Admin />
           </AuthLayout>
         ),
       },
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         path: "/c/:username/liked-videos",
         element: (
           <AuthLayout authentication={false}>
-            <LikedVideos />,
+            <LikedVideos />
           </AuthLayout>
         ),
       },
@@ -92,7 +92,7 @@ const router = createBrowserRouter([
         path: "/c/:username",
         element: (
           <AuthLayout authentication={false}>
-            <ChannelPage />,
+            <ChannelPage />
           </AuthLayout>
         ),
       },
@@ -100,7 +100,7 @@ const router = createBrowserRouter([
         path: "/videos/:videoId",
         element: (
           <AuthLayout authentication={false}>
-            <VideoPage />,
+            <VideoPage />
           </AuthLayout>
         ),
       },
@@ -108,7 +108,7 @@ const router = createBrowserRouter([
         path: "/c/:username/history",
         element: (
           <AuthLayout authentication={false}>
-            <History />,
+            <History />
           </AuthLayout>
         ),
       },
@@ -124,7 +124,7 @@ const router = createBrowserRouter([
         path: "/c/:username",
         element: (
           <AuthLayout authentication={false}>
-            <ProfileOutlet />,
+            <ProfileOutlet />
           </AuthLayout>
         ),
         children: [
@@ -132,7 +132,7 @@ const router = createBrowserRouter([
             path: "/c/:username/videos",
             element: (
               <AuthLayout authentication={false}>
-                <MyChannel />,
+                <MyChannel />
               </AuthLayout>
             ),
           },
@@ -140,7 +140,7 @@ const router = createBrowserRouter([
             path: "/c/:username/playlists",
             element: (
               <AuthLayout authentication={false}>
-                <Playlists />,
+                <Playlists />
               </AuthLayout>
             ),
           },
@@ -148,7 +148,7 @@ const router = createBrowserRouter([
             path: "/c/:username/tweets",
             element: (
               <AuthLayout authentication={false}>
-                <Tweet />,
+                <Tweet />
               </AuthLayout>
             ),
           },
@@ -156,7 +156,7 @@ const router = createBrowserRouter([
             path: "/c/:username/subscribed",
             element: (
               <AuthLayout authentication={false}>
-                <Subscribed />,
+                <Subscribed />
               </AuthLayout>
             ),
           },
