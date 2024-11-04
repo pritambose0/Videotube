@@ -16,7 +16,7 @@ function VideoPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
+  
   // Fetch video data
   const { data: video } = useQuery({
     queryKey: ["video", videoId],
@@ -24,7 +24,7 @@ function VideoPage() {
       const res = await axiosInstance.get(`/videos/${videoId}`);
       return res?.data?.data;
     },
-    staleTime: Infinity,
+    staleTime: 300000,
     enabled: !!videoId,
   });
 
@@ -55,7 +55,7 @@ function VideoPage() {
 
   return (
     <section className="w-full pb-[70px] sm:ml-[70px] lg:ml-0 sm:pb-0">
-      <div className="flex flex-col lg:flex-row lg:gap-4 pl-1">
+      <div className="flex flex-col lg:flex-row p-1">
         {/* Video Player Section */}
         <div className="w-full lg:w-3/4">
           <div className="relative mb-4 w-full pt-[56%]">
@@ -119,7 +119,7 @@ function VideoPage() {
         </div>
 
         {/* Suggested Videos  */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-4 py-5">
+        <div className="w-full lg:w-1/3 flex flex-col gap-4 p-2">
           {isLoadingRecommendedVideos ? (
             <div>
               {Array.from({ length: 1 }).map((_, index) => (

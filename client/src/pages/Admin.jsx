@@ -303,7 +303,12 @@ function Admin() {
           <div className="bg-black p-4 rounded">
             <h2 className="text-xl font-semibold mb-4">Edit Video</h2>
 
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <form
+              className="space-y-6"
+              onSubmit={handleSubmit(onSubmit)}
+              encType="multipart/form-data"
+              method="PATCH"
+            >
               <div className="w-full">
                 <Input
                   id="title"
@@ -334,6 +339,7 @@ function Admin() {
                   id="thumbnail"
                   label="Thumbnail"
                   type="file"
+                  {...register("thumbnail")}
                   accept="image/png, image/jpg, image/jpeg, image/gif"
                   className="file:mr-4 file:border-none file:bg-[#ae7aff] file:text-black file:px-4 file:py-2 file:rounded-md file:hover:bg-[#965dff] cursor-pointer"
                 />
