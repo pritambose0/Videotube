@@ -26,6 +26,7 @@ import ChannelPage from "./components/ChannelPage.jsx";
 import EditChannel from "./pages/EditChannel.jsx";
 import Admin from "./pages/Admin.jsx";
 import Playlist from "./pages/Playlist.jsx";
+import SearchPage from "./pages/SearchPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -37,8 +38,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/search/:query",
-        element: <Home />,
+        path: "/query",
+        element: <SearchPage />,
       },
       {
         path: "/login",

@@ -111,7 +111,7 @@ function ProfileCard({
                 to={`/c/${channelHandle}/edit`}
                 className="flex w-full sm:w-auto"
               >
-                <button className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm active:translate-x-[5px] active:translate-y-[5px]">
+                <button className="bg-[#ae7aff] px-4 py-2 font-bold text-black transition-transform duration-150 ease-in-out rounded-sm flex gap-2 items-center active:translate-x-[2px] active:translate-y-[2px] hover:bg-[#9c6de2]">
                   Edit Channel
                 </button>
               </Link>
@@ -120,7 +120,7 @@ function ProfileCard({
                 to={`/c/${channelHandle}/admin`}
                 className="flex w-full sm:w-auto"
               >
-                <button className="w-full bg-[#ae7aff] px-4 py-2 text-center font-bold text-black transition-all duration-150 ease-in-out sm:w-auto rounded-sm">
+                <button className="bg-[#ae7aff] px-4 py-2 font-bold text-black transition-transform duration-150 ease-in-out rounded-sm flex gap-2 items-center active:translate-x-[2px] active:translate-y-[2px] hover:bg-[#9c6de2]">
                   Dashboard
                 </button>
               </Link>

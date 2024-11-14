@@ -19,14 +19,12 @@ const getAllVideos = asyncHandler(async (req, res) => {
   } = req.query;
 
   const skip = (page - 1) * limit;
+  console.log("Query",query);
 
   const videos = await Video.aggregate([
     {
       $match: {
-        $or: [
-          { title: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } },
-        ],
+        $or: [{ title: { $regex: query, $options: "i" } }],
       },
     },
     {

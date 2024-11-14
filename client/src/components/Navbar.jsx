@@ -36,7 +36,7 @@ function Navbar() {
 
   const onSubmit = (data) => {
     if (data.searchQuery.trim()) {
-      navigate(`/search/${data.searchQuery}`);
+      navigate(`/query?search=${data.searchQuery}`);
     }
     reset();
   };
@@ -104,12 +104,12 @@ function Navbar() {
           <form onSubmit={handleSubmit(onSubmit)} className="relative">
             <input
               {...register("searchQuery")}
-              className="w-full border-2 border-slate-500 bg-transparent py-1 pl-8 pr-3 placeholder-slate-300 outline-none sm:py-2 rounded-md"
+              className="w-full border-2 border-slate-500 bg-transparent py-2 pl-10 pr-3 placeholder-slate-300 outline-none sm:py-3 rounded-full transition duration-200 hover:shadow-lg focus:shadow-md"
               placeholder="Type here..."
             />
             <button
               type="submit"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white hover:text-indigo-500 transition duration-200"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-full bg-[#ae7aff] text-white hover:bg-[#9b65e0] transition duration-200"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +172,7 @@ function Navbar() {
             </div>
           ) : (
             <button
-              className="hidden sm:block w-full bg-[#383737] px-3 py-2 hover:bg-[#4f4e4e] sm:w-auto sm:bg-transparent"
+              className="hidden sm:block bg-[#ae7aff] px-4 py-2 font-bold text-black transition-transform duration-150 ease-in-out rounded-sm  items-center active:translate-x-[2px] active:translate-y-[2px] hover:bg-[#9c6de2]"
               onClick={handleLogout}
             >
               Logout
