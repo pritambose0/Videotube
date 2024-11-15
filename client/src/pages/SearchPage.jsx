@@ -9,7 +9,6 @@ function SearchPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("search");
-  console.log(query);
 
   const {
     data: videos,
@@ -19,7 +18,11 @@ function SearchPage() {
   } = useQuery({
     queryKey: ["searchedVideos", query],
     queryFn: async () => {
-      const res = await axiosInstance.get("/videos", { query });
+      const res = await axiosInstance.get("/videos", {
+        params: {
+          query,
+        },
+      });
       return res.data?.data;
     },
     staleTime: 1000 * 60,
@@ -61,10 +64,13 @@ function SearchPage() {
         </div>
       ) : (
         // No Videos Available
-        <div className="flex items-center justify-center text-center p-1">
-          <h4 className="text-lg font-semibold text-gray-400">
-            No videos available at the moment. Please check back later.
+        <div className="flex flex-col items-center justify-center text-center p-6  rounded-lg shadow-md h-screen">
+          <h4 className="text-2xl font-semibold mb-2">
+            No videos found for "{query}"
           </h4>
+          <p className="text-md text-gray-500">
+            Try searching with different keywords or check back later.
+          </p>
         </div>
       )}
     </section>
